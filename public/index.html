@@ -131,32 +131,80 @@
     .card {
       position: relative;
       overflow: hidden;
-      border: 1px solid rgba(255,255,255,.82);
+      isolation: isolate;
+      border: 1px solid rgba(255,255,255,.78);
       border-radius: 22px;
-      background: var(--white);
-      box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,.92);
-      backdrop-filter: blur(18px) saturate(1.15);
-      -webkit-backdrop-filter: blur(18px) saturate(1.15);
-      transition: transform .24s ease, box-shadow .24s ease, border-color .24s ease;
+      background: linear-gradient(145deg, rgba(255,255,255,.76), rgba(255,255,255,.38));
+      box-shadow:
+        0 20px 54px rgba(43,39,75,.11),
+        inset 0 1.5px 0 rgba(255,255,255,.98),
+        inset 0 -1px 0 rgba(255,255,255,.34);
+      backdrop-filter: blur(30px) saturate(1.45) contrast(1.04);
+      -webkit-backdrop-filter: blur(30px) saturate(1.45) contrast(1.04);
+      transform: translateZ(0);
+      transition: transform .38s cubic-bezier(.2,.8,.2,1), box-shadow .38s ease, border-color .38s ease;
     }
 
     .card::before {
       content: "";
       position: absolute;
-      inset: 0;
+      inset: -45% -15%;
+      z-index: -1;
       pointer-events: none;
-      background: linear-gradient(125deg, rgba(255,255,255,.34), transparent 44%);
+      background:
+        radial-gradient(circle at 22% 28%, rgba(255,255,255,.78), transparent 22%),
+        linear-gradient(118deg, rgba(255,255,255,.5), transparent 36%, rgba(255,255,255,.16) 62%, transparent 78%);
+      opacity: .66;
+      transform: translate3d(-9%, -4%, 0) rotate(-4deg);
+      transition: transform .75s cubic-bezier(.2,.8,.2,1), opacity .4s ease;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 1px;
+      z-index: -1;
+      border-radius: 21px;
+      pointer-events: none;
+      box-shadow:
+        inset 0 0 28px rgba(255,255,255,.16),
+        inset 0 -16px 28px rgba(109,89,157,.06);
     }
 
     .card:hover {
-      transform: translateY(-3px);
+      transform: translateY(-4px) scale(1.008);
       border-color: rgba(255,255,255,1);
-      box-shadow: 0 22px 58px rgba(43,39,75,.13), inset 0 1px 0 #fff;
+      box-shadow:
+        0 28px 68px rgba(43,39,75,.16),
+        inset 0 1.5px 0 #fff,
+        inset 0 -1px 0 rgba(255,255,255,.42);
     }
 
-    .card.blue-card { background: linear-gradient(135deg, rgba(53,204,241,.78), rgba(122,228,250,.62)); }
-    .card.pink-card { background: linear-gradient(135deg, rgba(255,111,189,.76), rgba(255,176,219,.57)); }
-    .card.dark-card { background: linear-gradient(135deg, rgba(34,28,57,.93), rgba(59,46,92,.9)); color: #fff; }
+    .card:hover::before { transform: translate3d(10%, 5%, 0) rotate(3deg); opacity: .9; }
+
+    .card.blue-card { background: linear-gradient(135deg, rgba(53,204,241,.76), rgba(122,228,250,.55)); }
+    .card.pink-card { background: linear-gradient(135deg, rgba(255,111,189,.74), rgba(255,176,219,.52)); }
+    .card.dark-card { background: linear-gradient(135deg, rgba(34,28,57,.91), rgba(59,46,92,.86)); color: #fff; }
+
+    details[open] { animation: liquid-open .52s cubic-bezier(.18,.88,.24,1.16) both; }
+    details[open] .detail { animation: detail-reveal .46s cubic-bezier(.2,.78,.2,1) both; transform-origin: top center; }
+    details[open] .detail > * { animation: content-rise .5s .06s cubic-bezier(.2,.8,.2,1) both; }
+
+    @keyframes liquid-open {
+      0% { transform: translateY(0) scale(1); }
+      48% { transform: translateY(-3px) scale(1.012, .992); }
+      100% { transform: translateY(0) scale(1); }
+    }
+
+    @keyframes detail-reveal {
+      from { opacity: 0; transform: translateY(-10px) scaleY(.92); filter: blur(5px); }
+      to { opacity: 1; transform: translateY(0) scaleY(1); filter: blur(0); }
+    }
+
+    @keyframes content-rise {
+      from { opacity: 0; transform: translateY(9px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
     .card-link, summary {
       position: relative;
@@ -175,6 +223,7 @@
     }
 
     summary::-webkit-details-marker { display: none; }
+    summary:active .arrow { scale: .88; }
 
     .label {
       display: block;
@@ -411,7 +460,7 @@
 
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      *, *::before, *::after { transition: none !important; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
     }
   </style>
 </head>
@@ -446,8 +495,8 @@
               <article class="project">
                 <div>
                   <small>VST3 · C++20 · AUDIO DSP</small>
-                  <h2>调音的终结和最后的通道条</h2>
-                  <p>双模式低延迟通道条，从一键处理到完整专业控制。</p>
+                  <h2>Mint 的混音通道条</h2>
+                  <p>为直播小白与专业创作者设计，从一键处理到完整混音控制。</p>
                   <a class="project-action" href="/works/mint-final-channel/">查看作品 ↗</a>
                 </div>
                 <div class="project-visual"><img src="/works/mint-final-channel/assets/cover.png" alt="Mint Final Channel 展示图"></div>
@@ -472,13 +521,13 @@
           <summary><span><span class="label">BLOG</span><span class="title">博客入口</span></span><span class="arrow">↓</span></summary>
           <div class="detail blog-list">
             <p>最近更新</p>
-            <a class="blog-row" href="/works/mint-final-channel/">
-              <time datetime="2026-07-17">2026.07.17</time><strong>调音的终结和最后的通道条</strong><span>↗</span>
+            <a class="blog-row" id="latest-blog-1" href="https://mintryu.com/blog/u-card-license-risk-spectrum">
+              <time datetime="2026-07-17">2026.07.17</time><strong>中推圈的开户生意：我花一天把六层平台的牌照全查了一遍</strong><span>↗</span>
             </a>
-            <a class="blog-row" href="https://live.mintryu.com" target="_blank" rel="noopener noreferrer">
-              <time datetime="2026-07-16">2026.07.16</time><strong>Mint 同传：现场课堂的实时同声传译</strong><span>↗</span>
+            <a class="blog-row" id="latest-blog-2" href="https://mintryu.com/blog/korean-food-memories">
+              <time datetime="2026-07-16">2026.07.16</time><strong>在韩国吃过的一些饭</strong><span>↗</span>
             </a>
-            <a class="blog-all" href="/blog/">查看全部文章 ↗</a>
+            <a class="blog-all" href="https://mintryu.com/blog">查看全部文章 ↗</a>
           </div>
         </details>
 
@@ -511,5 +560,23 @@
     </section>
     <footer>© 2026 MINT</footer>
   </main>
+  <script>
+    (() => {
+      const rows = [document.getElementById('latest-blog-1'), document.getElementById('latest-blog-2')];
+      fetch('/api/blog/posts', { headers: { accept: 'application/json' } })
+        .then((response) => response.ok ? response.json() : Promise.reject())
+        .then(({ posts }) => posts.slice(0, 2).forEach((post, index) => {
+          const row = rows[index];
+          if (!row) return;
+          const published = post.publishedAt || post.updatedAt;
+          const date = published.slice(0, 10);
+          row.href = `/blog/${encodeURIComponent(post.slug)}`;
+          row.querySelector('time').dateTime = date;
+          row.querySelector('time').textContent = date.replaceAll('-', '.');
+          row.querySelector('strong').textContent = post.title;
+        }))
+        .catch(() => {});
+    })();
+  </script>
 </body>
 </html>
