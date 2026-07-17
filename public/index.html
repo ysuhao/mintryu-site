@@ -141,6 +141,28 @@
     .post-row strong { font-size: 14.5px; font-weight: 600; line-height: 1.5; }
     .post-row span { color: var(--blue-deep); }
 
+    /* 可折叠玻璃卡：grid-rows 双向平滑开合（关闭也有动画） */
+    details.collapsible .detail-wrap { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .55s cubic-bezier(.2,.8,.2,1); }
+    details.collapsible[open] .detail-wrap { grid-template-rows: 1fr; }
+    details.collapsible .detail-inner { overflow: hidden; min-height: 0; }
+    details.collapsible[open] .rise { animation: content-rise .55s .1s cubic-bezier(.2,.76,.2,1) both; }
+    @keyframes content-rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .card.tint-pink { background: linear-gradient(135deg, rgba(255,111,189,.32), rgba(255,255,255,.5) 60%); }
+    .card.tint-blue { background: linear-gradient(135deg, rgba(53,204,241,.28), rgba(255,255,255,.5) 60%); }
+    .works-sub { display: grid; gap: 12px; }
+    .work.sub {
+      grid-template-columns: 168px 1fr;
+      border: 1px solid var(--line); border-radius: var(--r-md);
+      background: rgba(255,255,255,.62); box-shadow: none;
+      backdrop-filter: none; -webkit-backdrop-filter: none;
+    }
+    .work.sub:hover { transform: none; background: rgba(255,255,255,.88); box-shadow: 0 10px 26px rgba(43,39,75,.1); }
+    .work.sub .work-visual { min-height: 128px; }
+    .work.sub .work-body { padding: 15px 18px; }
+    .collapsible .post-row { padding: 15px 10px; }
+    .blog-all { display: inline-block; margin-top: 12px; font-size: 12.5px; font-weight: 700; color: var(--blue-deep); text-decoration: none; }
+    .blog-all:hover { text-decoration: underline; }
+
     summary {
       display: flex; align-items: center; justify-content: space-between;
       padding: 18px 22px; cursor: pointer; list-style: none; user-select: none;
@@ -224,33 +246,35 @@
       </section>
 
       <div class="stack">
-        <section aria-label="精选作品">
-          <div class="section-head"><span class="kicker">SELECTED WORKS</span></div>
-          <div class="works">
-            <a class="card work" href="/works/mint-final-channel/">
-              <div class="work-visual"><img src="/works/mint-final-channel/assets/cover.png" alt="Mint Final Channel 展示图"></div>
-              <div class="work-body">
-                <small>VST3 · C++20 · AUDIO DSP</small>
-                <h3>Mint 的混音通道条</h3>
-                <p>为直播小白与专业创作者设计，从一键处理到完整混音控制。</p>
-                <span class="work-cta">查看作品 ↗</span>
-              </div>
-            </a>
-            <a class="card work mini" href="https://live.mintryu.com" target="_blank" rel="noopener noreferrer">
-              <div class="work-visual"><div class="mini-live"><b>Mint 同传</b><i></i><span>실시간 번역<br>实时语音翻译</span></div></div>
-              <div class="work-body">
-                <small>LIVE AI · GEMINI · WEBRTC</small>
-                <h3>Mint 同传</h3>
-                <p>面向现场课堂的韩语到普通话实时同声传译。</p>
-                <span class="work-cta">打开项目 ↗</span>
-              </div>
-            </a>
-          </div>
-        </section>
+        <details class="card collapsible tint-pink">
+          <summary><span><span class="label">PORTFOLIO</span><span class="title">我的作品</span></span><span class="arrow">↓</span></summary>
+          <div class="detail-wrap"><div class="detail-inner"><div class="detail rise">
+            <div class="works-sub">
+              <a class="work sub" href="/works/mint-final-channel/">
+                <div class="work-visual"><img src="/works/mint-final-channel/assets/cover.png" alt="Mint Final Channel 展示图"></div>
+                <div class="work-body">
+                  <small>VST3 · C++20 · AUDIO DSP</small>
+                  <h3>Mint 的混音通道条</h3>
+                  <p>为直播小白与专业创作者设计，从一键处理到完整混音控制。</p>
+                  <span class="work-cta">查看作品 ↗</span>
+                </div>
+              </a>
+              <a class="work sub" href="https://live.mintryu.com" target="_blank" rel="noopener noreferrer">
+                <div class="work-visual" style="display:grid;place-items:center;padding:14px"><div class="mini-live"><b>Mint 同传</b><i></i><span>실시간 번역<br>实时语音翻译</span></div></div>
+                <div class="work-body">
+                  <small>LIVE AI · GEMINI · WEBRTC</small>
+                  <h3>Mint 同传</h3>
+                  <p>面向现场课堂的韩语到普通话实时同声传译。</p>
+                  <span class="work-cta">打开项目 ↗</span>
+                </div>
+              </a>
+            </div>
+          </div></div></div>
+        </details>
 
-        <section aria-label="最新文章">
-          <div class="section-head"><span class="kicker">LATEST NOTES</span><a class="more" href="/blog">全部文章 ↗</a></div>
-          <div class="card posts">
+        <details class="card collapsible tint-blue">
+          <summary><span><span class="label">BLOG</span><span class="title">最新文章</span></span><span class="arrow">↓</span></summary>
+          <div class="detail-wrap"><div class="detail-inner"><div class="detail rise">
             <a class="post-row" id="latest-blog-1" href="/blog/u-card-license-risk-spectrum">
               <time datetime="2026-07-17">2026.07.17</time>
               <strong>中推圈的开户生意：我花一天把六层平台的牌照全查了一遍</strong><span>↗</span>
@@ -259,16 +283,17 @@
               <time datetime="2026-07-16">2026.07.16</time>
               <strong>在韩国吃过的一些饭</strong><span>↗</span>
             </a>
-          </div>
-        </section>
+            <a class="blog-all" href="/blog">查看全部文章 ↗</a>
+          </div></div></div>
+        </details>
 
-        <details class="card">
+        <details class="card collapsible">
           <summary><span><span class="label">CONTACT</span><span class="title">联系我</span></span><span class="arrow">↓</span></summary>
-          <div class="detail contact-lines">
+          <div class="detail-wrap"><div class="detail-inner"><div class="detail rise contact-lines">
             <a href="mailto:me@mintryu.com">Email: me@mintryu.com</a>
             <a href="tel:+447871567095">🇬🇧 +44 7871 567095</a>
             <a href="tel:+8201057655902">🇰🇷 +82 010 5765 5902</a>
-          </div>
+          </div></div></div>
         </details>
       </div>
     </div>
