@@ -282,6 +282,39 @@
     .contact-lines a { text-decoration: none; }
     .contact-lines a:hover { color: var(--blue-deep); }
 
+    .blog-list { display: grid; gap: 10px; }
+    .blog-list > p { margin: 0 0 2px; color: rgba(255,255,255,.62); }
+
+    .blog-row {
+      display: grid;
+      grid-template-columns: 78px minmax(0, 1fr) 24px;
+      gap: 12px;
+      align-items: center;
+      padding: 13px 14px;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 14px;
+      background: rgba(255,255,255,.07);
+      color: #fff;
+      text-decoration: none;
+      transition: background .2s ease, transform .2s ease;
+    }
+
+    .blog-row:hover { transform: translateX(3px); background: rgba(255,255,255,.12); }
+    .blog-row time { color: rgba(255,255,255,.51); font: 700 9px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .05em; }
+    .blog-row strong { font-size: 13px; line-height: 1.45; }
+    .blog-row span { color: var(--blue); text-align: right; }
+
+    .blog-all {
+      justify-self: start;
+      margin-top: 3px;
+      color: rgba(255,255,255,.75);
+      font-size: 11px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .blog-all:hover { color: #fff; }
+
     .thanks {
       margin-top: 54px;
       padding-top: 44px;
@@ -327,19 +360,32 @@
 
     .thanks-grid a:hover { transform: translateY(-3px); background: rgba(255,255,255,.9); }
 
-    .logo-mark {
-      min-width: 42px;
+    .brand-mark {
+      width: 48px;
       height: 42px;
       display: grid;
       place-items: center;
-      padding: 0 8px;
-      border-radius: 13px;
-      background: linear-gradient(135deg, var(--blue), var(--pink));
-      color: #fff;
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: -.02em;
-      box-shadow: 0 8px 18px rgba(255,111,189,.16);
+    }
+
+    .brand-mark svg {
+      width: 36px;
+      height: 36px;
+      display: block;
+    }
+
+    .brand-mark img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+
+    .brand-note {
+      max-width: 760px;
+      margin: 18px auto 0;
+      color: #aaa1bd;
+      font-size: 10px;
+      line-height: 1.7;
+      text-align: center;
     }
 
     footer {
@@ -422,9 +468,19 @@
           </div>
         </details>
 
-        <a class="card dark-card card-link" href="/blog/">
-          <span><span class="label">BLOG</span><span class="title">博客入口</span></span><span class="arrow">↗</span>
-        </a>
+        <details class="card dark-card">
+          <summary><span><span class="label">BLOG</span><span class="title">博客入口</span></span><span class="arrow">↓</span></summary>
+          <div class="detail blog-list">
+            <p>最近更新</p>
+            <a class="blog-row" href="/works/mint-final-channel/">
+              <time datetime="2026-07-17">2026.07.17</time><strong>调音的终结和最后的通道条</strong><span>↗</span>
+            </a>
+            <a class="blog-row" href="https://live.mintryu.com" target="_blank" rel="noopener noreferrer">
+              <time datetime="2026-07-16">2026.07.16</time><strong>Mint 同传：现场课堂的实时同声传译</strong><span>↗</span>
+            </a>
+            <a class="blog-all" href="/blog/">查看全部文章 ↗</a>
+          </div>
+        </details>
 
         <details class="card">
           <summary><span><span class="label">CONTACT</span><span class="title">联系我</span></span><span class="arrow">↓</span></summary>
@@ -442,15 +498,16 @@
       <h2 id="thanks-title">鸣谢<span>.</span></h2>
       <p>tools, teams &amp; people that made this possible</p>
       <div class="thanks-grid">
-        <a href="https://cloudflare.com" target="_blank" rel="noopener noreferrer"><span class="logo-mark">CF</span>Cloudflare</a>
-        <a href="https://openai.com" target="_blank" rel="noopener noreferrer"><span class="logo-mark">AI</span>OpenAI</a>
-        <a href="https://anthropic.com" target="_blank" rel="noopener noreferrer"><span class="logo-mark">AN</span>Anthropic</a>
-        <a href="https://google.com" target="_blank" rel="noopener noreferrer"><span class="logo-mark">G</span>Google</a>
-        <a href="https://x.ai" target="_blank" rel="noopener noreferrer"><span class="logo-mark">xAI</span>x.AI</a>
-        <a href="https://apple.com" target="_blank" rel="noopener noreferrer"><span class="logo-mark">AP</span>Apple</a>
-        <a href="https://samsung.com" target="_blank" rel="noopener noreferrer"><span class="logo-mark">SS</span>Samsung</a>
-        <a href="https://korea.ac.kr" target="_blank" rel="noopener noreferrer"><span class="logo-mark">KU</span>Korea University</a>
+        <a href="https://cloudflare.com" target="_blank" rel="noopener noreferrer" aria-label="Cloudflare 官方网站"><span class="brand-mark"><svg aria-hidden="true" style="fill:#f38020" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M16.5088 16.8447c.1475-.5068.0908-.9707-.1553-1.3154-.2246-.3164-.6045-.499-1.0615-.5205l-8.6592-.1123a.1559.1559 0 0 1-.1333-.0713c-.0283-.042-.0351-.0986-.021-.1553.0278-.084.1123-.1484.2036-.1562l8.7359-.1123c1.0351-.0489 2.1601-.8868 2.5537-1.9136l.499-1.3013c.0215-.0561.0293-.1128.0147-.168-.5625-2.5463-2.835-4.4453-5.5499-4.4453-2.5039 0-4.6284 1.6177-5.3876 3.8614-.4927-.3658-1.1187-.5625-1.794-.499-1.2026.119-2.1665 1.083-2.2861 2.2856-.0283.31-.0069.6128.0635.894C1.5683 13.171 0 14.7754 0 16.752c0 .1748.0142.3515.0352.5273.0141.083.0844.1475.1689.1475h15.9814c.0909 0 .1758-.0645.2032-.1553l.12-.4268zm2.7568-5.5634c-.0771 0-.1611 0-.2383.0112-.0566 0-.1054.0415-.127.0976l-.3378 1.1744c-.1475.5068-.0918.9707.1543 1.3164.2256.3164.6055.498 1.0625.5195l1.8437.1133c.0557 0 .1055.0263.1329.0703.0283.043.0351.1074.0214.1562-.0283.084-.1132.1485-.204.1553l-1.921.1123c-1.041.0488-2.1582.8867-2.5527 1.914l-.1406.3585c-.0283.0713.0215.1416.0986.1416h6.5977c.0771 0 .1474-.0489.169-.126.1122-.4082.1757-.837.1757-1.2803 0-2.6025-2.125-4.727-4.7344-4.727"/></svg></span>Cloudflare</a>
+        <a href="https://openai.com" target="_blank" rel="noopener noreferrer" aria-label="OpenAI 官方网站"><span class="brand-mark"><svg aria-hidden="true" style="fill:#412991" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/></svg></span>OpenAI</a>
+        <a href="https://anthropic.com" target="_blank" rel="noopener noreferrer" aria-label="Anthropic 官方网站"><span class="brand-mark"><svg aria-hidden="true" style="fill:#d97757" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.3041 3.541h-3.6718l6.696 16.918H24Zm-10.6082 0L0 20.459h3.7442l1.3693-3.5527h7.0052l1.3693 3.5528h3.7442L10.5363 3.5409Zm-.3712 10.2232 2.2914-5.9456 2.2914 5.9456Z"/></svg></span>Anthropic</a>
+        <a href="https://google.com" target="_blank" rel="noopener noreferrer" aria-label="Google 官方网站"><span class="brand-mark"><svg aria-hidden="true" style="fill:#4285f4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg></span>Google</a>
+        <a href="https://x.ai" target="_blank" rel="noopener noreferrer" aria-label="xAI 官方网站"><span class="brand-mark"><svg aria-hidden="true" style="fill:#111117" viewBox="0 0 466.04 516.93" xmlns="http://www.w3.org/2000/svg"><polygon points="0.12 182.71 234.14 516.92 338.15 516.92 104.13 182.71 0.12 182.71"/><polygon points="0 516.92 104.08 516.92 156.08 442.67 104.04 368.34 0 516.92"/><polygon points="466.04 0 361.96 0 182.1 256.86 234.15 331.18 466.04 0"/><polygon points="380.78 516.92 466.04 516.92 466.04 37.16 380.78 158.92 380.78 516.92"/></svg></span>x.AI</a>
+        <a href="https://apple.com" target="_blank" rel="noopener noreferrer" aria-label="Apple 官方网站"><span class="brand-mark"><svg aria-hidden="true" style="fill:#555" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg></span>Apple</a>
+        <a href="https://samsung.com" target="_blank" rel="noopener noreferrer" aria-label="Samsung 官方网站"><span class="brand-mark"><svg aria-hidden="true" style="fill:#1428a0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.8166 10.2808l.0459 2.6934h-.023l-.7793-2.6934h-1.2837v3.3925h.8481l-.0458-2.785h.023l.8366 2.785h1.2264v-3.3925zm-16.149 0l-.6418 3.427h.9284l.4699-3.1175h.0229l.4585 3.1174h.9169l-.6304-3.4269zm5.1805 0l-.424 2.6132h-.023l-.424-2.6132H6.5788l-.0688 3.427h.8596l.023-3.0832h.0114l.573 3.0831h.8711l.5731-3.083h.023l.0228 3.083h.8596l-.0802-3.4269zm-7.2664 2.4527c.0343.0802.0229.1949.0114.2522-.0229.1146-.1031.2292-.3324.2292-.2177 0-.3438-.126-.3438-.3095v-.3323H0v.2636c0 .7679.6074.9971 1.2493.9971.6189 0 1.1346-.2178 1.2149-.7794.0458-.298.0114-.4928 0-.5616-.1605-.722-1.467-.9283-1.5588-1.3295-.0114-.0688-.0114-.1375 0-.1834.023-.1146.1032-.2292.3095-.2292.2063 0 .321.126.321.3095v.2063h.8595v-.2407c0-.745-.6762-.8596-1.1576-.8596-.6074 0-1.1117.2063-1.2034.7564-.023.149-.0344.2866.0114.4585.1376.7106 1.364.9169 1.5358 1.3524m11.152 0c.0343.0803.0228.1834.0114.2522-.023.1146-.1032.2292-.3324.2292-.2178 0-.3438-.126-.3438-.3095v-.3323h-.917v.2636c0 .7564.596.9857 1.2379.9857.6189 0 1.1232-.2063 1.2034-.7794.0459-.298.0115-.4814 0-.5616-.1375-.7106-1.4327-.9284-1.5243-1.318-.0115-.0688-.0115-.1376 0-.1835.0229-.1146.1031-.2292.3094-.2292.1948 0 .321.126.321.3095v.2063h.848v-.2407c0-.745-.6647-.8596-1.146-.8596-.6075 0-1.1004.1948-1.192.7564-.023.149-.023.2866.0114.4585.1376.7106 1.341.9054 1.513 1.3524m2.8882.4585c.2407 0 .3094-.1605.3323-.2522.0115-.0343.0115-.0917.0115-.126v-2.533h.871v2.4642c0 .0688 0 .1948-.0114.2292-.0573.6419-.5616.8482-1.192.8482-.6303 0-1.1346-.2063-1.192-.8482 0-.0344-.0114-.1604-.0114-.2292v-2.4642h.871v2.533c0 .0458 0 .0916.0115.126 0 .0917.0688.2522.3095.2522m7.1518-.0344c.2522 0 .3324-.1605.3553-.2522.0115-.0343.0115-.0917.0115-.126v-.4929h-.3553v-.5043H24v.917c0 .0687 0 .1145-.0115.2292-.0573.6303-.596.8481-1.2034.8481-.6075 0-1.1461-.2178-1.2034-.8481-.0115-.1147-.0115-.1605-.0115-.2293v-1.444c0-.0574.0115-.172.0115-.2293.0802-.6419.596-.8482 1.2034-.8482s1.1347.2063 1.2034.8482c.0115.1031.0115.2292.0115.2292v.1146h-.8596v-.1948s0-.0803-.0115-.1261c-.0114-.0802-.0802-.2521-.3438-.2521-.2521 0-.321.1604-.3438.2521-.0115.0458-.0115.1032-.0115.1605v1.5702c0 .0458 0 .0916.0115.126 0 .0917.0917.2522.3323.2522"/></svg></span>Samsung</a>
+        <a href="https://korea.ac.kr" target="_blank" rel="noopener noreferrer" aria-label="Korea University 官方网站"><span class="brand-mark"><img src="/brand-icons/korea-university.png?v=20260717" alt=""></span>Korea University</a>
       </div>
+      <p class="brand-note">各品牌标志及商标归其各自权利人所有，仅用于鸣谢与指向官方网站，不代表赞助、合作或背书。</p>
     </section>
     <footer>© 2026 MINT</footer>
   </main>
