@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Mint制作-调音的终结和最后的通道条：蒸汽波双模式 VST3 通道条作品展示。">
+  <meta property="og:title" content="Mint制作-调音的终结和最后的通道条">
+  <meta property="og:description" content="Simple 一键整理，Formal 精细控制。一个面向创作者的双模式 VST3 通道条。">
+  <meta property="og:image" content="./assets/cover.png">
+  <meta name="theme-color" content="#050819">
+  <title>Mint制作-调音的终结和最后的通道条｜作品展示</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #03050f;
+      --panel: rgba(12, 19, 45, .76);
+      --line: rgba(83, 162, 230, .23);
+      --cyan: #43e5ff;
+      --pink: #ff57c9;
+      --purple: #9e6bff;
+      --text: #f4f7ff;
+      --muted: #9aa9c7;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 8% 3%, rgba(89, 61, 238, .22), transparent 27rem),
+        radial-gradient(circle at 92% 28%, rgba(255, 56, 186, .15), transparent 32rem),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, "Noto Sans SC", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      opacity: .16;
+      background-image:
+        linear-gradient(rgba(91, 142, 204, .14) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(91, 142, 204, .14) 1px, transparent 1px);
+      background-size: 62px 62px;
+      mask-image: linear-gradient(to bottom, transparent, #000 36%, #000);
+    }
+
+    a { color: inherit; }
+    img { display: block; width: 100%; }
+
+    .shell {
+      width: min(1180px, calc(100% - 36px));
+      margin: 0 auto;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 74px;
+      color: #8191b1;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .18em;
+    }
+
+    nav a { text-decoration: none; }
+    nav .mark { color: var(--cyan); }
+
+    .hero {
+      padding: 76px 0 54px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      color: var(--cyan);
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: .28em;
+    }
+
+    h1 {
+      margin: 20px auto 18px;
+      max-width: 920px;
+      font-size: clamp(46px, 7vw, 92px);
+      line-height: .98;
+      letter-spacing: -.055em;
+    }
+
+    .gradient {
+      color: transparent;
+      background: linear-gradient(90deg, var(--cyan), #f7f8ff 45%, var(--pink));
+      background-clip: text;
+      -webkit-background-clip: text;
+    }
+
+    .hero p {
+      max-width: 690px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.8;
+    }
+
+    .status {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      margin-top: 26px;
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(8, 14, 34, .8);
+      color: #aebbd4;
+      font-size: 11px;
+      letter-spacing: .1em;
+    }
+
+    .status i {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--pink);
+      box-shadow: 0 0 12px var(--pink);
+    }
+
+    .cover, .shot {
+      overflow: hidden;
+      border: 1px solid rgba(74, 208, 255, .3);
+      border-radius: 24px;
+      background: #050815;
+      box-shadow: 0 38px 100px rgba(0, 0, 0, .52), 0 0 48px rgba(55, 223, 255, .08);
+    }
+
+    .cover { margin-bottom: 140px; }
+
+    section { margin-bottom: 150px; }
+
+    .intro {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 76px;
+      align-items: start;
+    }
+
+    h2 {
+      margin: 14px 0 22px;
+      font-size: clamp(38px, 5vw, 64px);
+      line-height: 1.05;
+      letter-spacing: -.045em;
+    }
+
+    .copy p {
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.85;
+    }
+
+    .facts {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .fact {
+      min-height: 150px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel);
+    }
+
+    .fact strong {
+      display: block;
+      color: var(--cyan);
+      font-size: 27px;
+    }
+
+    .fact span {
+      display: block;
+      margin-top: 10px;
+      color: #a3b1cb;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .feature {
+      display: grid;
+      grid-template-columns: .78fr 1.22fr;
+      gap: 54px;
+      align-items: center;
+    }
+
+    .feature.reverse { grid-template-columns: 1.22fr .78fr; }
+
+    .list {
+      margin: 26px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 13px;
+      color: #c5d0e5;
+      font-size: 14px;
+    }
+
+    .list li::before {
+      content: "//";
+      margin-right: 10px;
+      color: var(--pink);
+      font-weight: 900;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .gallery figure { margin: 0; }
+
+    figcaption {
+      margin: 13px 4px 0;
+      color: #74829e;
+      font-size: 12px;
+    }
+
+    .notice {
+      padding: 26px 30px;
+      border: 1px solid rgba(255, 82, 197, .23);
+      border-radius: 20px;
+      background: linear-gradient(110deg, rgba(40, 20, 65, .65), rgba(8, 18, 43, .75));
+      color: #b6c2d9;
+      line-height: 1.8;
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 34px 0 50px;
+      border-top: 1px solid var(--line);
+      color: #687791;
+      font-size: 11px;
+      letter-spacing: .1em;
+    }
+
+    @media (max-width: 780px) {
+      .hero { padding-top: 48px; }
+      .cover, section { margin-bottom: 84px; }
+      .intro, .feature, .feature.reverse { grid-template-columns: 1fr; gap: 34px; }
+      .feature.reverse .shot { order: 2; }
+      .facts, .gallery { grid-template-columns: 1fr; }
+      nav span:last-child { display: none; }
+      footer { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="shell">
+    <a href="/">YUSUHAO<span class="mark">.</span></a>
+    <span>WORK / AUDIO SOFTWARE / 2026</span>
+  </nav>
+
+  <main class="shell">
+    <header class="hero">
+      <div class="eyebrow">MINT // FINAL CHANNEL · VST3</div>
+      <h1>调音的终结和<br><span class="gradient">最后的通道条</span></h1>
+      <p>一套面向创作者的双模式音频通道条：Simple 一键完成清理与目标响度，Formal 提供完整的精细控制。</p>
+      <div class="status"><i></i> UI PREVIEW · DEVELOPMENT BUILD</div>
+    </header>
+
+    <div class="cover"><img src="./assets/cover.png" alt="Mint Final Channel 产品展示图"></div>
+
+    <section class="intro">
+      <div class="copy">
+        <div class="eyebrow">PROJECT OVERVIEW</div>
+        <h2>把复杂留在里面，<br><span class="gradient">把选择交给创作者。</span></h2>
+        <p>它不是把两套处理链拼在一起，而是让 Simple 与 Formal 映射到同一组底层参数。切换模式不会改变声音，只改变你看到的控制深度。</p>
+      </div>
+      <div class="facts">
+        <div class="fact"><strong>&lt;10 ms</strong><span>默认处理链的低延迟目标，适合接近实时监听。</span></div>
+        <div class="fact"><strong>12 Bands</strong><span>Formal 模式的可视化参数 EQ 设计。</span></div>
+        <div class="fact"><strong>2 Modes</strong><span>Simple 快速出结果，Formal 完整控制。</span></div>
+        <div class="fact"><strong>Offline</strong><span>模型与音频处理均在本地完成，不上传音频。</span></div>
+      </div>
+    </section>
+
+    <section class="feature">
+      <div class="copy">
+        <div class="eyebrow">SIMPLE MODE</div>
+        <h2>一键整理，<br><span class="gradient">直接进入创作。</span></h2>
+        <p>Auto Clean 将实时频谱降噪与目标响度跟随统一在一个动作里，适合播客、视频和快速混音。</p>
+        <ul class="list">
+          <li>Streaming / Podcast / Broadcast 响度场景</li>
+          <li>6 种 EQ 音色与 6 种空间预设</li>
+          <li>模块独立开关与实时电平反馈</li>
+        </ul>
+      </div>
+      <div class="shot"><img src="./assets/simple.png" alt="Simple 模式展示图"></div>
+    </section>
+
+    <section class="feature reverse">
+      <div class="shot"><img src="./assets/formal.png" alt="Formal 模式展示图"></div>
+      <div class="copy">
+        <div class="eyebrow">FORMAL MODE</div>
+        <h2>每一步都<br><span class="gradient">掌握在手里。</span></h2>
+        <p>在一条固定处理链中展开降噪、12 段 EQ、压缩、FDN 混响、响度和真峰值限制。</p>
+        <ul class="list">
+          <li>可视化多频段参数 EQ</li>
+          <li>压缩、算法混响与模块级旁路</li>
+          <li>真峰值限制与低延迟前瞻</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <div class="eyebrow">REAL UI CAPTURES</div>
+      <h2>当前界面实拍</h2>
+      <div class="gallery">
+        <figure><div class="shot"><img src="./assets/ui-simple.png" alt="Simple 模式 UI 实拍"></div><figcaption>Simple 模式 · 可交互 UI 原型</figcaption></figure>
+        <figure><div class="shot"><img src="./assets/ui-formal.png" alt="Formal 模式 UI 实拍"></div><figcaption>Formal 模式 · 可交互 UI 原型</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="notice">
+      当前页面仅作作品展示，不提供插件安装包、源代码或模型下载。界面为开发版本，参数布局与最终发行版可能继续调整。降噪采用自研低延迟频谱路线，借鉴修复类软件的工作思路，但不包含或复制 iZotope RX 的代码、模型或品牌元素。
+    </section>
+  </main>
+
+  <footer class="shell">
+    <span>© 2026 YUSUHAO · MINT FINAL CHANNEL</span>
+    <span>DESIGNED &amp; BUILT FOR AUDIO CREATORS</span>
+  </footer>
+</body>
+</html>
