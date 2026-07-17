@@ -4,19 +4,30 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Mint 的个人主页：代码、音频软件、实时同传、音乐与摄影。">
-  <meta name="theme-color" content="#f9fbff">
+  <meta name="theme-color" content="#fbfbff">
   <title>Mint — Code the sound, chase the light</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --ink: #221c39;
-      --muted: #766d91;
+      --ink-80: rgba(34,28,57,.8);
+      --muted: #6b6286;
       --blue: #35ccf1;
-      --blue-deep: #00a9db;
+      --blue-deep: #0096c7;
       --pink: #ff6fbd;
-      --pink-deep: #ee4ca4;
-      --white: rgba(255,255,255,.78);
-      --line: rgba(48, 52, 92, .14);
-      --shadow: 0 18px 50px rgba(43, 39, 75, .09);
+      --pink-deep: #e0449e;
+      --yt: #ff0033;
+      --paper: #fbfbff;
+      --glass: linear-gradient(145deg, rgba(255,255,255,.78), rgba(255,255,255,.42));
+      --line: rgba(48,52,92,.14);
+      --r-lg: 20px;
+      --r-md: 14px;
+      --shadow-1: 0 16px 44px rgba(43,39,75,.10);
+      --shadow-2: 0 26px 64px rgba(43,39,75,.16);
+      --font-display: "Space Grotesk", "Noto Sans SC", "PingFang SC", ui-sans-serif, sans-serif;
+      --font-body: "Noto Sans SC", "PingFang SC", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
     * { box-sizing: border-box; }
@@ -27,437 +38,161 @@
       min-height: 100vh;
       color: var(--ink);
       background:
-        radial-gradient(680px 360px at 88% -8%, rgba(53,204,241,.19), transparent 68%),
-        radial-gradient(700px 430px at 3% 104%, rgba(255,111,189,.17), transparent 70%),
-        linear-gradient(135deg, #fff 0%, #fbfbff 48%, #f8fbff 100%);
-      font-family: "Space Grotesk", Inter, "Noto Sans SC", "PingFang SC", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        radial-gradient(680px 360px at 88% -8%, rgba(53,204,241,.16), transparent 68%),
+        radial-gradient(700px 430px at 3% 104%, rgba(255,111,189,.14), transparent 70%),
+        linear-gradient(135deg, #fff 0%, var(--paper) 55%, #f8fbff 100%);
+      font-family: var(--font-body);
       -webkit-font-smoothing: antialiased;
     }
 
     a { color: inherit; }
     img { display: block; max-width: 100%; }
+    :focus-visible { outline: 2px solid var(--blue-deep); outline-offset: 3px; border-radius: 6px; }
 
-    .shell {
-      width: min(1080px, calc(100% - 40px));
-      margin: 0 auto;
-      padding: 48px 0 78px;
-    }
+    .shell { width: min(1080px, calc(100% - 40px)); margin: 0 auto; padding: 52px 0 72px; }
+    .layout { display: grid; grid-template-columns: 380px minmax(0,1fr); gap: 64px; align-items: start; }
 
-    .layout {
-      display: grid;
-      grid-template-columns: 400px minmax(0, 1fr);
-      gap: 56px;
-      align-items: start;
-    }
-
-    .profile {
-      position: sticky;
-      top: 48px;
-      padding: 28px 0;
-      text-align: center;
-    }
-
+    .profile { position: sticky; top: 52px; text-align: center; }
     .avatar-wrap {
-      position: relative;
-      width: 136px;
-      height: 136px;
-      margin: 0 auto;
-      padding: 5px;
+      position: relative; width: 132px; height: 132px; margin: 0 auto; padding: 5px;
       border-radius: 50%;
       background: linear-gradient(135deg, var(--blue), #fff 46%, var(--pink));
-      box-shadow: 0 18px 46px rgba(255,111,189,.2), 0 8px 34px rgba(53,204,241,.18);
+      box-shadow: 0 16px 40px rgba(255,111,189,.18), 0 8px 30px rgba(53,204,241,.16);
     }
-
-    .avatar-wrap::after {
-      content: "";
-      position: absolute;
-      right: 2px;
-      bottom: 12px;
-      width: 18px;
-      height: 18px;
-      border: 4px solid #fff;
-      border-radius: 50%;
-      background: var(--blue);
-    }
-
-    .avatar {
-      width: 100%;
-      height: 100%;
-      border: 4px solid #fff;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    h1 {
-      margin: 22px 0 4px;
-      font-size: 48px;
-      line-height: 1;
-      letter-spacing: -.055em;
-    }
-
+    .avatar { width: 100%; height: 100%; border: 4px solid #fff; border-radius: 50%; object-fit: cover; }
+    h1 { margin: 20px 0 6px; font-family: var(--font-display); font-size: 46px; line-height: 1; letter-spacing: -.045em; font-weight: 700; }
     h1 span { color: var(--pink); }
+    .motto { margin: 0; color: var(--muted); font-size: 15px; font-weight: 500; letter-spacing: .06em; }
+    .badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 16px; }
+    .badge { padding: 6px 13px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .badge.dark { background: var(--ink); color: #fff; }
+    .badge.blue { background: rgba(53,204,241,.28); color: #0a6e8f; }
+    .badge.pink { background: rgba(255,111,189,.24); color: #b02a78; }
 
-    .motto {
-      margin: 0;
-      color: var(--muted);
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 18px;
-      font-style: italic;
+    .socials { display: grid; gap: 10px; margin-top: 24px; }
+    .social {
+      display: flex; align-items: center; gap: 12px;
+      padding: 15px 20px; border-radius: 16px;
+      color: #fff; text-decoration: none; text-align: left;
+      box-shadow: 0 14px 34px rgba(34,28,57,.22);
+      transition: transform .22s cubic-bezier(.2,.8,.2,1), box-shadow .22s ease, filter .22s ease;
     }
+    .social:hover { transform: translateY(-2px) scale(1.01); box-shadow: 0 20px 44px rgba(34,28,57,.28); filter: brightness(1.06); }
+    .social:active { transform: scale(.99); }
+    .social.x { background: linear-gradient(135deg, #2b2340, var(--ink)); }
+    .social.yt { background: linear-gradient(135deg, #ff2d55, var(--yt)); box-shadow: 0 14px 34px rgba(255,0,51,.28); }
+    .social.yt:hover { box-shadow: 0 20px 44px rgba(255,0,51,.34); }
+    .social svg { width: 26px; height: 26px; flex: 0 0 auto; fill: #fff; }
+    .social .txt { display: flex; flex-direction: column; gap: 1px; }
+    .social .txt small { font-size: 10.5px; font-weight: 700; letter-spacing: .16em; opacity: .72; }
+    .social .txt b { font-family: var(--font-display); font-size: 16.5px; font-weight: 700; letter-spacing: -.01em; }
+    .social .go { margin-left: auto; font-size: 16px; opacity: .85; }
 
-    .badges {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 18px;
+    .stack { display: flex; flex-direction: column; gap: 34px; }
+    .section-head {
+      display: flex; align-items: baseline; justify-content: space-between;
+      margin-bottom: 14px; padding: 0 4px;
     }
-
-    .badge {
-      padding: 7px 14px;
-      border: 1px solid rgba(255,255,255,.72);
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 780;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.8);
-    }
-
-    .badge.dark { background: rgba(34,28,57,.92); color: #fff; }
-    .badge.blue { background: rgba(53,204,241,.72); }
-    .badge.pink { background: rgba(255,111,189,.7); }
-
-    .stack { display: flex; flex-direction: column; gap: 14px; }
+    .section-head .kicker { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: .2em; color: var(--ink-80); }
+    .section-head .more { font-size: 12.5px; font-weight: 700; color: var(--blue-deep); text-decoration: none; }
+    .section-head .more:hover { text-decoration: underline; }
 
     .card {
-      position: relative;
-      overflow: hidden;
-      isolation: isolate;
-      border: 1px solid rgba(255,255,255,.78);
-      border-radius: 22px;
-      background: linear-gradient(145deg, rgba(255,255,255,.76), rgba(255,255,255,.38));
-      box-shadow:
-        0 20px 54px rgba(43,39,75,.11),
-        inset 0 1.5px 0 rgba(255,255,255,.98),
-        inset 0 -1px 0 rgba(255,255,255,.34);
-      backdrop-filter: blur(30px) saturate(1.45) contrast(1.04);
-      -webkit-backdrop-filter: blur(30px) saturate(1.45) contrast(1.04);
+      position: relative; overflow: hidden; isolation: isolate;
+      border: 1px solid rgba(255,255,255,.8); border-radius: var(--r-lg);
+      background: var(--glass);
+      box-shadow: var(--shadow-1), inset 0 1.5px 0 rgba(255,255,255,.95);
+      backdrop-filter: blur(26px) saturate(1.4); -webkit-backdrop-filter: blur(26px) saturate(1.4);
       transform: translateZ(0);
-      transition: transform .38s cubic-bezier(.2,.8,.2,1), box-shadow .38s ease, border-color .38s ease;
+      transition: transform .34s cubic-bezier(.2,.8,.2,1), box-shadow .34s ease;
     }
+    .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-2), inset 0 1.5px 0 #fff; }
 
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: -45% -15%;
-      z-index: -1;
-      pointer-events: none;
-      background:
-        radial-gradient(circle at 22% 28%, rgba(255,255,255,.78), transparent 22%),
-        linear-gradient(118deg, rgba(255,255,255,.5), transparent 36%, rgba(255,255,255,.16) 62%, transparent 78%);
-      opacity: .66;
-      transform: translate3d(-9%, -4%, 0) rotate(-4deg);
-      transition: transform .75s cubic-bezier(.2,.8,.2,1), opacity .4s ease;
+    .works { display: grid; gap: 14px; }
+    .work { display: grid; grid-template-columns: 200px 1fr; text-decoration: none; }
+    .work-visual { min-height: 168px; background: linear-gradient(145deg,#f2f8ff,#f9f1fb); }
+    .work-visual img { width: 100%; height: 100%; object-fit: cover; }
+    .work-body { padding: 20px 22px; display: flex; flex-direction: column; justify-content: center; }
+    .work-body small { color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .14em; }
+    .work-body h3 { margin: 7px 0 8px; font-family: var(--font-display); font-size: 21px; letter-spacing: -.02em; }
+    .work-body p { margin: 0 0 14px; color: var(--muted); font-size: 13px; line-height: 1.65; }
+    .work-cta {
+      align-self: flex-start; display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 15px; border-radius: 999px; background: var(--ink); color: #fff;
+      font-size: 12px; font-weight: 700;
     }
-
-    .card::after {
-      content: "";
-      position: absolute;
-      inset: 1px;
-      z-index: -1;
-      border-radius: 21px;
-      pointer-events: none;
-      box-shadow:
-        inset 0 0 28px rgba(255,255,255,.16),
-        inset 0 -16px 28px rgba(109,89,157,.06);
-    }
-
-    .card:hover {
-      transform: translateY(-4px) scale(1.008);
-      border-color: rgba(255,255,255,1);
-      box-shadow:
-        0 28px 68px rgba(43,39,75,.16),
-        inset 0 1.5px 0 #fff,
-        inset 0 -1px 0 rgba(255,255,255,.42);
-    }
-
-    .card:hover::before { transform: translate3d(10%, 5%, 0) rotate(3deg); opacity: .9; }
-
-    .card.blue-card { background: linear-gradient(135deg, rgba(53,204,241,.76), rgba(122,228,250,.55)); }
-    .card.pink-card { background: linear-gradient(135deg, rgba(255,111,189,.74), rgba(255,176,219,.52)); }
-    .card.dark-card { background: linear-gradient(135deg, rgba(34,28,57,.91), rgba(59,46,92,.86)); color: #fff; }
-
-    details[open] { animation: liquid-open .76s cubic-bezier(.18,.82,.22,1.08) both; }
-    details[open] .detail { animation: detail-reveal .68s cubic-bezier(.2,.72,.2,1) both; transform-origin: top center; }
-    details[open] .detail > * { animation: content-rise .7s .12s cubic-bezier(.2,.76,.2,1) both; }
-
-    @keyframes liquid-open {
-      0% { transform: translateY(0) scale(1); }
-      48% { transform: translateY(-3px) scale(1.012, .992); }
-      100% { transform: translateY(0) scale(1); }
-    }
-
-    @keyframes detail-reveal {
-      from { opacity: 0; transform: translateY(-10px) scaleY(.92); filter: blur(5px); }
-      to { opacity: 1; transform: translateY(0) scaleY(1); filter: blur(0); }
-    }
-
-    @keyframes content-rise {
-      from { opacity: 0; transform: translateY(9px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .card-link, summary {
-      position: relative;
-      z-index: 1;
-      min-height: 82px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      padding: 18px 22px;
-      color: inherit;
-      text-decoration: none;
-      cursor: pointer;
-      list-style: none;
-      user-select: none;
-    }
-
-    summary::-webkit-details-marker { display: none; }
-    summary:active .arrow { scale: .88; }
-
-    .label {
-      display: block;
-      margin-bottom: 4px;
-      opacity: .62;
-      font-size: 10px;
-      font-weight: 820;
-      letter-spacing: .19em;
-    }
-
-    .title {
-      display: block;
-      font-size: 21px;
-      font-weight: 820;
-      letter-spacing: -.025em;
-    }
-
-    .arrow {
-      flex: 0 0 auto;
-      width: 34px;
-      height: 34px;
-      display: grid;
-      place-items: center;
-      border: 1px solid rgba(34,28,57,.16);
-      border-radius: 50%;
-      background: rgba(255,255,255,.34);
-      font-size: 17px;
-      transition: transform .25s ease;
-    }
-
-    .dark-card .arrow { border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.08); }
-    details[open] .arrow { transform: rotate(180deg); }
-
-    .detail {
-      position: relative;
-      z-index: 1;
-      margin: 0 22px 22px;
-      padding-top: 16px;
-      border-top: 1px dashed rgba(34,28,57,.22);
-      font-size: 14px;
-      line-height: 1.75;
-    }
-
-    .dark-card .detail { border-color: rgba(255,255,255,.23); }
-    .detail > p { margin: 0 0 14px; }
-
-    .projects { display: grid; gap: 12px; }
-
-    .project {
-      display: grid;
-      grid-template-columns: 1fr 180px;
-      gap: 16px;
-      overflow: hidden;
-      padding: 16px;
-      border: 1px solid rgba(34,28,57,.12);
-      border-radius: 17px;
-      background: rgba(255,255,255,.67);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.9);
-    }
-
-    .project small { color: var(--muted); font-size: 9px; font-weight: 820; letter-spacing: .12em; }
-    .project h2 { margin: 5px 0 7px; font-size: 19px; line-height: 1.13; letter-spacing: -.03em; }
-    .project p { margin: 0; color: #675f7f; font-size: 12px; line-height: 1.6; }
-
-    .project-action {
-      display: inline-flex;
-      min-height: 34px;
-      align-items: center;
-      margin-top: 12px;
-      padding: 0 13px;
-      border-radius: 999px;
-      background: var(--ink);
-      color: #fff;
-      font-size: 11px;
-      font-weight: 800;
-      text-decoration: none;
-    }
-
-    .project-visual {
-      min-height: 138px;
-      display: grid;
-      place-items: center;
-      overflow: hidden;
-      border: 1px solid rgba(34,28,57,.1);
-      border-radius: 13px;
-      background: linear-gradient(145deg, #f9fbff, #f6efff);
-    }
-
-    .project-visual img { width: 100%; height: 100%; object-fit: cover; }
-
-    .mini-live {
-      width: 78%;
-      padding: 13px;
-      border: 1px solid rgba(34,28,57,.13);
-      background: #fff;
-      box-shadow: 0 10px 25px rgba(34,28,57,.1);
-    }
-
+    .work.mini .work-visual { display: grid; place-items: center; padding: 18px; }
+    .mini-live { width: 82%; padding: 13px; border: 1px solid var(--line); border-radius: 10px; background: #fff; box-shadow: 0 10px 24px rgba(34,28,57,.1); }
     .mini-live b { display: flex; align-items: center; justify-content: space-between; font-size: 12px; }
-    .mini-live b::after { content: "LIVE"; color: var(--pink-deep); font-size: 8px; letter-spacing: .1em; }
-    .mini-live i { display: block; height: 5px; margin-top: 13px; background: linear-gradient(90deg, var(--blue) 0 62%, #e9e9ef 62%); }
-    .mini-live span { display: block; margin-top: 9px; color: var(--muted); font-size: 8px; line-height: 1.5; }
+    .mini-live b::after { content: "LIVE"; color: var(--pink-deep); font-size: 9px; letter-spacing: .1em; }
+    .mini-live i { display: block; height: 5px; margin-top: 12px; border-radius: 3px; background: linear-gradient(90deg, var(--blue) 0 62%, #e9e9ef 62%); }
+    .mini-live span { display: block; margin-top: 9px; color: var(--muted); font-size: 10px; line-height: 1.5; }
 
-    .contact-lines { display: grid; gap: 8px; font-weight: 720; }
+    .posts { display: grid; }
+    .post-row {
+      display: grid; grid-template-columns: 92px 1fr 22px; gap: 14px; align-items: center;
+      padding: 17px 22px; text-decoration: none;
+      border-bottom: 1px dashed var(--line);
+      transition: background .2s ease;
+    }
+    .post-row:last-child { border-bottom: 0; }
+    .post-row:hover { background: rgba(255,255,255,.55); }
+    .post-row time { color: var(--muted); font: 600 11px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .04em; }
+    .post-row strong { font-size: 14.5px; font-weight: 600; line-height: 1.5; }
+    .post-row span { color: var(--blue-deep); }
+
+    summary {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 22px; cursor: pointer; list-style: none; user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary:active .arrow { scale: .9; }
+    summary .label { display: block; margin-bottom: 3px; color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .18em; }
+    summary .title { font-family: var(--font-display); font-size: 19px; font-weight: 700; letter-spacing: -.02em; }
+    .arrow {
+      width: 32px; height: 32px; display: grid; place-items: center;
+      border: 1px solid var(--line); border-radius: 50%; background: rgba(255,255,255,.4);
+      font-size: 15px; transition: transform .25s ease;
+    }
+    details[open] .arrow { transform: rotate(180deg); }
+    details[open] { animation: liquid-open .7s cubic-bezier(.18,.82,.22,1.06) both; }
+    details[open] .detail { animation: detail-reveal .6s cubic-bezier(.2,.72,.2,1) both; transform-origin: top center; }
+    @keyframes liquid-open { 0%{transform:scale(1)} 48%{transform:translateY(-3px) scale(1.01,.99)} 100%{transform:scale(1)} }
+    @keyframes detail-reveal { from{opacity:0;transform:translateY(-8px);filter:blur(4px)} to{opacity:1;transform:none;filter:blur(0)} }
+    .detail { margin: 0 22px 20px; padding-top: 15px; border-top: 1px dashed var(--line); font-size: 14px; }
+    .contact-lines { display: grid; gap: 10px; font-weight: 600; }
     .contact-lines a { text-decoration: none; }
     .contact-lines a:hover { color: var(--blue-deep); }
 
-    .blog-list { display: grid; gap: 10px; }
-    .blog-list > p { margin: 0 0 2px; color: rgba(255,255,255,.62); }
-
-    .blog-row {
-      display: grid;
-      grid-template-columns: 78px minmax(0, 1fr) 24px;
-      gap: 12px;
-      align-items: center;
-      padding: 13px 14px;
-      border: 1px solid rgba(255,255,255,.13);
-      border-radius: 14px;
-      background: rgba(255,255,255,.07);
-      color: #fff;
-      text-decoration: none;
-      transition: background .2s ease, transform .2s ease;
-    }
-
-    .blog-row:hover { transform: translateX(3px); background: rgba(255,255,255,.12); }
-    .blog-row time { color: rgba(255,255,255,.51); font: 700 9px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .05em; }
-    .blog-row strong { font-size: 13px; line-height: 1.45; }
-    .blog-row span { color: var(--blue); text-align: right; }
-
-    .blog-all {
-      justify-self: start;
-      margin-top: 3px;
-      color: rgba(255,255,255,.75);
-      font-size: 11px;
-      font-weight: 800;
-      text-decoration: none;
-    }
-
-    .blog-all:hover { color: #fff; }
-
-    .thanks {
-      margin-top: 54px;
-      padding-top: 44px;
-      border-top: 1px dashed rgba(34,28,57,.19);
-    }
-
-    .thanks-kicker {
-      color: var(--pink-deep);
-      font-size: 10px;
-      font-weight: 850;
-      letter-spacing: .22em;
-      text-align: center;
-    }
-
-    .thanks h2 { margin: 8px 0 0; font-size: 38px; text-align: center; letter-spacing: -.045em; }
-    .thanks h2 span { color: var(--pink); }
-    .thanks > p { margin: 5px 0 24px; color: var(--muted); text-align: center; font: italic 15px Georgia, serif; }
-
-    .thanks-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
-    }
-
+    .thanks { margin-top: 46px; padding-top: 26px; border-top: 1px dashed var(--line); text-align: center; }
+    .thanks .kicker { color: var(--pink-deep); font-size: 11px; font-weight: 700; letter-spacing: .22em; }
+    .thanks-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 16px; }
     .thanks-grid a {
-      min-height: 104px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      border: 1px solid rgba(255,255,255,.82);
-      border-radius: 18px;
-      background: rgba(255,255,255,.68);
-      box-shadow: 0 12px 32px rgba(43,39,75,.07), inset 0 1px 0 #fff;
-      backdrop-filter: blur(14px);
-      font-size: 12px;
-      font-weight: 760;
-      text-align: center;
-      text-decoration: none;
-      transition: transform .2s ease, background .2s ease;
+      width: 48px; height: 48px; display: grid; place-items: center;
+      border: 1px solid rgba(255,255,255,.85); border-radius: 15px;
+      background: rgba(255,255,255,.68); box-shadow: 0 8px 20px rgba(43,39,75,.07), inset 0 1px 0 #fff;
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      transition: transform .18s ease, background .18s ease, box-shadow .18s ease;
     }
-
-    .thanks-grid a:hover { transform: translateY(-3px); background: rgba(255,255,255,.9); }
-
-    .brand-mark {
-      width: 48px;
-      height: 42px;
-      display: grid;
-      place-items: center;
-    }
-
-    .brand-mark svg {
-      width: 36px;
-      height: 36px;
-      display: block;
-    }
-
-    .brand-mark img {
-      width: 40px;
-      height: 40px;
-      object-fit: contain;
-    }
-
-    .thanks > .brand-note {
-      max-width: 820px;
-      margin: 18px auto 0;
-      color: rgba(118,109,145,.58);
-      font: 500 10px/1.7 Inter, "Noto Sans SC", sans-serif;
-      letter-spacing: .01em;
-      text-align: center;
-    }
-
-    footer {
-      margin-top: 30px;
-      color: #aaa1bd;
-      font-size: 11px;
-      letter-spacing: .14em;
-      text-align: center;
-    }
+    .thanks-grid a:hover { transform: translateY(-3px); background: rgba(255,255,255,.95); box-shadow: 0 14px 28px rgba(43,39,75,.12), inset 0 1px 0 #fff; }
+    .thanks-grid img { width: 24px; height: 24px; object-fit: contain; }
+    .brand-note { margin: 14px auto 0; max-width: 640px; color: rgba(107,98,134,.6); font-size: 10.5px; line-height: 1.7; }
+    footer { margin-top: 30px; color: #a79ec0; font-size: 11px; letter-spacing: .14em; text-align: center; }
 
     @media (max-width: 900px) {
-      .layout { grid-template-columns: 1fr; gap: 12px; }
-      .profile { position: static; padding: 8px 0 20px; }
-      .stack { width: min(100%, 560px); margin: 0 auto; }
+      .layout { grid-template-columns: 1fr; gap: 20px; }
+      .profile { position: static; }
+      .socials { grid-template-columns: 1fr 1fr; width: min(100%, 480px); margin: 24px auto 0; }
+      .stack { width: min(100%, 580px); margin: 0 auto; }
     }
-
     @media (max-width: 620px) {
-      .shell { width: min(100% - 28px, 1080px); padding-top: 28px; }
-      .project { grid-template-columns: 1fr; }
-      .project-visual { min-height: 160px; }
-      .thanks-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .shell { width: calc(100% - 28px); padding-top: 30px; }
+      .socials { grid-template-columns: 1fr; }
+      .work { grid-template-columns: 1fr; }
+      .work-visual { min-height: 150px; }
+      .post-row { grid-template-columns: 1fr 22px; }
+      .post-row time { display: none; }
     }
-
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -476,60 +211,56 @@
           <span class="badge blue">音乐</span>
           <span class="badge pink">摄影</span>
         </div>
+        <div class="socials">
+          <a class="social x" href="https://x.com/ryusoohow" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            <span class="txt"><small>X / TWITTER</small><b>@ryusoohow</b></span><span class="go">↗</span>
+          </a>
+          <a class="social yt" href="https://www.youtube.com/@mint8733" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.5A3.02 3.02 0 0 0 .5 6.19C0 8.07 0 12 0 12s0 3.93.5 5.81a3.02 3.02 0 0 0 2.12 2.14c1.88.5 9.38.5 9.38.5s7.5 0 9.38-.5a3.02 3.02 0 0 0 2.12-2.14C24 15.93 24 12 24 12s0-3.93-.5-5.81zM9.55 15.57V8.43L15.82 12z"/></svg>
+            <span class="txt"><small>YOUTUBE</small><b>@mint8733</b></span><span class="go">↗</span>
+          </a>
+        </div>
       </section>
 
-      <section class="stack" aria-label="主页链接">
-        <a class="card blue-card card-link" href="https://x.com/ryusoohow" target="_blank" rel="noopener noreferrer">
-          <span><span class="label">X / TWITTER</span><span class="title">@ryusoohow</span></span><span class="arrow">↗</span>
-        </a>
-
-        <a class="card card-link" href="https://www.youtube.com/@mint8733" target="_blank" rel="noopener noreferrer">
-          <span><span class="label">YOUTUBE</span><span class="title">@mint8733</span></span><span class="arrow">↗</span>
-        </a>
-
-        <details class="card pink-card">
-          <summary><span><span class="label">PORTFOLIO</span><span class="title">我的作品</span></span><span class="arrow">↓</span></summary>
-          <div class="detail">
-            <p>持续更新中的个人项目、产品与技术实验。</p>
-            <div class="projects">
-              <article class="project">
-                <div>
-                  <small>VST3 · C++20 · AUDIO DSP</small>
-                  <h2>Mint 的混音通道条</h2>
-                  <p>为直播小白与专业创作者设计，从一键处理到完整混音控制。</p>
-                  <a class="project-action" href="/works/mint-final-channel/">查看作品 ↗</a>
-                </div>
-                <div class="project-visual"><img src="/works/mint-final-channel/assets/cover.png" alt="Mint Final Channel 展示图"></div>
-              </article>
-
-              <article class="project">
-                <div>
-                  <small>LIVE AI · GEMINI · WEBRTC</small>
-                  <h2>Mint 同传</h2>
-                  <p>面向现场课堂的韩语到普通话实时同声传译。</p>
-                  <a class="project-action" href="https://live.mintryu.com" target="_blank" rel="noopener noreferrer">打开项目 ↗</a>
-                </div>
-                <div class="project-visual">
-                  <div class="mini-live"><b>Mint 同传</b><i></i><span>실시간 번역<br>实时语音翻译</span></div>
-                </div>
-              </article>
-            </div>
-          </div>
-        </details>
-
-        <details class="card dark-card">
-          <summary><span><span class="label">BLOG</span><span class="title">博客入口</span></span><span class="arrow">↓</span></summary>
-          <div class="detail blog-list">
-            <p>最近更新</p>
-            <a class="blog-row" id="latest-blog-1" href="https://mintryu.com/blog/u-card-license-risk-spectrum">
-              <time datetime="2026-07-17">2026.07.17</time><strong>中推圈的开户生意：我花一天把六层平台的牌照全查了一遍</strong><span>↗</span>
+      <div class="stack">
+        <section aria-label="精选作品">
+          <div class="section-head"><span class="kicker">SELECTED WORKS</span></div>
+          <div class="works">
+            <a class="card work" href="/works/mint-final-channel/">
+              <div class="work-visual"><img src="/works/mint-final-channel/assets/cover.png" alt="Mint Final Channel 展示图"></div>
+              <div class="work-body">
+                <small>VST3 · C++20 · AUDIO DSP</small>
+                <h3>Mint 的混音通道条</h3>
+                <p>为直播小白与专业创作者设计，从一键处理到完整混音控制。</p>
+                <span class="work-cta">查看作品 ↗</span>
+              </div>
             </a>
-            <a class="blog-row" id="latest-blog-2" href="https://mintryu.com/blog/korean-food-memories">
-              <time datetime="2026-07-16">2026.07.16</time><strong>在韩国吃过的一些饭</strong><span>↗</span>
+            <a class="card work mini" href="https://live.mintryu.com" target="_blank" rel="noopener noreferrer">
+              <div class="work-visual"><div class="mini-live"><b>Mint 同传</b><i></i><span>실시간 번역<br>实时语音翻译</span></div></div>
+              <div class="work-body">
+                <small>LIVE AI · GEMINI · WEBRTC</small>
+                <h3>Mint 同传</h3>
+                <p>面向现场课堂的韩语到普通话实时同声传译。</p>
+                <span class="work-cta">打开项目 ↗</span>
+              </div>
             </a>
-            <a class="blog-all" href="https://mintryu.com/blog">查看全部文章 ↗</a>
           </div>
-        </details>
+        </section>
+
+        <section aria-label="最新文章">
+          <div class="section-head"><span class="kicker">LATEST NOTES</span><a class="more" href="/blog">全部文章 ↗</a></div>
+          <div class="card posts">
+            <a class="post-row" id="latest-blog-1" href="/blog/u-card-license-risk-spectrum">
+              <time datetime="2026-07-17">2026.07.17</time>
+              <strong>中推圈的开户生意：我花一天把六层平台的牌照全查了一遍</strong><span>↗</span>
+            </a>
+            <a class="post-row" id="latest-blog-2" href="/blog/korean-food-memories">
+              <time datetime="2026-07-16">2026.07.16</time>
+              <strong>在韩国吃过的一些饭</strong><span>↗</span>
+            </a>
+          </div>
+        </section>
 
         <details class="card">
           <summary><span><span class="label">CONTACT</span><span class="title">联系我</span></span><span class="arrow">↓</span></summary>
@@ -539,22 +270,20 @@
             <a href="tel:+8201057655902">🇰🇷 +82 010 5765 5902</a>
           </div>
         </details>
-      </section>
+      </div>
     </div>
 
-    <section class="thanks" aria-labelledby="thanks-title">
-      <div class="thanks-kicker">ACKNOWLEDGEMENTS</div>
-      <h2 id="thanks-title">参考与致谢<span>.</span></h2>
-      <p>Tools and organizations I use, learn from, or appreciate</p>
+    <section class="thanks" aria-label="参考与致谢">
+      <div class="kicker">ACKNOWLEDGEMENTS</div>
       <div class="thanks-grid">
-        <a href="https://cloudflare.com" target="_blank" rel="noopener noreferrer" aria-label="Cloudflare 官方网站"><span class="brand-mark"><svg aria-hidden="true" style="fill:#f38020" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M16.5088 16.8447c.1475-.5068.0908-.9707-.1553-1.3154-.2246-.3164-.6045-.499-1.0615-.5205l-8.6592-.1123a.1559.1559 0 0 1-.1333-.0713c-.0283-.042-.0351-.0986-.021-.1553.0278-.084.1123-.1484.2036-.1562l8.7359-.1123c1.0351-.0489 2.1601-.8868 2.5537-1.9136l.499-1.3013c.0215-.0561.0293-.1128.0147-.168-.5625-2.5463-2.835-4.4453-5.5499-4.4453-2.5039 0-4.6284 1.6177-5.3876 3.8614-.4927-.3658-1.1187-.5625-1.794-.499-1.2026.119-2.1665 1.083-2.2861 2.2856-.0283.31-.0069.6128.0635.894C1.5683 13.171 0 14.7754 0 16.752c0 .1748.0142.3515.0352.5273.0141.083.0844.1475.1689.1475h15.9814c.0909 0 .1758-.0645.2032-.1553l.12-.4268zm2.7568-5.5634c-.0771 0-.1611 0-.2383.0112-.0566 0-.1054.0415-.127.0976l-.3378 1.1744c-.1475.5068-.0918.9707.1543 1.3164.2256.3164.6055.498 1.0625.5195l1.8437.1133c.0557 0 .1055.0263.1329.0703.0283.043.0351.1074.0214.1562-.0283.084-.1132.1485-.204.1553l-1.921.1123c-1.041.0488-2.1582.8867-2.5527 1.914l-.1406.3585c-.0283.0713.0215.1416.0986.1416h6.5977c.0771 0 .1474-.0489.169-.126.1122-.4082.1757-.837.1757-1.2803 0-2.6025-2.125-4.727-4.7344-4.727"/></svg></span>Cloudflare</a>
-        <a href="https://openai.com" target="_blank" rel="noopener noreferrer" aria-label="OpenAI 官方网站"><span class="brand-mark"><svg aria-hidden="true" style="fill:#412991" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/></svg></span>OpenAI</a>
-        <a href="https://anthropic.com" target="_blank" rel="noopener noreferrer" aria-label="Anthropic 官方网站"><span class="brand-mark"><svg aria-hidden="true" style="fill:#d97757" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.3041 3.541h-3.6718l6.696 16.918H24Zm-10.6082 0L0 20.459h3.7442l1.3693-3.5527h7.0052l1.3693 3.5528h3.7442L10.5363 3.5409Zm-.3712 10.2232 2.2914-5.9456 2.2914 5.9456Z"/></svg></span>Anthropic</a>
-        <a href="https://deepmind.google" target="_blank" rel="noopener noreferrer" aria-label="Google DeepMind 官方网站"><span class="brand-mark"><svg aria-hidden="true" style="fill:#4285f4" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg"><path d="M133.52 16.39C122.52 11.17 109.43 8 97 8 59.48 8 37.04 39.06 39.45 69.4c1.09 13.73 7.83 27.02 18.98 37.4 4.14 3.84 8.62 7.04 13.26 9.53a31.482 31.482 0 0 1-6.98-15.19C62.22 85.89 72.28 63.45 98 63.45c27.66 0 58.14 26.31 60.69 58.64 1.58 19.77-5.93 37.61-18.6 50.04C166.37 156.9 184 128.5 184 96c0-35.17-20.65-65.53-50.48-79.61z"/><path d="M152.55 122.6c-1.09-13.73-7.83-27.02-18.98-37.4-4.14-3.84-8.62-7.04-13.26-9.53 3.58 4.25 6.04 9.47 6.98 15.19 2.49 15.25-7.57 37.69-33.29 37.69-27.66 0-58.14-26.31-60.69-58.64-1.58-19.77 5.93-37.61 18.6-50.04C25.63 35.1 8 63.5 8 96c0 35.17 20.65 65.53 50.48 79.61 11 5.22 24.08 8.39 36.52 8.39 37.52 0 59.96-31.06 57.55-61.4z"/></svg></span>Google DeepMind</a>
-        <a href="https://x.ai" target="_blank" rel="noopener noreferrer" aria-label="xAI 官方网站"><span class="brand-mark"><svg aria-hidden="true" style="fill:#111117" viewBox="0 0 466.04 516.93" xmlns="http://www.w3.org/2000/svg"><polygon points="0.12 182.71 234.14 516.92 338.15 516.92 104.13 182.71 0.12 182.71"/><polygon points="0 516.92 104.08 516.92 156.08 442.67 104.04 368.34 0 516.92"/><polygon points="466.04 0 361.96 0 182.1 256.86 234.15 331.18 466.04 0"/><polygon points="380.78 516.92 466.04 516.92 466.04 37.16 380.78 158.92 380.78 516.92"/></svg></span>x.AI</a>
-        <a href="https://apple.com" target="_blank" rel="noopener noreferrer" aria-label="Apple 官方网站"><span class="brand-mark"><svg aria-hidden="true" style="fill:#555" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg></span>Apple</a>
-        <a href="https://samsung.com" target="_blank" rel="noopener noreferrer" aria-label="Samsung 官方网站"><span class="brand-mark"><svg aria-hidden="true" style="fill:#1428a0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.8166 10.2808l.0459 2.6934h-.023l-.7793-2.6934h-1.2837v3.3925h.8481l-.0458-2.785h.023l.8366 2.785h1.2264v-3.3925zm-16.149 0l-.6418 3.427h.9284l.4699-3.1175h.0229l.4585 3.1174h.9169l-.6304-3.4269zm5.1805 0l-.424 2.6132h-.023l-.424-2.6132H6.5788l-.0688 3.427h.8596l.023-3.0832h.0114l.573 3.0831h.8711l.5731-3.083h.023l.0228 3.083h.8596l-.0802-3.4269zm-7.2664 2.4527c.0343.0802.0229.1949.0114.2522-.0229.1146-.1031.2292-.3324.2292-.2177 0-.3438-.126-.3438-.3095v-.3323H0v.2636c0 .7679.6074.9971 1.2493.9971.6189 0 1.1346-.2178 1.2149-.7794.0458-.298.0114-.4928 0-.5616-.1605-.722-1.467-.9283-1.5588-1.3295-.0114-.0688-.0114-.1375 0-.1834.023-.1146.1032-.2292.3095-.2292.2063 0 .321.126.321.3095v.2063h.8595v-.2407c0-.745-.6762-.8596-1.1576-.8596-.6074 0-1.1117.2063-1.2034.7564-.023.149-.0344.2866.0114.4585.1376.7106 1.364.9169 1.5358 1.3524m11.152 0c.0343.0803.0228.1834.0114.2522-.023.1146-.1032.2292-.3324.2292-.2178 0-.3438-.126-.3438-.3095v-.3323h-.917v.2636c0 .7564.596.9857 1.2379.9857.6189 0 1.1232-.2063 1.2034-.7794.0459-.298.0115-.4814 0-.5616-.1375-.7106-1.4327-.9284-1.5243-1.318-.0115-.0688-.0115-.1376 0-.1835.0229-.1146.1031-.2292.3094-.2292.1948 0 .321.126.321.3095v.2063h.848v-.2407c0-.745-.6647-.8596-1.146-.8596-.6075 0-1.1004.1948-1.192.7564-.023.149-.023.2866.0114.4585.1376.7106 1.341.9054 1.513 1.3524m2.8882.4585c.2407 0 .3094-.1605.3323-.2522.0115-.0343.0115-.0917.0115-.126v-2.533h.871v2.4642c0 .0688 0 .1948-.0114.2292-.0573.6419-.5616.8482-1.192.8482-.6303 0-1.1346-.2063-1.192-.8482 0-.0344-.0114-.1604-.0114-.2292v-2.4642h.871v2.533c0 .0458 0 .0916.0115.126 0 .0917.0688.2522.3095.2522m7.1518-.0344c.2522 0 .3324-.1605.3553-.2522.0115-.0343.0115-.0917.0115-.126v-.4929h-.3553v-.5043H24v.917c0 .0687 0 .1145-.0115.2292-.0573.6303-.596.8481-1.2034.8481-.6075 0-1.1461-.2178-1.2034-.8481-.0115-.1147-.0115-.1605-.0115-.2293v-1.444c0-.0574.0115-.172.0115-.2293.0802-.6419.596-.8482 1.2034-.8482s1.1347.2063 1.2034.8482c.0115.1031.0115.2292.0115.2292v.1146h-.8596v-.1948s0-.0803-.0115-.1261c-.0114-.0802-.0802-.2521-.3438-.2521-.2521 0-.321.1604-.3438.2521-.0115.0458-.0115.1032-.0115.1605v1.5702c0 .0458 0 .0916.0115.126 0 .0917.0917.2522.3323.2522"/></svg></span>Samsung</a>
-        <a href="https://korea.ac.kr" target="_blank" rel="noopener noreferrer" aria-label="Korea University 官方网站"><span class="brand-mark"><img src="/brand-icons/korea-university.png?v=20260717" alt=""></span>Korea University</a>
+        <a href="https://cloudflare.com" target="_blank" rel="noopener noreferrer" aria-label="Cloudflare 官方网站" title="Cloudflare"><img src="/brand-icons/cloudflare.svg" alt="Cloudflare"></a>
+        <a href="https://openai.com" target="_blank" rel="noopener noreferrer" aria-label="OpenAI 官方网站" title="OpenAI"><img src="/brand-icons/openai.svg" alt="OpenAI"></a>
+        <a href="https://anthropic.com" target="_blank" rel="noopener noreferrer" aria-label="Anthropic 官方网站" title="Anthropic"><img src="/brand-icons/anthropic.svg" alt="Anthropic"></a>
+        <a href="https://deepmind.google" target="_blank" rel="noopener noreferrer" aria-label="Google DeepMind 官方网站" title="Google DeepMind"><img src="/brand-icons/google-deepmind.svg" alt="Google DeepMind"></a>
+        <a href="https://x.ai" target="_blank" rel="noopener noreferrer" aria-label="xAI 官方网站" title="x.AI"><img src="/brand-icons/xai.svg" alt="x.AI"></a>
+        <a href="https://apple.com" target="_blank" rel="noopener noreferrer" aria-label="Apple 官方网站" title="Apple"><img src="/brand-icons/apple.svg" alt="Apple"></a>
+        <a href="https://samsung.com" target="_blank" rel="noopener noreferrer" aria-label="Samsung 官方网站" title="Samsung"><img src="/brand-icons/samsung.svg" alt="Samsung"></a>
+        <a href="https://korea.ac.kr" target="_blank" rel="noopener noreferrer" aria-label="Korea University 官方网站" title="Korea University"><img src="/brand-icons/korea-university.png?v=20260717" alt="Korea University"></a>
       </div>
       <p class="brand-note">All trademarks, logos, and brand names belong to their respective owners. Their inclusion here does not imply affiliation, sponsorship, endorsement, or official association.</p>
     </section>
