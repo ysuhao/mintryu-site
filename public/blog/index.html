@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Ryu Mint 的文章、作品与开发记录。">
+  <meta name="theme-color" content="#ffffff">
+  <title>博客 — Ryu Mint</title>
+  <style>
+    :root { --ink:#101014; --muted:#66666e; --line:#e7e7eb; --blue:#28c6ee; --pink:#ff69bd; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:#fff; font-family:Inter,"Noto Sans SC","PingFang SC",ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; -webkit-font-smoothing:antialiased; }
+    a { color:inherit; }
+    .page { width:min(1180px,calc(100% - 48px)); margin:0 auto; }
+    nav { min-height:84px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--line); font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; }
+    nav a { text-decoration:none; }
+    .dot { color:var(--pink); }
+    header { padding:100px 0 82px; }
+    .kicker { margin-bottom:18px; color:var(--blue); font-size:12px; font-weight:850; letter-spacing:.24em; text-transform:uppercase; }
+    h1 { margin:0; font-size:clamp(68px,10vw,132px); line-height:.88; letter-spacing:-.075em; }
+    header p { max-width:650px; margin:38px 0 0; color:var(--muted); font-size:18px; line-height:1.8; }
+    .list { border-top:1px solid var(--line); }
+    article { display:grid; grid-template-columns:150px 1fr auto; gap:36px; align-items:center; padding:38px 0; border-bottom:1px solid var(--line); }
+    time { color:#9999a1; font:700 11px ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.08em; }
+    h2 { margin:0 0 10px; font-size:clamp(25px,3vw,38px); letter-spacing:-.04em; }
+    article p { margin:0; color:var(--muted); line-height:1.7; }
+    .open { display:inline-flex; min-height:44px; align-items:center; padding:0 17px; border:1px solid var(--ink); background:var(--ink); color:#fff; font-size:12px; font-weight:800; text-decoration:none; }
+    footer { display:flex; justify-content:space-between; gap:20px; margin-top:100px; padding:28px 0 42px; border-top:1px solid var(--line); color:#9999a1; font-size:11px; letter-spacing:.1em; text-transform:uppercase; }
+    @media(max-width:720px){.page{width:calc(100% - 32px)}header{padding:78px 0 68px}article{grid-template-columns:1fr;gap:16px}.open{justify-self:start}footer{flex-direction:column}}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <nav><a href="/">Ryu Mint<span class="dot">.</span></a><a href="/">返回主页 ↗</a></nav>
+    <header>
+      <div class="kicker">Notes / Work / Process</div>
+      <h1>博客<span class="dot">.</span></h1>
+      <p>文章、作品与开发过程的安静存档。这里先从正在构建的创作者工具开始，后续持续更新。</p>
+    </header>
+    <main class="list">
+      <article>
+        <time datetime="2026-07-17">2026 / 07 / 17</time>
+        <div><h2>调音的终结和最后的通道条</h2><p>双模式 VST3 通道条的产品设计、界面与低延迟音频链展示。</p></div>
+        <a class="open" href="/works/mint-final-channel/">查看作品 ↗</a>
+      </article>
+    </main>
+    <footer><span>© 2026 Ryu Mint</span><span>Blue / Pink / White</span></footer>
+  </div>
+</body>
+</html>
