@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Agent × Hyper-personalization → GEO for 소상공인 — Team Mission Demo</title>
+<meta name="description" content="고려대학교 디지털 창업 팀미션 데모: 소상공인을 위한 GEO(Generative Engine Optimization) 기회">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@800;900&family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#fff8e9;
+    --ink:#182449;
+    --blue:#9bd5f3;
+    --blue-deep:#4b86bd;
+    --yellow:#ffd866;
+    --yellow-deep:#e39b2e;
+    --pink:#f6b0bb;
+    --pink-deep:#c85f78;
+    --mint:#b9e4ce;
+    --radius:22px;
+    --shadow:7px 8px 0 var(--ink);
+    --shadow-sm:4px 5px 0 var(--ink);
+    --font-display:Nunito,"Noto Sans KR","Noto Sans SC","PingFang SC",sans-serif;
+    --font-body:"Noto Sans KR","Noto Sans SC","PingFang SC",system-ui,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background-color:var(--paper);
+    background-image:radial-gradient(rgba(24,36,73,.09) 1.1px, transparent 1.2px);
+    background-size:22px 22px;
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--yellow);}
+  .shell{width:min(1160px, 100% - 36px);margin:0 auto;}
+  h1,h2,h3,.display{font-family:var(--font-display);font-weight:900;line-height:1.18;letter-spacing:-.01em;}
+  .zh{
+    display:block;
+    font-size:.78em;
+    color:rgba(24,36,73,.62);
+    font-weight:500;
+    margin-top:.3em;
+    line-height:1.5;
+  }
+  .en{font-family:var(--font-display);font-weight:800;}
+  .muted{color:rgba(24,36,73,.6);}
+  button{font-family:inherit;color:var(--ink);cursor:pointer;}
+  button:focus-visible, a:focus-visible, [tabindex]:focus-visible{
+    outline:3px dashed var(--blue-deep);
+    outline-offset:3px;
+    border-radius:6px;
+  }
+  a{color:var(--blue-deep);word-break:break-all;}
+  a:hover{color:var(--pink-deep);}
+
+  /* ---------- section frames ---------- */
+  section{margin:0 0 72px;}
+  .kicker{
+    display:inline-block;
+    font-family:var(--font-display);font-weight:900;font-size:.8rem;
+    letter-spacing:.14em;text-transform:uppercase;
+    background:var(--ink);color:var(--paper);
+    padding:7px 16px;border-radius:999px;
+    margin-bottom:18px;
+  }
+  .kicker .zh{display:inline;color:rgba(255,248,233,.75);font-size:.85em;margin:0 0 0 .6em;}
+  .sec-title{font-size:clamp(1.7rem, 4vw, 2.6rem);margin-bottom:8px;}
+  .sec-sub{font-size:1.02rem;max-width:52ch;}
+
+  /* ---------- header / hero ---------- */
+  header.hero{padding:56px 0 40px;}
+  .hero-tag{
+    display:inline-flex;flex-wrap:wrap;gap:6px;align-items:center;
+    font-family:var(--font-display);font-weight:900;font-size:.72rem;letter-spacing:.16em;
+    border:2.5px solid var(--ink);border-radius:999px;
+    padding:9px 18px;background:#fff;
+    box-shadow:var(--shadow-sm);
+    transform:rotate(-1deg);
+    margin-bottom:26px;
+  }
+  .hero-tag .sep{opacity:.4;}
+  .brand-dots{display:flex;gap:10px;margin-bottom:20px;}
+  .brand-dots i{width:16px;height:16px;border-radius:50%;border:2.5px solid var(--ink);display:block;}
+  .brand-dots i:nth-child(1){background:var(--mint);transform:translateY(-3px);}
+  .brand-dots i:nth-child(2){background:var(--pink);}
+  .brand-dots i:nth-child(3){background:var(--yellow);transform:translateY(3px);}
+  .brand-dots i:nth-child(4){background:var(--blue);transform:translateY(-2px);}
+  .hero h1{font-size:clamp(2rem, 5.4vw, 3.6rem);max-width:22ch;}
+  .hero h1 .accent{
+    background:var(--yellow);border:2.5px solid var(--ink);border-radius:14px;
+    padding:0 .28em;box-shadow:var(--shadow-sm);display:inline-block;transform:rotate(-1deg);
+    margin:0 .1em;
+  }
+  .hero-sub{
+    margin-top:26px;font-size:clamp(1.05rem,2.4vw,1.35rem);font-weight:700;max-width:46ch;
+    border-left:6px solid var(--pink);padding-left:18px;
+  }
+
+  /* ---------- sticker cards / trend strip ---------- */
+  .trend-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;}
+  .sticker{
+    background:#fff;border:3px solid var(--ink);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:26px 26px 24px;
+    position:relative;
+  }
+  .sticker.tilt-l{transform:rotate(-1.2deg);}
+  .sticker.tilt-r{transform:rotate(1.1deg);}
+  .sticker .num{
+    position:absolute;top:-16px;left:20px;
+    font-family:var(--font-display);font-weight:900;font-size:.85rem;
+    padding:6px 14px;border:2.5px solid var(--ink);border-radius:999px;
+    box-shadow:3px 3px 0 var(--ink);
+  }
+  .sticker.blue{background:var(--blue);} .sticker.blue .num{background:var(--blue-deep);color:#fff;}
+  .sticker.yellow{background:var(--yellow);} .sticker.yellow .num{background:var(--yellow-deep);color:#fff;}
+  .sticker h3{font-size:1.25rem;margin:10px 0 10px;}
+  .sticker p{font-weight:500;}
+  .sticker .note{
+    margin-top:16px;font-size:.82rem;font-weight:700;
+    border-top:2px dashed rgba(24,36,73,.35);padding-top:12px;
+  }
+  .quote-chip{
+    margin-top:14px;background:#fff;border:2.5px solid var(--ink);border-radius:14px;
+    padding:12px 16px;font-weight:700;font-size:.95rem;
+    box-shadow:4px 4px 0 rgba(24,36,73,.9);transform:rotate(-.6deg);
+  }
+
+  /* ---------- stat band ---------- */
+  .stat-band{
+    background:var(--ink);color:var(--paper);
+    border:3px solid var(--ink);border-radius:26px;
+    box-shadow:7px 8px 0 var(--pink-deep);
+    padding:38px 30px 30px;
+  }
+  .stat-band .band-title{
+    font-family:var(--font-display);font-weight:900;font-size:.85rem;letter-spacing:.14em;
+    color:var(--yellow);margin-bottom:24px;
+  }
+  .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+  .stat{
+    background:var(--paper);color:var(--ink);
+    border:3px solid var(--ink);border-radius:18px;
+    padding:22px 20px;box-shadow:5px 6px 0 rgba(255,248,233,.25);
+  }
+  .stat .big{font-family:var(--font-display);font-weight:900;font-size:clamp(2.1rem,4.5vw,3rem);line-height:1;}
+  .stat:nth-child(1) .big{color:var(--blue-deep);}
+  .stat:nth-child(2) .big{color:var(--yellow-deep);}
+  .stat:nth-child(3) .big{color:var(--pink-deep);}
+  .stat .label{font-weight:800;margin-top:8px;font-size:1rem;}
+  .stat .detail{font-size:.85rem;margin-top:6px;}
+  .stat-caption{
+    margin-top:24px;text-align:center;
+    font-family:var(--font-display);font-weight:900;font-size:1.2rem;
+  }
+  .stat-caption .zh{color:rgba(255,248,233,.65);}
+
+  /* ---------- feature A: before/after ---------- */
+  .panel{
+    background:#fff;border:3px solid var(--ink);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:30px;
+  }
+  .toggle-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:24px;}
+  .seg-btn{
+    flex:1 1 200px;min-height:56px;
+    font-family:var(--font-display);font-weight:900;font-size:1.05rem;
+    border:3px solid var(--ink);border-radius:16px;background:var(--paper);
+    box-shadow:var(--shadow-sm);padding:12px 18px;
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+  }
+  .seg-btn small{display:block;font-family:var(--font-body);font-weight:500;font-size:.75rem;color:rgba(24,36,73,.6);margin-top:2px;}
+  .seg-btn[aria-pressed="true"]{
+    background:var(--ink);color:var(--paper);
+    transform:translate(4px,5px);box-shadow:1px 1px 0 var(--ink);
+  }
+  .seg-btn[aria-pressed="true"] small{color:rgba(255,248,233,.7);}
+  .seg-btn:not([aria-pressed="true"]):hover{transform:translate(2px,3px);box-shadow:2px 2px 0 var(--ink);}
+  .ba-stage{position:relative;min-height:270px;}
+  .ba-card{
+    position:absolute;inset:0;
+    border:3px solid var(--ink);border-radius:18px;
+    padding:26px;display:flex;flex-direction:column;justify-content:center;gap:14px;
+    transition:opacity .45s ease, transform .45s ease;
+  }
+  .ba-card.before{background:var(--blue);}
+  .ba-card.after{background:var(--pink);}
+  .ba-card.hidden-card{opacity:0;transform:translateY(14px) scale(.98);pointer-events:none;}
+  .ba-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+  .ba-pill{
+    background:#fff;border:2.5px solid var(--ink);border-radius:999px;
+    padding:8px 18px;font-weight:800;font-size:1rem;box-shadow:3px 3px 0 var(--ink);
+  }
+  .ba-pill .zh{display:inline;margin:0 0 0 .5em;font-size:.75em;}
+  .ba-label{font-family:var(--font-display);font-weight:900;font-size:.8rem;letter-spacing:.12em;
+    background:var(--ink);color:var(--paper);padding:5px 12px;border-radius:999px;width:max-content;}
+  .ba-verdict{margin-top:4px;font-weight:800;font-size:1.1rem;}
+
+  /* ---------- feature B: diagnostic ---------- */
+  .diag-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:26px;align-items:start;}
+  .field{margin-bottom:20px;}
+  .field legend, .field .field-label{
+    font-weight:800;font-size:.95rem;margin-bottom:10px;display:block;
+  }
+  .chip-group{display:flex;gap:10px;flex-wrap:wrap;}
+  .chip-btn{
+    min-height:44px;padding:10px 16px;font-weight:700;font-size:.92rem;
+    border:2.5px solid var(--ink);border-radius:999px;background:var(--paper);
+    box-shadow:3px 3px 0 var(--ink);
+    transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .chip-btn[aria-pressed="true"]{background:var(--ink);color:var(--paper);transform:translate(3px,3px);box-shadow:0 0 0 var(--ink);}
+  .chip-btn:not([aria-pressed="true"]):hover{transform:translate(1px,1px);box-shadow:2px 2px 0 var(--ink);}
+  .diag-submit{
+    width:100%;min-height:56px;margin-top:6px;
+    font-family:var(--font-display);font-weight:900;font-size:1.1rem;
+    background:var(--yellow);border:3px solid var(--ink);border-radius:16px;
+    box-shadow:var(--shadow-sm);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .diag-submit:hover{transform:translate(2px,3px);box-shadow:2px 2px 0 var(--ink);}
+  .diag-result{
+    background:var(--mint);border:3px solid var(--ink);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:26px;min-height:340px;
+  }
+  .diag-result.risk{background:var(--pink);}
+  .diag-result.mid{background:var(--yellow);}
+  .verdict-tag{
+    display:inline-block;font-family:var(--font-display);font-weight:900;font-size:.8rem;letter-spacing:.1em;
+    background:var(--ink);color:var(--paper);padding:6px 14px;border-radius:999px;margin-bottom:14px;
+  }
+  .diag-result h3{font-size:1.3rem;margin-bottom:10px;}
+  .stat-list{list-style:none;margin-top:14px;display:flex;flex-direction:column;gap:10px;}
+  .stat-list li{
+    background:#fff;border:2.5px solid var(--ink);border-radius:14px;
+    padding:11px 15px;font-size:.92rem;font-weight:600;
+    box-shadow:3px 3px 0 rgba(24,36,73,.9);
+  }
+  .stat-list li b{font-family:var(--font-display);font-weight:900;}
+  .demo-badge{
+    display:inline-block;margin-top:16px;font-size:.75rem;font-weight:800;
+    border:2px dashed var(--ink);border-radius:999px;padding:5px 14px;
+    background:rgba(255,255,255,.7);
+  }
+
+  /* ---------- feature C: agent flow ---------- */
+  .flow-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start;}
+  .step-btn{
+    width:100%;text-align:left;
+    background:#fff;border:3px solid var(--ink);border-radius:18px;
+    box-shadow:var(--shadow-sm);padding:18px 20px;margin-bottom:16px;
+    display:flex;gap:14px;align-items:flex-start;
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+  }
+  .step-btn .step-num{
+    flex:none;width:44px;height:44px;border-radius:50%;
+    border:2.5px solid var(--ink);background:var(--blue);
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-display);font-weight:900;font-size:1.1rem;
+  }
+  .step-btn[data-step="2"] .step-num{background:var(--yellow);}
+  .step-btn[data-step="3"] .step-num{background:var(--mint);}
+  .step-btn h3{font-size:1.05rem;margin-bottom:4px;}
+  .step-btn p{font-size:.87rem;font-weight:500;}
+  .step-btn[aria-selected="true"]{
+    background:var(--ink);color:var(--paper);
+    transform:translate(4px,5px);box-shadow:1px 1px 0 var(--ink);
+  }
+  .step-btn[aria-selected="true"] p{color:rgba(255,248,233,.85);}
+  .step-btn:not([aria-selected="true"]):hover{transform:translate(2px,3px);box-shadow:2px 2px 0 var(--ink);}
+  .phone-wrap{display:flex;flex-direction:column;align-items:center;}
+  .phone{
+    width:min(320px,100%);
+    background:#fff;border:3.5px solid var(--ink);border-radius:36px;
+    box-shadow:var(--shadow);padding:18px 16px 22px;position:relative;
+  }
+  .phone::before{
+    content:"";display:block;width:88px;height:10px;border-radius:999px;
+    background:var(--ink);margin:0 auto 16px;
+  }
+  .phone-screen{min-height:400px;display:flex;flex-direction:column;gap:12px;}
+  .phone h4{font-family:var(--font-display);font-weight:900;font-size:1rem;}
+  .mock-card{
+    border:2.5px solid var(--ink);border-radius:14px;padding:13px 14px;font-size:.85rem;font-weight:600;
+    background:var(--paper);
+  }
+  .mock-card.blue{background:var(--blue);} .mock-card.yellow{background:var(--yellow);}
+  .mock-card.pink{background:var(--pink);} .mock-card.mint{background:var(--mint);}
+  .mock-bar{height:12px;border:2px solid var(--ink);border-radius:999px;background:#fff;overflow:hidden;margin-top:8px;}
+  .mock-bar i{display:block;height:100%;background:var(--pink-deep);width:0;transition:width .6s ease;}
+  .mock-bar.good i{background:var(--blue-deep);}
+  .tag-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+  .tag{
+    font-size:.78rem;font-weight:800;border:2px solid var(--ink);border-radius:999px;
+    padding:4px 11px;background:#fff;
+  }
+  .tag.new{background:var(--ink);color:var(--paper);}
+  .phone-caption{
+    margin-top:14px;font-size:.75rem;font-weight:800;
+    border:2px dashed var(--ink);border-radius:999px;padding:5px 14px;background:var(--paper);
+  }
+  .fade-swap{animation:fadeSwap .4s ease;}
+  @keyframes fadeSwap{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+
+  /* ---------- opportunity ---------- */
+  .opp{
+    background:var(--yellow);border:3px solid var(--ink);border-radius:26px;
+    box-shadow:7px 8px 0 var(--pink-deep);
+    padding:44px 34px;text-align:center;position:relative;
+  }
+  .opp::before,.opp::after{
+    content:"";position:absolute;width:22px;height:22px;border-radius:50%;border:3px solid var(--ink);
+  }
+  .opp::before{background:var(--mint);top:-13px;left:8%;}
+  .opp::after{background:var(--pink);bottom:-13px;right:8%;}
+  .opp h2{font-size:clamp(1.4rem,3.4vw,2.1rem);max-width:34ch;margin:14px auto 0;}
+  .opp .zh{font-size:.85em;color:rgba(24,36,73,.7);margin-top:14px;}
+
+  /* ---------- counterpoints ---------- */
+  .counter{
+    background:#fff;border:3px solid var(--ink);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:28px;
+  }
+  .counter ul{list-style:none;display:flex;flex-direction:column;gap:14px;}
+  .counter li{
+    border-left:6px solid var(--blue);padding:4px 0 4px 16px;font-size:.95rem;font-weight:500;
+  }
+  .counter li:nth-child(2){border-color:var(--yellow-deep);}
+  .counter li:nth-child(3){border-color:var(--pink-deep);}
+  .counter li b{font-weight:900;}
+
+  /* ---------- sources / footer ---------- */
+  footer{padding:10px 0 60px;}
+  .sources{
+    background:var(--mint);border:3px solid var(--ink);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:28px;
+  }
+  .sources ol{margin-left:22px;display:flex;flex-direction:column;gap:10px;font-size:.88rem;}
+  .sources li::marker{font-weight:900;}
+  .foot-note{margin-top:26px;text-align:center;font-size:.8rem;color:rgba(24,36,73,.6);font-weight:600;}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:900px){
+    .trend-grid,.diag-grid,.flow-grid{grid-template-columns:1fr;}
+    .stat-grid{grid-template-columns:1fr;gap:16px;}
+    .ba-stage{min-height:340px;}
+    section{margin-bottom:56px;}
+  }
+  @media (max-width:620px){
+    .hero{padding:36px 0 28px;}
+    .panel,.sticker,.counter,.sources,.diag-result{padding:20px;}
+    .stat-band{padding:26px 18px 22px;}
+    .ba-stage{min-height:420px;}
+    .ba-card{padding:18px;}
+    .step-btn{padding:14px 16px;}
+    .phone{padding:14px 12px 18px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *,*::before,*::after{animation:none !important;transition:none !important;}
+    .sticker.tilt-l,.sticker.tilt-r,.hero-tag,.quote-chip,.hero h1 .accent{transform:none;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <div class="shell">
+    <div class="hero-tag">TEAM MISSION <span class="sep">·</span> DIGITAL ENTREPRENEURSHIP <span class="sep">·</span> KOREA UNIVERSITY</div>
+    <div class="brand-dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <h1><span class="en">AI Agent</span> × <span class="en">Hyper-personalization</span> → <span class="accent">GEO</span> for 소상공인</h1>
+    <p class="hero-sub">
+      AI가 가게를 추천하는 시대, 디지털 약자인 소상공인은 AI 답변에서 사라지고 있다
+      <span class="zh">AI 开始替顾客挑店，数字化弱势的小商家正在从 AI 回答中消失</span>
+    </p>
+  </div>
+</header>
+
+<main class="shell">
+
+<!-- ================= 1. TREND ================= -->
+<section aria-labelledby="trend-title">
+  <span class="kicker">TREND <span class="zh">趋势</span></span>
+  <h2 class="sec-title" id="trend-title">두 개의 흐름이 만나는 지점<span class="zh">两股潮流的交汇点</span></h2>
+  <div class="trend-grid" style="margin-top:28px;">
+    <article class="sticker blue tilt-l">
+      <span class="num">01</span>
+      <h3>IT TREND · <span class="en">AI Agent</span></h3>
+      <p>
+        검색·비교·예약·구매를 사용자 대신 실행하는 AI
+        <span class="zh">代替用户执行搜索、比价、预约、购买的 AI</span>
+      </p>
+      <p class="note">네이버플러스 스토어 「쇼핑 AI 에이전트」 도입 (2026)</p>
+    </article>
+    <article class="sticker yellow tilt-r">
+      <span class="num">02</span>
+      <h3>CONSUMER TREND · <span class="en">Hyper-personalization</span> 초개인화</h3>
+      <p>
+        키워드 대신 "나의 상황"을 말한다
+        <span class="zh">不再输入关键词，而是描述自己的情境</span>
+      </p>
+      <div class="quote-chip">「혼자 가도 안 어색한 조용한 성수 카페 추천해줘」</div>
+    </article>
+  </div>
+</section>
+
+<!-- ================= 2. WHY NOW ================= -->
+<section aria-labelledby="why-title">
+  <span class="kicker">WHY NOW <span class="zh">为什么是现在</span></span>
+  <h2 class="sec-title" id="why-title">검색은 이미 질문으로 바뀌었다<span class="zh">搜索已经变成了提问</span></h2>
+  <div class="stat-band" style="margin-top:28px;">
+    <p class="band-title">WHY NOW · <span class="en">Search → Ask</span></p>
+    <div class="stat-grid">
+      <div class="stat">
+        <div class="big">54.5%</div>
+        <div class="label">ChatGPT 검색 이용률</div>
+        <div class="detail">Gemini 사용 경험률 28.9% — 전년 대비 약 3배<span class="zh">ChatGPT 检索使用率</span></div>
+      </div>
+      <div class="stat">
+        <div class="big">56.9%</div>
+        <div class="label">궁금하면 즉시 AI에게 묻는다</div>
+        <div class="detail">42.3%는 추가 질문까지 이어간다<span class="zh">有疑问立刻问 AI</span></div>
+      </div>
+      <div class="stat">
+        <div class="big">37.1%</div>
+        <div class="label">AI 인용 페이지 중 검색 상위 10위 비율</div>
+        <div class="detail">1년 전 약 76%<span class="zh">AI 引用页面中搜索前10名占比</span></div>
+      </div>
+    </div>
+    <p class="stat-caption">검색 순위 ≠ AI 추천<span class="zh">搜索排名 ≠ AI 推荐</span></p>
+  </div>
+</section>
+
+<!-- ================= 3. INTERACTIVE A ================= -->
+<section aria-labelledby="change-title">
+  <span class="kicker">CHANGE <span class="zh">变化</span></span>
+  <h2 class="sec-title" id="change-title"><span class="en">Search → Ask</span> : 무엇이 달라졌나<span class="zh">点击切换，看看发生了什么变化</span></h2>
+  <div class="panel" style="margin-top:28px;">
+    <div class="toggle-row" role="group" aria-label="Before/After 전환">
+      <button class="seg-btn" id="btnBefore" aria-pressed="true">BEFORE · 키워드 검색<small>클릭해서 전환 · 点击切换</small></button>
+      <button class="seg-btn" id="btnAfter" aria-pressed="false">AFTER · AI에게 질문<small>클릭해서 전환 · 点击切换</small></button>
+    </div>
+    <div class="ba-stage">
+      <div class="ba-card before" id="cardBefore">
+        <span class="ba-label">BEFORE</span>
+        <div class="ba-row"><span class="ba-pill">키워드 검색<span class="zh">关键词搜索</span></span></div>
+        <div class="ba-row"><span class="ba-pill">링크 10개<span class="zh">十个链接</span></span></div>
+        <div class="ba-row"><span class="ba-pill">겉으로 드러난 니즈<span class="zh">表面需求</span></span></div>
+        <p class="ba-verdict">소비자가 직접 비교하고, 직접 선택했다</p>
+      </div>
+      <div class="ba-card after hidden-card" id="cardAfter">
+        <span class="ba-label">AFTER</span>
+        <div class="ba-row"><span class="ba-pill">상황을 말하기<span class="zh">描述情境</span></span></div>
+        <div class="ba-row"><span class="ba-pill">답 하나 · <span class="en">Zero-click</span><span class="zh">一个答案</span></span></div>
+        <div class="ba-row"><span class="ba-pill">속마음 · <span class="en">Dark knowledge</span><span class="zh">真实需求</span></span></div>
+        <p class="ba-verdict">AI가 비교하고, AI가 선택한다 — 그 답에 가게가 있어야 한다</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 4. PROBLEM / INTERACTIVE B ================= -->
+<section aria-labelledby="problem-title">
+  <span class="kicker">PROBLEM <span class="zh">问题</span></span>
+  <h2 class="sec-title" id="problem-title">AI 노출 진단 데모<span class="zh">AI 曝光诊断演示</span></h2>
+  <p class="sec-sub">내 가게가 AI 답변에 나올 수 있을까? 조건을 골라 직접 확인해 보세요.<span class="zh">我的店能出现在 AI 回答里吗？选择条件亲自验证一下。</span></p>
+  <div class="diag-grid" style="margin-top:28px;">
+    <form class="panel" id="diagForm">
+      <fieldset class="field">
+        <legend>업종<span class="zh">行业</span></legend>
+        <div class="chip-group" role="group" aria-label="업종 선택">
+          <button type="button" class="chip-btn" data-group="biz" data-value="food" aria-pressed="true">음식점·카페</button>
+          <button type="button" class="chip-btn" data-group="biz" data-value="retail" aria-pressed="false">소매·리테일</button>
+          <button type="button" class="chip-btn" data-group="biz" data-value="edu" aria-pressed="false">교육·레저</button>
+        </div>
+      </fieldset>
+      <fieldset class="field">
+        <legend>정보 상태<span class="zh">信息状态</span></legend>
+        <div class="chip-group" role="group" aria-label="정보 상태 선택">
+          <button type="button" class="chip-btn" data-group="info" data-value="keyword" aria-pressed="true">키워드 정보만 있음</button>
+          <button type="button" class="chip-btn" data-group="info" data-value="context" aria-pressed="false">일부 맥락 정보 있음</button>
+        </div>
+      </fieldset>
+      <fieldset class="field">
+        <legend>AI 채널<span class="zh">AI 渠道</span></legend>
+        <div class="chip-group" role="group" aria-label="AI 채널 선택">
+          <button type="button" class="chip-btn" data-group="channel" data-value="naver" aria-pressed="true">NAVER AI 브리핑</button>
+          <button type="button" class="chip-btn" data-group="channel" data-value="chatgpt" aria-pressed="false">ChatGPT</button>
+          <button type="button" class="chip-btn" data-group="channel" data-value="gemini" aria-pressed="false">Gemini</button>
+        </div>
+      </fieldset>
+      <button type="submit" class="diag-submit">진단하기 · 开始诊断</button>
+      <span class="demo-badge">데모 / mockup — 실제 진단이 아닙니다 · 演示样机，并非真实诊断</span>
+    </form>
+    <div class="diag-result risk" id="diagResult" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- ================= 5. OPPORTUNITY / INTERACTIVE C ================= -->
+<section aria-labelledby="flow-title">
+  <span class="kicker">OPPORTUNITY <span class="zh">机会</span></span>
+  <h2 class="sec-title" id="flow-title">GEO 에이전트 3단계 흐름<span class="zh">GEO agent 三步流程 · 点击每一步</span></h2>
+  <div class="flow-grid" style="margin-top:28px;">
+    <div role="tablist" aria-label="GEO 에이전트 단계">
+      <button class="step-btn" data-step="1" role="tab" aria-selected="true" id="stepTab1" aria-controls="phoneScreen">
+        <span class="step-num" aria-hidden="true">1</span>
+        <span>
+          <h3>AI 노출 진단 · <span class="en">AI Visibility Check</span></h3>
+          <p>내 가게가 NAVER AI / ChatGPT / Gemini에서 어떻게 추천되는지 확인</p>
+        </span>
+      </button>
+      <button class="step-btn" data-step="2" role="tab" aria-selected="false" id="stepTab2" aria-controls="phoneScreen">
+        <span class="step-num" aria-hidden="true">2</span>
+        <span>
+          <h3>맥락 정보 자동 생성 · <span class="en">Context Auto-generation</span></h3>
+          <p>사진·메뉴·리뷰를 AI가 이해하는 맥락 정보(조용함, 1인석, 주차, 아이 동반 등)로 변환해 Place 소개·블로그·리뷰 답글에 반영</p>
+        </span>
+      </button>
+      <button class="step-btn" data-step="3" role="tab" aria-selected="false" id="stepTab3" aria-controls="phoneScreen">
+        <span class="step-num" aria-hidden="true">3</span>
+        <span>
+          <h3>월간 리포트 · <span class="en">Monthly Report</span></h3>
+          <p>사장님이 휴대폰으로 보는 간단한 리포트 + 소상공인 지원 바우처 연결</p>
+        </span>
+      </button>
+    </div>
+    <div class="phone-wrap">
+      <div class="phone" role="tabpanel" id="phoneScreen" aria-live="polite" aria-label="단계별 화면 목업"></div>
+      <span class="phone-caption">mockup 화면입니다 · 样机画面</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 6. OPPORTUNITY STATEMENT ================= -->
+<section aria-labelledby="opp-title">
+  <div class="opp">
+    <span class="kicker" style="margin-bottom:0;">OUR OPPORTUNITY <span class="zh">我们的机会</span></span>
+    <h2 id="opp-title">
+      우리는 디지털 역량이 약한 소상공인의 AI 추천에서 사라지는 문제를
+      사진·메뉴·리뷰를 AI가 이해하는 맥락 정보로 자동 변환하는
+      <span class="en">GEO</span> 에이전트로 해결한다
+    </h2>
+    <span class="zh" style="max-width:52ch;margin-left:auto;margin-right:auto;">
+      我们用「把照片、菜单、评论自动转换成 AI 能理解的情境信息的 GEO agent」，解决数字化能力弱的小商家从 AI 推荐中消失的问题。
+    </span>
+  </div>
+</section>
+
+<!-- ================= 7. COUNTERPOINTS ================= -->
+<section aria-labelledby="counter-title">
+  <span class="kicker">HONEST CHECK <span class="zh">诚实的反方观点</span></span>
+  <h2 class="sec-title" id="counter-title" style="font-size:clamp(1.3rem,3vw,1.8rem);">우리가 스스로 던지는 반론<span class="zh">我们主动提出的质疑</span></h2>
+  <div class="counter" style="margin-top:24px;">
+    <ul>
+      <li>NAVER는 여전히 강하다 — 뉴스·생활 정보 검색 주사용률 <b>60% 이상</b>, 로컬 검색은 NAVER 지도/Place 중심. → GEO는 NAVER AI(AI 브리핑, 쇼핑 AI 에이전트)까지 포함해야 한다.</li>
+      <li>ChatGPT·Gemini 검색 신뢰도는 <b>약 50%</b> — 사용자가 AI 답변을 맹신하지는 않는다.</li>
+      <li>llms.txt 채택률 <b>약 10%</b>(30만 도메인 기준), 생성된 파일의 <b>97%는 읽히지 않음</b> → 파일 생성 자체가 아니라 <b>효과 검증이 핵심</b>이다.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= 8. SOURCES ================= -->
+<footer>
+  <div class="sources">
+    <h2 class="sec-title" style="font-size:1.3rem;">출처 · Sources<span class="zh">所有数据均来自以下公开资料</span></h2>
+    <ol style="margin-top:16px;">
+      <li>중소기업중앙회 「소상공인 DX·AX 현황 및 정책 수요 설문조사」 (2026.6, 소상공인 500개사) — <a href="https://edaily.co.kr/News/Read?mediaCodeNo=257&amp;newsId=03020886645480080">https://edaily.co.kr/News/Read?mediaCodeNo=257&amp;newsId=03020886645480080</a></li>
+      <li>오픈서베이 「AI 검색 트렌드 리포트 2026」 — <a href="https://blog.opensurvey.co.kr/article/ai-search-2026-2/">https://blog.opensurvey.co.kr/article/ai-search-2026-2/</a></li>
+      <li>오픈서베이 「AI 검색 트렌드 리포트 2026 하반기」 (1,000명) — <a href="https://blog.opensurvey.co.kr/trendreport/ai-search-2-2026/">https://blog.opensurvey.co.kr/trendreport/ai-search-2-2026/</a></li>
+      <li>오픈서베이 「온라인 쇼핑 트렌드 리포트 2026」 — <a href="https://blog.opensurvey.co.kr/trendreport/online_shopping-2026/">https://blog.opensurvey.co.kr/trendreport/online_shopping-2026/</a></li>
+      <li>오픈소스마케팅 GEO 데이터 정리 (2026) — <a href="https://osoma.kr/blog/geo-ai-traffic-value/">https://osoma.kr/blog/geo-ai-traffic-value/</a></li>
+      <li>디지털데일리 네이버 에이전틱 커머스 (2026.4.24) — <a href="https://m.ddaily.co.kr/page/view/2026042416082146478">https://m.ddaily.co.kr/page/view/2026042416082146478</a></li>
+      <li>한국관광공사 「요즘, 한국관광 데이터 세미나」 2026 (여행신문 보도) — <a href="https://www.traveltimes.co.kr/news/articleView.html?idxno=500297">https://www.traveltimes.co.kr/news/articleView.html?idxno=500297</a></li>
+      <li>KDI 나라경제 중기부 AI 정책 (2026.1) — <a href="https://eiec.kdi.re.kr/publish/naraView.do?fcode=00002000040000100005&amp;cidx=15438&amp;sel_year=2026&amp;sel_month=01">https://eiec.kdi.re.kr/publish/naraView.do?fcode=00002000040000100005&amp;cidx=15438&amp;sel_year=2026&amp;sel_month=01</a></li>
+    </ol>
+  </div>
+  <p class="foot-note">Korea University · Digital Entrepreneurship · Team Mission Classroom Demo — 본 페이지는 수업 시연용 데모입니다</p>
+</footer>
+
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- Feature A: Before / After toggle ---------- */
+  var btnBefore = document.getElementById("btnBefore");
+  var btnAfter  = document.getElementById("btnAfter");
+  var cardBefore = document.getElementById("cardBefore");
+  var cardAfter  = document.getElementById("cardAfter");
+
+  function setMode(after){
+    btnBefore.setAttribute("aria-pressed", String(!after));
+    btnAfter.setAttribute("aria-pressed", String(after));
+    cardBefore.classList.toggle("hidden-card", after);
+    cardAfter.classList.toggle("hidden-card", !after);
+  }
+  btnBefore.addEventListener("click", function(){ setMode(false); });
+  btnAfter.addEventListener("click", function(){ setMode(true); });
+
+  /* ---------- Feature B: AI visibility diagnostic ---------- */
+  var diagState = { biz: "food", info: "keyword", channel: "naver" };
+
+  document.querySelectorAll(".chip-btn").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var group = btn.getAttribute("data-group");
+      diagState[group] = btn.getAttribute("data-value");
+      document.querySelectorAll('.chip-btn[data-group="' + group + '"]').forEach(function(b){
+        b.setAttribute("aria-pressed", String(b === btn));
+      });
+    });
+  });
+
+  var bizNames = { food: "음식점·카페", retail: "소매·리테일", edu: "교육·레저" };
+  var channelNames = { naver: "NAVER AI 브리핑", chatgpt: "ChatGPT", gemini: "Gemini" };
+
+  function buildResult(s){
+    var biz = bizNames[s.biz], ch = channelNames[s.channel];
+    var stats = [];
+    var html = "";
+    if (s.info === "keyword"){
+      html += '<span class="verdict-tag">RISK · 위험</span>';
+      html += "<h3>AI가 이 가게를 상황 질문에 매칭하지 못합니다</h3>";
+      html += '<p><b>' + biz + "</b> 업종의 키워드 정보만으로는, <b>" + ch + "</b>에서 「혼자 가도 안 어색한 조용한 곳」 같은 상황 질문에 이 가게가 답으로 선택되기 어렵습니다.";
+      html += '<span class="zh">仅有关键词信息时，AI 无法把这家店匹配到情境式提问。</span></p>';
+      stats.push("소매·음식점 등 소상공인 디지털 활용률은 <b>46%</b>에 그칩니다");
+      stats.push("그중 마케팅에 디지털을 활용하는 비율은 <b>21.3%</b>");
+      stats.push("디지털 활용자의 <b>83.3%</b>가 기초·입문 단계에 머뭅니다");
+      stats.push("지원사업 미참여 사유의 <b>76.2%</b>는 「몰랐다」");
+    } else {
+      html += '<span class="verdict-tag">IMPROVED · 개선 가능</span>';
+      html += "<h3>맥락 정보가 있으면 AI 매칭 확률이 올라갑니다</h3>";
+      html += '<p><b>' + biz + "</b> 업종에서 일부 맥락 정보(조용함, 1인석, 주차 등)가 있으면 <b>" + ch + "</b>가 상황 질문에 이 가게를 연결할 실마리가 생깁니다. 하지만 맥락 정보를 스스로 만들고 관리할 디지털 역량이 문제입니다.";
+      html += '<span class="zh">有了部分情境信息，AI 更容易把这家店匹配到情境提问——但小商家往往缺乏自行生成与维护这些信息的数字化能力。</span></p>';
+      stats.push("디지털 활용자의 <b>83.3%</b>가 기초·입문 단계 — 맥락 정보 운영은 대부분에게 버거운 일");
+      stats.push("마케팅 디지털 활용 <b>21.3%</b> — 검색 순위와 AI 추천은 다릅니다 (검색 순위 ≠ AI 추천)");
+      stats.push("지원사업 미참여 사유 <b>76.2%</b> 「몰랐다」 — 바우처 연계까지 필요한 이유");
+    }
+    html += '<ul class="stat-list">';
+    stats.forEach(function(t){ html += "<li>" + t + "</li>"; });
+    html += "</ul>";
+    html += '<span class="demo-badge">데모 / mockup — 실제 진단이 아닙니다</span>';
+    return { html: html, risk: s.info === "keyword" };
+  }
+
+  function renderDiag(){
+    var r = buildResult(diagState);
+    var box = document.getElementById("diagResult");
+    box.innerHTML = r.html;
+    box.classList.toggle("risk", r.risk);
+    box.classList.toggle("mid", !r.risk);
+    box.classList.remove("fade-swap");
+    void box.offsetWidth;
+    box.classList.add("fade-swap");
+  }
+  document.getElementById("diagForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    renderDiag();
+  });
+  renderDiag();
+
+  /* ---------- Feature C: 3-step agent flow ---------- */
+  var screens = {
+    "1":
+      '<h4>AI 노출 진단 · AI Visibility Check</h4>' +
+      '<div class="mock-card pink"><b>가게 노출 상태</b><br>「혼자 가도 안 어색한 조용한 성수 카페」' +
+      '<div class="mock-bar"><i style="width:22%"></i></div>' +
+      '<span style="font-size:.75rem;">현재 답변에 우리 가게가 없습니다</span></div>' +
+      '<div class="mock-card"><b>NAVER AI 브리핑</b> — 노출 없음</div>' +
+      '<div class="mock-card"><b>ChatGPT</b> — 노출 없음</div>' +
+      '<div class="mock-card"><b>Gemini</b> — 경쟁 가게만 추천됨</div>',
+    "2":
+      '<h4>맥락 정보 자동 생성 · Context Auto-generation</h4>' +
+      '<div class="mock-card"><b>입력</b> — 사진 · 메뉴 · 리뷰</div>' +
+      '<div class="mock-card yellow"><b>AI가 읽어낸 맥락</b>' +
+      '<div class="tag-row"><span class="tag new">#조용함</span><span class="tag new">#1인석</span><span class="tag new">#주차가능</span><span class="tag new">#아이동반</span></div></div>' +
+      '<div class="mock-card mint"><b>자동 반영</b> — Place 소개 · 블로그 · 리뷰 답글</div>',
+    "3":
+      '<h4>월간 리포트 · Monthly Report</h4>' +
+      '<div class="mock-card mint"><b>이번 달 AI 노출</b>' +
+      '<div class="mock-bar good"><i style="width:64%"></i></div>' +
+      '<span style="font-size:.75rem;">상황 질문 답변에 우리 가게가 등장하기 시작했습니다</span></div>' +
+      '<div class="mock-card"><b>NAVER AI 브리핑</b> — 신규 노출 2건</div>' +
+      '<div class="mock-card"><b>ChatGPT</b> — 맥락 태그 반영 완료</div>' +
+      '<div class="mock-card blue"><b>소상공인 지원 바우처</b> — 신청 가능 사업 연결</div>'
+  };
+
+  var phoneScreen = document.getElementById("phoneScreen");
+  var stepBtns = document.querySelectorAll(".step-btn");
+
+  function showStep(n){
+    stepBtns.forEach(function(b){
+      b.setAttribute("aria-selected", String(b.getAttribute("data-step") === n));
+    });
+    phoneScreen.innerHTML = screens[n];
+    phoneScreen.classList.remove("fade-swap");
+    void phoneScreen.offsetWidth;
+    phoneScreen.classList.add("fade-swap");
+    var bars = phoneScreen.querySelectorAll(".mock-bar i");
+    for (var i = 0; i < bars.length; i++){
+      var w = bars[i].style.width;
+      bars[i].style.width = "0";
+      (function(el, target){
+        setTimeout(function(){ el.style.width = target; }, 60);
+      })(bars[i], w);
+    }
+  }
+  stepBtns.forEach(function(b){
+    b.addEventListener("click", function(){ showStep(b.getAttribute("data-step")); });
+  });
+  showStep("1");
+})();
+</script>
+</body>
+</html>
