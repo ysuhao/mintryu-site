@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>豪意值检测 · 测测你有多嘉豪</title>
+  <meta name="description" content="15 道题，量化你的豪意值。没活 + 为了装逼 = 嘉豪。阴阳自嘲，非攻击。">
+  <meta name="theme-color" content="#fbfbff">
+  <meta property="og:title" content="豪意值检测 · 测测你有多嘉豪">
+  <meta property="og:description" content="15 道题，量化你的豪意值。没有人永远嘉豪，但永远有人嘉豪。">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main id="app">
+
+    <!-- 首页 -->
+    <section id="view-home" class="view">
+      <div class="home-inner">
+        <div class="home-kicker"><span class="dot" aria-hidden="true"></span>JIAHAO METER · 2026</div>
+        <h1 class="home-title">豪意值检测</h1>
+        <p class="home-desc">
+          15 道题，量化你的<span class="hl">豪意值</span><br>
+          没活 + 为了装逼 = <span class="hl">嘉豪</span>
+        </p>
+        <div class="home-formula" aria-label="核心公式">
+          有活 + 逗大伙开心 = 老艺术家<br>
+          没活 + 逗大伙开心 = 有趣的灵魂<br>
+          有活 + 为了装逼 = B 哥<br>
+          <b>没活 + 为了装逼 = 嘉豪</b>
+        </div>
+        <button id="btn-start" class="btn-primary" type="button">开始检测</button>
+        <p class="home-tip">约 90 秒 · 结果可分享 · 阴阳但不刻薄</p>
+        <p class="home-foot"><a href="https://mintryu.com" target="_blank" rel="noopener noreferrer">mintryu.com</a> · 玩梗自嘲</p>
+      </div>
+    </section>
+
+    <!-- 答题 -->
+    <section id="view-quiz" class="view hidden">
+      <div class="quiz-inner" id="quiz-inner">
+        <div class="progress-track"><div id="progress-bar" class="progress-bar"></div></div>
+        <div class="quiz-meta">
+          <p id="quiz-step" class="quiz-step"></p>
+          <span id="quiz-tag" class="quiz-tag"></span>
+        </div>
+        <h2 id="quiz-title" class="quiz-title"></h2>
+        <div id="options" class="options" role="group" aria-label="选项"></div>
+      </div>
+    </section>
+
+    <!-- 计算中 -->
+    <section id="view-computing" class="view hidden">
+      <div class="computing-inner">
+        <div class="spinner" aria-hidden="true"></div>
+        <p class="computing-text">豪意扫描中<span id="dots"></span></p>
+        <p class="computing-sub">正在核对虚空打碟参数…</p>
+      </div>
+    </section>
+
+    <!-- 结果 -->
+    <section id="view-result" class="view hidden">
+      <article class="result-card" id="result-card">
+        <div id="result-hero" class="result-hero accent-pink">
+          <p class="score-label">HAOYI VALUE</p>
+          <div id="score-num" class="score-num">0</div>
+          <p class="score-unit">豪意值 / 100</p>
+          <h2 id="tier-name" class="tier-name"></h2>
+          <div class="tags-row">
+            <span id="tag-type" class="tag"></span>
+            <span id="tag-tier" class="tag"></span>
+          </div>
+        </div>
+        <div class="result-body">
+          <p id="quote" class="quote"></p>
+          <p id="comment" class="comment"></p>
+
+          <div id="tip-bge" class="tip-box warn hidden"></div>
+          <div id="tip-save" class="tip-box hidden"></div>
+
+          <div class="meter-block">
+            <div class="meter-label">
+              <span>豪意浓度</span>
+              <strong id="meter-value">0 / 100</strong>
+            </div>
+            <div class="meter-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-label="豪意值">
+              <div id="meter-fill" class="meter-fill"></div>
+            </div>
+          </div>
+
+          <p id="disclaimer" class="disclaimer"></p>
+          <p class="nihao">注意：你现在正在读一个嘉豪测试的结果，这个行为本身，已经让你进入了「拟豪态」。</p>
+        </div>
+      </article>
+
+      <div class="actions">
+        <button id="btn-haodao" class="btn-ink" type="button">豪到你了？</button>
+        <div class="actions-row">
+          <button id="btn-share" class="btn-primary" type="button">分享结果</button>
+          <button id="btn-copy-link" class="btn-ghost" type="button">复制链接</button>
+        </div>
+        <button id="btn-retry" class="btn-ghost" type="button">再测一次</button>
+      </div>
+      <p class="share-hint">分享链接后，好友打开可直接看到这份结果</p>
+    </section>
+
+  </main>
+
+  <!-- 豪到你了 弹层 -->
+  <div id="modal-backdrop" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal">
+      <h3 id="modal-title">豪到你了？</h3>
+      <p id="modal-text"></p>
+      <button id="modal-close" class="btn-primary" type="button">知道了</button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/scoring.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="HANSA 韩学事：为高丽大学首尔与世宗校区留学生整理公告、课表、作业和 A 饭记录的独立个人项目。">
+  <meta property="og:title" content="HANSA 韩学事｜高丽大学留学生助手">
+  <meta property="og:description" content="公告、课表、作业与 A 饭，收进一款轻量校园助手。">
+  <meta property="og:image" content="https://mintryu.com/works/hansa/assets/cover.png">
+  <meta name="theme-color" content="#fff8e9">
+  <title>HANSA 韩学事｜Mint 的个人项目</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #fff8e9;
+      --white: #fffdf8;
+      --ink: #182449;
+      --muted: #4f5a79;
+      --blue: #9bd5f3;
+      --blue-deep: #4b86bd;
+      --yellow: #ffd866;
+      --pink: #f6b0bb;
+      --mint: #b9e4ce;
+      --line: rgba(24, 36, 73, .16);
+      --font-display: "Nunito", "Noto Sans SC", "PingFang SC", sans-serif;
+      --font-body: "Noto Sans SC", "Noto Sans KR", "PingFang SC", -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    a { color: inherit; }
+    img { display: block; max-width: 100%; }
+    :focus-visible { outline: 3px solid var(--blue-deep); outline-offset: 3px; border-radius: 6px; }
+
+    .skip-link {
+      position: fixed; z-index: 20; top: 12px; left: 12px; transform: translateY(-180%);
+      padding: 10px 14px; border: 2px solid var(--ink); border-radius: 10px;
+      background: var(--yellow); font-weight: 900; text-decoration: none;
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    .shell { width: min(1080px, calc(100% - 40px)); margin: 0 auto; }
+
+    /* ── top bar ─────────────────────────────── */
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+      min-height: 84px; border-bottom: 1px solid var(--line);
+    }
+    .brand {
+      display: inline-flex; align-items: center; gap: 9px; text-decoration: none;
+      font: 900 22px/1 var(--font-display); letter-spacing: -.04em;
+    }
+    .brand-dot { width: 11px; height: 11px; border: 2px solid var(--ink); border-radius: 50%; background: var(--mint); }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 7px; padding: 9px 14px;
+      border: 1px solid var(--line); border-radius: 999px; background: var(--white);
+      color: var(--muted); font-size: 13px; font-weight: 700; text-decoration: none;
+      transition: color .18s ease, border-color .18s ease;
+    }
+    .back-link:hover { color: var(--ink); border-color: var(--ink); }
+
+    /* ── hero ────────────────────────────────── */
+    .hero {
+      display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(320px, .8fr);
+      gap: 64px; align-items: center; padding: 88px 0 96px;
+    }
+    .eyebrow {
+      display: flex; align-items: center; gap: 10px; margin: 0;
+      font: 800 11px/1 var(--font-display); letter-spacing: .22em; text-transform: uppercase;
+      color: var(--blue-deep);
+    }
+    .eyebrow::before { content: ""; width: 26px; height: 2px; background: var(--blue-deep); }
+    h1 {
+      margin: 24px 0 22px;
+      font: 900 clamp(44px, 5.6vw, 68px)/1.12 var(--font-display);
+      letter-spacing: -.045em;
+    }
+    h1 em { font-style: normal; color: var(--blue-deep); }
+    .hero-lead { max-width: 560px; margin: 0; color: var(--muted); font-size: 17px; line-height: 2; }
+    .hero-lead strong { color: var(--ink); font-weight: 700; }
+    .hero-facts {
+      display: flex; flex-wrap: wrap; gap: 0; margin: 30px 0 34px; padding: 0;
+      border-top: 1px solid var(--line); list-style: none;
+    }
+    .hero-facts li {
+      padding: 12px 18px 0 0; margin-right: 18px;
+      color: var(--muted); font-size: 12.5px; line-height: 1.7;
+    }
+    .hero-facts b { display: block; color: var(--ink); font-size: 13.5px; font-weight: 900; }
+    .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+    .btn-download {
+      display: inline-flex; align-items: center; gap: 12px; padding: 15px 24px;
+      border: 2px solid var(--ink); border-radius: 16px; background: var(--ink); color: var(--paper);
+      text-decoration: none; font-size: 15px; font-weight: 900;
+      box-shadow: 4px 5px 0 rgba(24, 36, 73, .22);
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .btn-download:hover { transform: translate(2px, 2px); box-shadow: 1px 2px 0 rgba(24, 36, 73, .3); }
+    .btn-download img { width: 26px; height: 26px; border-radius: 7px; background: #fff; }
+    .btn-download small { display: block; font-size: 11px; font-weight: 500; opacity: .72; }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 8px; padding: 15px 20px;
+      border: 2px solid var(--ink); border-radius: 16px; background: var(--white);
+      font-size: 15px; font-weight: 900; text-decoration: none;
+      transition: background .18s ease;
+    }
+    .btn-ghost:hover { background: var(--yellow); }
+
+    .hero-figure { margin: 0; }
+    .hero-figure .frame {
+      overflow: hidden; border: 1px solid var(--line); border-radius: 22px;
+      background: var(--white); box-shadow: 0 24px 50px rgba(24, 36, 73, .10);
+    }
+    .hero-figure img { width: 100%; height: auto; }
+    .hero-figure figcaption {
+      display: flex; justify-content: space-between; gap: 12px; margin-top: 12px;
+      color: var(--muted); font-size: 12px; letter-spacing: .04em;
+    }
+
+    /* ── sections ────────────────────────────── */
+    .section { padding: 84px 0; border-top: 1px solid var(--line); }
+    .section-head { max-width: 640px; margin-bottom: 52px; }
+    .section-kicker {
+      display: flex; align-items: center; gap: 10px; margin: 0;
+      font: 800 11px/1 var(--font-display); letter-spacing: .22em; text-transform: uppercase;
+      color: var(--blue-deep);
+    }
+    .section-kicker::before { content: ""; width: 26px; height: 2px; background: currentColor; }
+    .section-head h2 {
+      margin: 18px 0 14px; font: 900 clamp(30px, 4vw, 44px)/1.2 var(--font-display); letter-spacing: -.04em;
+    }
+    .section-head p { margin: 0; color: var(--muted); font-size: 15.5px; line-height: 1.95; }
+
+    /* ── features ────────────────────────────── */
+    .feature {
+      display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 380px);
+      gap: 56px; align-items: center; padding: 56px 0;
+      border-top: 1px dashed var(--line);
+    }
+    .feature:first-of-type { border-top: 0; padding-top: 8px; }
+    .feature:nth-child(even) .feature-copy { order: 2; }
+    .feature:nth-child(even) .feature-media { order: 1; }
+    .feature-num {
+      display: inline-flex; align-items: baseline; gap: 10px;
+      font: 900 13px var(--font-display); letter-spacing: .18em; color: var(--blue-deep);
+    }
+    .feature-num i { font-style: normal; color: var(--muted); font-weight: 700; letter-spacing: .08em; }
+    .feature h3 { margin: 14px 0 12px; font: 900 27px/1.3 var(--font-display); letter-spacing: -.03em; }
+    .feature p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.95; }
+    .feature p + p { margin-top: 10px; }
+    .feature-note {
+      display: inline-block; margin-top: 16px; padding: 8px 13px;
+      border-left: 3px solid var(--yellow); background: var(--white);
+      color: var(--muted); font-size: 13px; line-height: 1.7;
+    }
+    .feature-media { display: flex; justify-content: center; gap: 18px; }
+    .shot {
+      margin: 0; width: min(100%, 300px);
+      border: 1px solid var(--line); border-radius: 26px; overflow: hidden;
+      background: var(--white); box-shadow: 0 18px 38px rgba(24, 36, 73, .10);
+    }
+    .shot.tall { width: min(100%, 260px); }
+    .shot img { display: block; width: 100%; height: auto; }
+    .shot figcaption {
+      padding: 11px 16px; border-top: 1px solid var(--line);
+      color: var(--muted); font-size: 11.5px; letter-spacing: .04em; text-align: center;
+    }
+    .shot.accent-blue { border-bottom: 5px solid var(--blue); }
+    .shot.accent-yellow { border-bottom: 5px solid var(--yellow); }
+    .shot.accent-pink { border-bottom: 5px solid var(--pink); }
+    .shot.accent-mint { border-bottom: 5px solid var(--mint); }
+
+    /* ── video ───────────────────────────────── */
+    .video-card {
+      border: 1px solid var(--line); border-radius: 26px; overflow: hidden;
+      background: var(--white); box-shadow: 0 24px 50px rgba(24, 36, 73, .10);
+    }
+    .video-stage { position: relative; aspect-ratio: 16 / 9; background: var(--ink); }
+    .video-stage iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .video-poster {
+      position: absolute; inset: 0; width: 100%; padding: 0; border: 0; cursor: pointer;
+      background: transparent; font: inherit; color: inherit; text-align: inherit;
+    }
+    .video-poster img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .video-poster::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(24, 36, 73, .55), rgba(24, 36, 73, .05) 55%);
+    }
+    .video-play {
+      position: absolute; z-index: 2; left: 50%; top: 50%; transform: translate(-50%, -50%);
+      display: grid; place-items: center; width: 84px; height: 84px;
+      border: 2px solid var(--paper); border-radius: 50%; background: rgba(24, 36, 73, .82);
+      transition: transform .18s ease, background .18s ease;
+    }
+    .video-poster:hover .video-play, .video-poster:focus-visible .video-play { transform: translate(-50%, -50%) scale(1.07); background: var(--blue-deep); }
+    .video-play svg { width: 30px; height: 30px; fill: var(--paper); margin-left: 5px; }
+    .video-hint {
+      position: absolute; z-index: 2; left: 24px; bottom: 20px; color: var(--paper);
+      font-size: 13px; font-weight: 700; letter-spacing: .05em; text-align: left;
+    }
+    .video-hint small { display: block; margin-top: 4px; font-weight: 400; opacity: .78; }
+    .video-bar {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 16px 22px; border-top: 1px solid var(--line);
+    }
+    .video-bar p { margin: 0; color: var(--muted); font-size: 13px; }
+    .video-bar a {
+      display: inline-flex; align-items: center; gap: 7px;
+      color: var(--blue-deep); font-size: 13px; font-weight: 900; text-decoration: none;
+    }
+    .video-bar a:hover { text-decoration: underline; }
+
+    /* ── story / author ──────────────────────── */
+    .story { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(280px, .7fr); gap: 64px; }
+    .story-text p { margin: 0 0 18px; color: var(--muted); font-size: 15.5px; line-height: 2.05; }
+    .story-text p strong { color: var(--ink); font-weight: 700; }
+    .author-card {
+      align-self: start; padding: 28px; border: 1px solid var(--line); border-radius: 22px;
+      background: var(--white); box-shadow: 0 18px 38px rgba(24, 36, 73, .08);
+    }
+    .author-card .author-tag {
+      display: inline-block; padding: 5px 11px; border-radius: 999px; background: var(--mint);
+      font: 800 10px/1.6 var(--font-display); letter-spacing: .16em;
+    }
+    .author-card h3 { margin: 16px 0 8px; font: 900 24px/1.2 var(--font-display); letter-spacing: -.03em; }
+    .author-card p { margin: 0 0 20px; color: var(--muted); font-size: 14px; line-height: 1.9; }
+    .author-card a.mail {
+      display: inline-flex; align-items: center; gap: 8px; padding: 11px 16px;
+      border: 2px solid var(--ink); border-radius: 12px; background: var(--paper);
+      font-size: 13.5px; font-weight: 900; text-decoration: none;
+      transition: background .18s ease;
+    }
+    .author-card a.mail:hover { background: var(--yellow); }
+
+    /* ── scope ───────────────────────────────── */
+    .scope { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+    .scope-col { padding: 30px; border: 1px solid var(--line); border-radius: 22px; background: var(--white); }
+    .scope-col.now { border-top: 5px solid var(--mint); }
+    .scope-col.future { border-top: 5px solid var(--blue); }
+    .scope-col h3 { display: flex; align-items: baseline; gap: 10px; margin: 0 0 6px; font: 900 21px/1.3 var(--font-display); letter-spacing: -.02em; }
+    .scope-col h3 small { color: var(--muted); font: 700 10px var(--font-display); letter-spacing: .18em; text-transform: uppercase; }
+    .scope-col > p { margin: 0 0 18px; color: var(--muted); font-size: 13px; line-height: 1.8; }
+    .scope-col ul { margin: 0; padding: 0; list-style: none; }
+    .scope-col li {
+      display: block; position: relative; padding: 11px 0 11px 24px; border-top: 1px dashed var(--line);
+      font-size: 14px; line-height: 1.75; color: var(--muted);
+    }
+    .scope-col li b { color: var(--ink); font-weight: 700; }
+    .scope-col li::before { content: "✓"; position: absolute; left: 0; top: 11px; color: var(--blue-deep); font-weight: 900; }
+    .scope-col.future li::before { content: "○"; color: var(--muted); }
+    .school-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 4px; }
+    .school-tags span {
+      padding: 5px 11px; border: 1px solid var(--line); border-radius: 999px;
+      font-size: 12px; color: var(--muted);
+    }
+    .school-tags span.live { border-color: var(--ink); background: var(--mint); color: var(--ink); font-weight: 700; }
+
+    /* ── download ────────────────────────────── */
+    .download-block {
+      display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 300px); gap: 56px; align-items: center;
+      padding: 44px; border: 2px solid var(--ink); border-radius: 28px; background: var(--white);
+      box-shadow: 8px 9px 0 rgba(24, 36, 73, .16);
+    }
+    .download-block h2 { margin: 0 0 12px; font: 900 clamp(26px, 3.4vw, 36px)/1.25 var(--font-display); letter-spacing: -.035em; }
+    .download-block .sub { margin: 0 0 26px; color: var(--muted); font-size: 15px; line-height: 1.95; }
+    .download-actions { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+    .download-fine { margin: 18px 0 0; color: var(--muted); font-size: 12px; line-height: 1.8; }
+    .download-figure { margin: 0; }
+
+    /* ── footer ──────────────────────────────── */
+    footer {
+      margin-top: 20px; padding: 34px 0 46px; border-top: 1px solid var(--line);
+      color: var(--muted); font-size: 12.5px; line-height: 2;
+    }
+    footer .foot-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 24px; }
+    footer a { color: var(--blue-deep); font-weight: 700; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    footer .legal { max-width: 720px; margin: 14px 0 0; font-size: 11.5px; opacity: .85; }
+
+    /* ── responsive ──────────────────────────── */
+    @media (max-width: 940px) {
+      .hero { grid-template-columns: 1fr; gap: 44px; padding: 60px 0 72px; }
+      .hero-figure { max-width: 520px; }
+      .feature { grid-template-columns: 1fr; gap: 30px; }
+      .feature:nth-child(even) .feature-copy { order: 1; }
+      .feature:nth-child(even) .feature-media { order: 2; }
+      .story { grid-template-columns: 1fr; gap: 40px; }
+      .scope { grid-template-columns: 1fr; }
+      .download-block { grid-template-columns: 1fr; gap: 34px; padding: 30px; }
+      .download-figure { max-width: 300px; }
+    }
+    @media (max-width: 620px) {
+      .shell { width: calc(100% - 28px); }
+      .topbar { min-height: 68px; }
+      .hero { padding: 44px 0 56px; }
+      .hero-facts li { padding-right: 12px; margin-right: 12px; }
+      .hero-actions .btn-download, .hero-actions .btn-ghost { width: 100%; justify-content: center; }
+      .section { padding: 60px 0; }
+      .section-head { margin-bottom: 38px; }
+      .feature { padding: 42px 0; }
+      .video-hint { left: 16px; bottom: 14px; font-size: 12px; }
+      .video-play { width: 64px; height: 64px; }
+      .download-block { padding: 24px; border-radius: 22px; box-shadow: 5px 6px 0 rgba(24, 36, 73, .16); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+    @media (max-width: 620px) {
+      .hero h1 { font-size: clamp(30px, 8.7vw, 48px); line-height: 1.2; text-wrap: balance; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#content">跳到主要内容</a>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Mint 个人主页">Mint<span class="brand-dot" aria-hidden="true"></span></a>
+      <a class="back-link" href="/"><span aria-hidden="true">←</span> 返回主页</a>
+    </header>
+
+    <main id="content">
+      <!-- hero -->
+      <section class="hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">HANSA · 韩学事 · 独立个人项目</p>
+          <h1 id="hero-title">韩国留学日常，<br><em>HANSA</em> 陪你从容一点。</h1>
+          <p class="hero-lead">把分散的<strong>学校公告</strong>整理清楚，也把课表、作业与聚餐账单放在一起。<strong>HANSA 韩学事</strong>——为在韩留学生做的轻量校园助手。</p>
+          <ul class="hero-facts">
+            <li><b>已接入</b>高丽大学 · 首尔 / 世宗</li>
+            <li><b>平台</b>Android（夸克网盘分发）</li>
+            <li><b>性质</b>独立个人项目</li>
+          </ul>
+          <div class="hero-actions">
+            <a class="btn-download" href="https://pan.quark.cn/s/e7a943fa295b" target="_blank" rel="noopener noreferrer">
+              <img src="/works/hansa/assets/quark-netdisk.png" alt="夸克网盘图标">
+              <span>夸克网盘下载<small>HANSA 最新 Android 版本</small></span>
+            </a>
+            <a class="btn-ghost" href="#video">观看介绍视频 <span aria-hidden="true">↓</span></a>
+          </div>
+        </div>
+        <figure class="hero-figure">
+          <div class="frame"><img src="/works/hansa/assets/cover.png" alt="HANSA 韩学事应用界面封面图" width="1672" height="941" fetchpriority="high"></div>
+          <figcaption><span>HANSA 韩学事 · Android</span><span>오늘의 학사 소식</span></figcaption>
+        </figure>
+      </section>
+
+      <!-- features -->
+      <section class="section" aria-labelledby="features-title">
+        <div class="section-head">
+          <p class="section-kicker">What it does</p>
+          <h2 id="features-title">四件每天都会用到的事</h2>
+          <p>不是再造一个学校门户，而是把你每天真正要处理的信息，按轻重缓急排好。以下截图均来自真实应用界面。</p>
+        </div>
+
+        <article class="feature">
+          <div class="feature-copy">
+            <span class="feature-num">01 <i>/ TODAY</i></span>
+            <h3>公告，行动优先</h3>
+            <p>选课、考试、成绩、奖学金、缴费、毕业、签证住宿等需要行动的消息放在最上面，活动宣传与一般通知默认收起。首屏按截止紧迫度着色——今日截止、三天内、已过期，一眼分辨；公告保留韩文原文链接，内容以学校原文为准。</p>
+          </div>
+          <div class="feature-media">
+            <figure class="shot accent-pink">
+              <img src="/works/hansa/assets/screen-today.png" alt="HANSA 今日页面：按截止紧迫度排列的公告卡片" loading="lazy" width="462" height="1000">
+              <figcaption>「今日」：紧迫度着色的公告卡片</figcaption>
+            </figure>
+          </div>
+        </article>
+
+        <article class="feature">
+          <div class="feature-copy">
+            <span class="feature-num">02 <i>/ SCHEDULE</i></span>
+            <h3>课表和作业，放在一起</h3>
+            <p>手动把课程加进每周课表——名称、时间、教室、学分。点开任意一门课，就能记录这门课的作业和截止时间，作业会自动出现在「今日」里，按紧迫度排序。</p>
+            <span class="feature-note">课表可手动建立；公开课程目录导入见「功能预览」。</span>
+          </div>
+          <div class="feature-media">
+            <figure class="shot accent-blue">
+              <img src="/works/hansa/assets/screen-schedule.png" alt="HANSA 课表页面：按星期排列的课程卡片" loading="lazy" width="462" height="1000">
+              <figcaption>周课表 · 我的课程</figcaption>
+            </figure>
+            <figure class="shot tall accent-yellow">
+              <img src="/works/hansa/assets/screen-assignment.png" alt="HANSA 添加作业对话框：选择课程、填写内容与截止时间" loading="lazy" width="462" height="1000">
+              <figcaption>从课程直接添加作业</figcaption>
+            </figure>
+          </div>
+        </article>
+
+        <article class="feature">
+          <div class="feature-copy">
+            <span class="feature-num">03 <i>/ SPLIT</i></span>
+            <h3>A 饭，记得清楚</h3>
+            <p>聚餐记账为韩元场景设计：记下总额和每个人实际花费，可以一键自动 AA，也可以按不同金额分摊；金额没对上时不允许保存，直到账平为止。</p>
+          </div>
+          <div class="feature-media">
+            <figure class="shot accent-mint">
+              <img src="/works/hansa/assets/screen-split.png" alt="HANSA A 饭页面：总额、每人分摊金额与自动 AA" loading="lazy" width="462" height="1000">
+              <figcaption>「A 饭」：按人头分摊韩元账单</figcaption>
+            </figure>
+          </div>
+        </article>
+
+        <article class="feature">
+          <div class="feature-copy">
+            <span class="feature-num">04 <i>/ COMMUNITY</i></span>
+            <h3>同学 BBS，先做个安静的角落</h3>
+            <p>选课互助、校园生活、自由讨论——一个可以发帖和回复的小板块。</p>
+            <span class="feature-note">发帖与回复的本机原型。</span>
+          </div>
+          <div class="feature-media">
+            <figure class="shot accent-blue">
+              <img src="/works/hansa/assets/screen-community.png" alt="HANSA 同学板块：发帖与空状态提示" loading="lazy" width="462" height="1000">
+              <figcaption>「同学」板块 · 本机原型</figcaption>
+            </figure>
+          </div>
+        </article>
+      </section>
+
+      <!-- video -->
+      <section class="section" id="video" aria-labelledby="video-title">
+        <div class="section-head">
+          <p class="section-kicker">Video</p>
+          <h2 id="video-title">看看 HANSA</h2>
+          <p>通过一段演示，认识 HANSA 的校园日常。</p>
+        </div>
+        <div class="video-card">
+          <div class="video-stage" id="video-stage">
+            <button class="video-poster" id="video-load" type="button" aria-label="加载 HANSA 介绍视频播放器">
+              <img src="/works/hansa/assets/cover.png" alt="" loading="lazy">
+              <span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+              <span class="video-hint">HANSA 韩学事 · 产品介绍<small>点击加载 YouTube 播放器</small></span>
+            </button>
+          </div>
+          <div class="video-bar">
+            <p>视频加载失败，或不想在这里播放？</p>
+            <a href="https://youtu.be/5aDBU8tKHR4" target="_blank" rel="noopener noreferrer">直接在 YouTube 上观看 <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+      </section>
+
+      <!-- story / author -->
+      <section class="section" aria-labelledby="story-title">
+        <div class="section-head">
+          <p class="section-kicker">Origin</p>
+          <h2 id="story-title">项目缘起</h2>
+        </div>
+        <div class="story">
+          <div class="story-text">
+            <p>韩国大学信息多为韩文且分散，逐页查找成本高；HANSA 将公开公告整理成更易行动的视图。</p>
+          </div>
+          <aside class="author-card" aria-label="作者信息">
+            <span class="author-tag">AUTHOR · 作者</span>
+            <h3>Mint</h3>
+            <p>高丽大学在校生</p>
+            <a class="mail" href="mailto:me@mintryu.com">me@mintryu.com <span aria-hidden="true">↗</span></a>
+          </aside>
+        </div>
+      </section>
+
+      <!-- scope -->
+      <section class="section" aria-labelledby="scope-title">
+        <div class="section-head">
+          <p class="section-kicker">Scope</p>
+          <h2 id="scope-title">已实装功能</h2>
+          <p>从高丽大学开始。</p>
+        </div>
+        <div class="scope">
+          <div class="scope-col now">
+            <h3>已实装功能 <small>Implemented</small></h3>
+            <ul>
+              <li>高丽大学首尔 / 世宗公告同步</li>
+              <li>今日紧迫度</li>
+              <li>手动课表与作业</li>
+              <li>A 饭分摊</li>
+              <li>同学 BBS 本机原型</li>
+            </ul>
+          </div>
+          <div class="scope-col future">
+            <h3>功能预览 <small>Preview</small></h3>
+            <ul>
+              <li><b>多校适配</b>（汉阳、庆熙、中央、成均馆、延世、东国仅预留）</li>
+              <li><b>选课信息</b></li>
+              <li><b>GPA 与毕业进度</b></li>
+            </ul>
+            <div class="school-tags" aria-label="学校接入状态">
+              <span class="live">高丽 · 首尔 已接入</span>
+              <span class="live">高丽 · 世宗 已接入</span>
+              <span>汉阳 · 预留</span><span>庆熙 · 预留</span><span>中央 · 预留</span>
+              <span>成均馆 · 预留</span><span>延世 · 预留</span><span>东国 · 预留</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- download -->
+      <section class="section" aria-labelledby="download-title">
+        <div class="download-block">
+          <div>
+            <h2 id="download-title">下载 HANSA</h2>
+            <p class="sub">安装包通过夸克网盘分发。首次打开时选择学校与就读阶段，即可进入「今日」——这些信息只保存在你自己的设备上，可随时切换。</p>
+            <div class="download-actions">
+            <a class="btn-download" href="https://pan.quark.cn/s/e7a943fa295b" target="_blank" rel="noopener noreferrer">
+              <img src="/works/hansa/assets/quark-netdisk.png" alt="夸克网盘图标">
+              <span>夸克网盘下载<small>HANSA 最新 Android 版本</small></span>
+              </a>
+              <a class="btn-ghost" href="mailto:me@mintryu.com?subject=HANSA%20%E9%9F%A9%E5%AD%A6%E4%BA%8B%E5%8F%8D%E9%A6%88">写信反馈 <span aria-hidden="true">↗</span></a>
+            </div>
+            <p class="download-fine">Android 安装包 · 数据仅保存在你自己的设备上</p>
+          </div>
+          <figure class="shot accent-yellow download-figure">
+            <img src="/works/hansa/assets/screen-school.png" alt="HANSA 首次使用页面：选择学校校区与就读阶段" loading="lazy" width="462" height="1000">
+            <figcaption>首次使用：告诉 HANSA 你在哪所学校</figcaption>
+          </figure>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="foot-row">
+        <span>HANSA 韩学事 · 一个由 <a href="/">Mint</a> 独立完成的个人项目</span>
+        <span>联系：<a href="mailto:me@mintryu.com">me@mintryu.com</a> · <a href="/">返回主页</a></span>
+      </div>
+      <p class="legal">独立个人项目；与高丽大学及其他学校官方无关。信息以学校原文为准。</p>
+    </footer>
+  </div>
+
+  <script>
+    (() => {
+      const loadButton = document.getElementById('video-load');
+      const stage = document.getElementById('video-stage');
+      if (!loadButton || !stage) return;
+      loadButton.addEventListener('click', () => {
+        const iframe = document.createElement('iframe');
+        iframe.src = 'https://www.youtube-nocookie.com/embed/5aDBU8tKHR4?rel=0';
+        iframe.title = 'HANSA 韩学事产品介绍视频（YouTube）';
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+        iframe.allowFullscreen = true;
+        stage.replaceChildren(iframe);
+        iframe.focus();
+      });
+    })();
+  </script>
+</body>
+</html>
