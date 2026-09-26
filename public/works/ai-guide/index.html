@@ -1,0 +1,791 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AI 订阅向导：面向中国大陆新手的 ChatGPT / Claude / Grok / Gemini 订阅准备向导，用卡片分支一步步理清路径。">
+  <meta property="og:title" content="AI 订阅向导｜Mint 作品展示">
+  <meta property="og:description" content="不替你代办，不承诺结果。用清晰的分支选择，帮新手整理主流 AI 服务的订阅准备步骤与风险提示。">
+  <meta name="theme-color" content="#fbfbff">
+  <title>AI 订阅向导｜作品介绍</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #fbfbff;
+      --ink: #221c39;
+      --muted: #6b6286;
+      --pink: #ff6fbd;
+      --pink-deep: #e0449e;
+      --blue: #35ccf1;
+      --blue-deep: #0096c7;
+      --line: rgba(48, 52, 92, .14);
+      --glass: linear-gradient(145deg, rgba(255,255,255,.78), rgba(255,255,255,.42));
+      --r-lg: 22px;
+      --r-md: 16px;
+      --shadow-1: 0 16px 44px rgba(43, 39, 75, .08);
+      --shadow-2: 0 24px 58px rgba(43, 39, 75, .12);
+      --font-display: "Space Grotesk", "Noto Sans SC", "PingFang SC", ui-sans-serif, sans-serif;
+      --font-body: "Noto Sans SC", "PingFang SC", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      background:
+        radial-gradient(760px 460px at 92% -6%, rgba(53, 204, 241, .18), transparent 68%),
+        radial-gradient(760px 500px at -6% 106%, rgba(255, 111, 189, .15), transparent 70%),
+        linear-gradient(135deg, #fff 0%, var(--paper) 58%, #f7fbff 100%);
+    }
+
+    a { color: inherit; }
+    :focus-visible { outline: 2px solid var(--blue-deep); outline-offset: 4px; border-radius: 6px; }
+
+    .shell { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+
+    nav {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .16em;
+    }
+    nav a { text-decoration: none; }
+    nav .mark { color: var(--pink); }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.08fr .92fr;
+      gap: 56px;
+      align-items: center;
+      padding: 48px 0 88px;
+    }
+
+    .eyebrow {
+      color: var(--pink-deep);
+      font: 700 12px/1 var(--font-display);
+      letter-spacing: .25em;
+    }
+
+    h1 {
+      margin: 18px 0 22px;
+      font: 700 clamp(42px, 6.4vw, 78px)/1.02 var(--font-display);
+      letter-spacing: -.05em;
+    }
+
+    .gradient {
+      color: transparent;
+      background: linear-gradient(115deg, var(--pink), var(--blue));
+      background-clip: text;
+      -webkit-background-clip: text;
+    }
+
+    .lead {
+      max-width: 560px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.85;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 26px 0 30px;
+    }
+
+    .meta span {
+      padding: 8px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .58);
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-width: min(100%, 220px);
+      padding: 16px 24px;
+      border-radius: 16px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 700;
+      background: linear-gradient(120deg, var(--pink), var(--blue));
+      box-shadow: 0 16px 40px rgba(224, 68, 158, .24);
+      transition: transform .22s ease, box-shadow .22s ease;
+    }
+    .cta:hover { transform: translateY(-2px); box-shadow: 0 22px 52px rgba(224, 68, 158, .3); }
+    .cta span { font-size: 18px; }
+
+    .cta-ghost {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-width: min(100%, 160px);
+      padding: 15px 22px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, .62);
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 700;
+      transition: background .2s ease, transform .2s ease;
+    }
+    .cta-ghost:hover { background: #fff; transform: translateY(-1px); }
+
+    .preview {
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 460px;
+    }
+
+    .glow {
+      position: absolute;
+      width: 78%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(255, 111, 189, .32), rgba(53, 204, 241, .3));
+      filter: blur(48px);
+    }
+
+    .preview-card {
+      position: relative;
+      z-index: 1;
+      width: min(380px, 92%);
+      padding: 26px;
+      border: 1px solid rgba(255, 255, 255, .92);
+      border-radius: 28px;
+      background: rgba(255, 255, 255, .72);
+      box-shadow: var(--shadow-2), inset 0 1.5px 0 #fff;
+      backdrop-filter: blur(28px) saturate(1.25);
+      -webkit-backdrop-filter: blur(28px) saturate(1.25);
+    }
+
+    .preview-card .tag {
+      display: inline-flex;
+      padding: 6px 11px;
+      border-radius: 999px;
+      background: linear-gradient(120deg, rgba(255, 111, 189, .16), rgba(53, 204, 241, .16));
+      color: var(--pink-deep);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+    }
+
+    .preview-card h2 {
+      margin: 16px 0 10px;
+      font: 700 28px/1.15 var(--font-display);
+      letter-spacing: -.03em;
+    }
+
+    .preview-card p {
+      margin: 0 0 20px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.75;
+    }
+
+    .branch-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .branch {
+      padding: 14px 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .78);
+      text-align: center;
+      transition: border-color .2s ease, transform .2s ease;
+    }
+    .branch:hover { border-color: rgba(53, 204, 241, .45); transform: translateY(-1px); }
+    .branch b { display: block; font-family: var(--font-display); font-size: 14px; }
+    .branch small { display: block; margin-top: 4px; color: var(--muted); font-size: 11px; }
+
+    .section {
+      padding: 88px 0;
+      border-top: 1px dashed var(--line);
+    }
+
+    .section-head { max-width: 720px; }
+
+    .section h2 {
+      margin: 14px 0 16px;
+      font: 700 clamp(32px, 4.6vw, 52px)/1.12 var(--font-display);
+      letter-spacing: -.04em;
+    }
+
+    .section-head p,
+    .copy p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.85;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 40px;
+    }
+
+    .panel {
+      min-height: 100%;
+      padding: 26px;
+      border: 1px solid rgba(255, 255, 255, .86);
+      border-radius: var(--r-lg);
+      background: rgba(255, 255, 255, .58);
+      box-shadow: var(--shadow-1), inset 0 1px 0 #fff;
+    }
+
+    .panel h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      letter-spacing: -.01em;
+    }
+
+    .panel p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14.5px;
+      line-height: 1.8;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 40px;
+    }
+
+    .product {
+      padding: 22px 18px;
+      border: 1px solid rgba(255, 255, 255, .86);
+      border-radius: var(--r-md);
+      background: rgba(255, 255, 255, .62);
+      box-shadow: var(--shadow-1), inset 0 1px 0 #fff;
+      text-align: center;
+    }
+
+    .product .icon {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 14px;
+      border-radius: 14px;
+      font: 700 15px/1 var(--font-display);
+      color: #fff;
+    }
+    .product.gpt .icon { background: linear-gradient(135deg, #10a37f, #1a7f64); }
+    .product.claude .icon { background: linear-gradient(135deg, #d97757, #c45c3e); }
+    .product.grok .icon { background: linear-gradient(135deg, #2b2340, #111); }
+    .product.gemini .icon { background: linear-gradient(135deg, #4285f4, #9b72cb 55%, #d96570); }
+
+    .product h3 {
+      margin: 0 0 8px;
+      font: 700 17px/1.2 var(--font-display);
+    }
+
+    .product p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .flow {
+      display: grid;
+      gap: 12px;
+      margin-top: 40px;
+      counter-reset: step;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 18px;
+      align-items: start;
+      padding: 22px 24px;
+      border: 1px solid rgba(255, 255, 255, .86);
+      border-radius: var(--r-md);
+      background: rgba(255, 255, 255, .6);
+      box-shadow: var(--shadow-1), inset 0 1px 0 #fff;
+    }
+
+    .step::before {
+      counter-increment: step;
+      content: counter(step, decimal-leading-zero);
+      font: 700 22px/1 var(--font-display);
+      color: var(--blue-deep);
+      padding-top: 2px;
+    }
+
+    .step h3 {
+      margin: 0 0 6px;
+      font-size: 17px;
+    }
+
+    .step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.75;
+    }
+
+    .flow-visual {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 28px;
+      padding: 24px;
+      border: 1px dashed var(--line);
+      border-radius: var(--r-lg);
+      background: rgba(255, 255, 255, .42);
+    }
+
+    .chip {
+      padding: 10px 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: 0 6px 16px rgba(43, 39, 75, .06);
+    }
+
+    .chip.soft {
+      background: linear-gradient(120deg, rgba(255, 111, 189, .12), rgba(53, 204, 241, .12));
+      border-color: transparent;
+      color: var(--ink);
+    }
+
+    .arrow {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .notice-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 40px;
+    }
+
+    .notice {
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: var(--r-lg);
+      background: rgba(255, 255, 255, .7);
+      box-shadow: var(--shadow-1);
+    }
+
+    .notice.alert {
+      border-color: rgba(224, 68, 158, .22);
+      background: linear-gradient(160deg, rgba(255, 111, 189, .08), rgba(255, 255, 255, .78));
+    }
+
+    .notice.safe {
+      border-color: rgba(0, 150, 199, .2);
+      background: linear-gradient(160deg, rgba(53, 204, 241, .08), rgba(255, 255, 255, .78));
+    }
+
+    .notice .label {
+      display: inline-block;
+      margin-bottom: 12px;
+      color: var(--pink-deep);
+      font: 700 11px/1 var(--font-display);
+      letter-spacing: .16em;
+    }
+
+    .notice.safe .label { color: var(--blue-deep); }
+
+    .notice h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .notice p, .notice li {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .notice ul {
+      margin: 0;
+      padding-left: 1.15em;
+    }
+
+    .notice li + li { margin-top: 6px; }
+
+    .audience {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 40px;
+    }
+
+    .who {
+      padding: 24px;
+      border: 1px solid rgba(255, 255, 255, .86);
+      border-radius: var(--r-md);
+      background: rgba(255, 255, 255, .58);
+      box-shadow: var(--shadow-1), inset 0 1px 0 #fff;
+    }
+
+    .who b {
+      display: block;
+      margin-bottom: 8px;
+      font: 700 16px/1.3 var(--font-display);
+    }
+
+    .who p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.75;
+    }
+
+    .disclaimer {
+      margin-top: 28px;
+      padding: 18px 20px;
+      border: 1px dashed var(--line);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .5);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.75;
+    }
+
+    .launch {
+      padding: 28px 0 100px;
+      text-align: center;
+    }
+
+    .launch-box {
+      padding: 52px 28px;
+      border: 1px solid rgba(255, 255, 255, .9);
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(255, 111, 189, .14), rgba(255, 255, 255, .66) 48%, rgba(53, 204, 241, .16));
+      box-shadow: 0 20px 54px rgba(43, 39, 75, .1);
+    }
+
+    .launch h2 {
+      margin: 0 0 12px;
+      font: 700 clamp(30px, 4.5vw, 48px)/1.18 var(--font-display);
+    }
+
+    .launch p {
+      margin: 0 0 28px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.75;
+    }
+
+    .launch .cta-row { justify-content: center; }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 28px 0 42px;
+      border-top: 1px solid var(--line);
+      color: #9a91b2;
+      font-size: 11px;
+      letter-spacing: .11em;
+    }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; gap: 36px; padding-top: 36px; }
+      .preview { min-height: 0; order: -1; }
+      .products { grid-template-columns: 1fr 1fr; }
+      .grid-2, .notice-grid, .audience { grid-template-columns: 1fr; }
+      nav span:last-child { display: none; }
+    }
+
+    @media (max-width: 560px) {
+      .shell { width: calc(100% - 28px); }
+      h1 { font-size: 40px; }
+      .lead { font-size: 15.5px; }
+      .cta, .cta-ghost { width: 100%; min-width: 0; }
+      .products { grid-template-columns: 1fr; }
+      .step { grid-template-columns: 40px 1fr; gap: 12px; padding: 18px; }
+      .flow-visual { gap: 8px; padding: 18px; }
+      .arrow { width: 100%; text-align: center; transform: rotate(90deg); }
+      .section { padding: 64px 0; }
+      footer { flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="shell">
+    <a href="/">Mint<span class="mark">.</span></a>
+    <span>WORK / GUIDED WIZARD / 2026</span>
+  </nav>
+
+  <main>
+    <header class="hero shell">
+      <div>
+        <div class="eyebrow">AI GUIDE // 订阅准备向导</div>
+        <h1>先弄清楚<br><span class="gradient">再动手订阅</span></h1>
+        <p class="lead">面向中国大陆新手的 AI 订阅准备向导。通过卡片分支一步步选择 ChatGPT、Claude、Grok 或 Gemini，把「该准备什么、要注意什么」整理成可读路径——不代办、不承诺结果。</p>
+        <div class="meta">
+          <span>卡片分支</span>
+          <span>四款主流产品</span>
+          <span>风险提示</span>
+          <span>新手友好</span>
+        </div>
+        <div class="cta-row">
+          <a class="cta" href="https://ai.mintryu.com" target="_blank" rel="noopener noreferrer">打开向导 <span aria-hidden="true">↗</span></a>
+          <a class="cta-ghost" href="/">返回首页</a>
+        </div>
+      </div>
+      <div class="preview" aria-label="向导界面示意">
+        <div class="glow"></div>
+        <div class="preview-card">
+          <span class="tag">STEP · 选产品</span>
+          <h2>你想先了解哪一个？</h2>
+          <p>点选卡片进入对应分支，按场景逐步整理订阅前需要核对的事项。</p>
+          <div class="branch-grid">
+            <div class="branch"><b>ChatGPT</b><small>OpenAI</small></div>
+            <div class="branch"><b>Claude</b><small>Anthropic</small></div>
+            <div class="branch"><b>Grok</b><small>xAI</small></div>
+            <div class="branch"><b>Gemini</b><small>Google</small></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="shell">
+        <div class="section-head">
+          <div class="eyebrow">POSITIONING</div>
+          <h2>项目定位</h2>
+          <p>这是一份<strong>准备向导</strong>，不是代开、代付或账号交易服务。它帮你在动手之前把信息摊开：产品差异、大致流程、常见卡点，以及需要自行判断的风险点。</p>
+        </div>
+        <div class="grid-2">
+          <article class="panel">
+            <h3>它做什么</h3>
+            <p>用卡片式问答引导你选择产品与场景，逐步给出结构化说明与核对清单，降低「搜一圈还是一团乱」的成本。</p>
+          </article>
+          <article class="panel">
+            <h3>它不做什么</h3>
+            <p>不替你完成注册或支付，不承诺可用性，不提供绕过地区或平台规则的操作说明，也不担保任何第三方服务的结果。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <div class="section-head">
+          <div class="eyebrow">WHY</div>
+          <h2>为什么做</h2>
+          <p>主流 AI 产品的官网文档往往面向全球用户，术语多、入口散。对第一次接触的人来说，更需要的是「按自己情况走一遍」的路径，而不是又一篇大而全的对比文。</p>
+        </div>
+        <div class="grid-2" style="margin-top:40px">
+          <article class="panel">
+            <h3>信息过载</h3>
+            <p>社区里经验各异、说法互相矛盾。向导把问题拆成可勾选的分支，让你只看与自己相关的几步。</p>
+          </article>
+          <article class="panel">
+            <h3>决策前置</h3>
+            <p>先想清楚目标产品、预算与风险承受度，再考虑是否继续，减少冲动点击与无效尝试。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <div class="section-head">
+          <div class="eyebrow">PRODUCTS</div>
+          <h2>覆盖的四个产品</h2>
+          <p>向导以当前主流对话型 AI 订阅为线索，分别整理公开信息与准备要点。具体套餐与政策以各官方页面为准，并会随时间变化。</p>
+        </div>
+        <div class="products">
+          <article class="product gpt">
+            <div class="icon" aria-hidden="true">GPT</div>
+            <h3>ChatGPT</h3>
+            <p>OpenAI 对话产品线，向导中按「选计划 → 核对准备 → 风险提示」展开。</p>
+          </article>
+          <article class="product claude">
+            <div class="icon" aria-hidden="true">C</div>
+            <h3>Claude</h3>
+            <p>Anthropic 的 Claude，侧重长文与编程等场景的准备说明。</p>
+          </article>
+          <article class="product grok">
+            <div class="icon" aria-hidden="true">X</div>
+            <h3>Grok</h3>
+            <p>xAI 的 Grok，说明与 X / xAI 生态相关的公开订阅路径线索。</p>
+          </article>
+          <article class="product gemini">
+            <div class="icon" aria-hidden="true">G</div>
+            <h3>Gemini</h3>
+            <p>Google Gemini，串联账号体系与套餐选择时需要留意的核对项。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <div class="section-head">
+          <div class="eyebrow">FLOW</div>
+          <h2>可视化分步流程</h2>
+          <p>整体是「选产品 → 明确场景 → 阅读准备清单 → 核对风险 → 自行决定是否继续」的线性向导，中间用卡片分支分流。</p>
+        </div>
+
+        <div class="flow-visual" aria-hidden="true">
+          <span class="chip soft">选择产品</span>
+          <span class="arrow">→</span>
+          <span class="chip">使用场景</span>
+          <span class="arrow">→</span>
+          <span class="chip">准备清单</span>
+          <span class="arrow">→</span>
+          <span class="chip">风险提示</span>
+          <span class="arrow">→</span>
+          <span class="chip soft">自行决策</span>
+        </div>
+
+        <div class="flow">
+          <article class="step">
+            <div>
+              <h3>点选目标产品</h3>
+              <p>从 ChatGPT、Claude、Grok、Gemini 中选一个开始。每条分支独立，可随时返回换产品。</p>
+            </div>
+          </article>
+          <article class="step">
+            <div>
+              <h3>回答少量场景问题</h3>
+              <p>例如更偏写作、编程还是日常问答，以及你是否已有相关账号体系——问题尽量短，避免问卷疲劳。</p>
+            </div>
+          </article>
+          <article class="step">
+            <div>
+              <h3>阅读结构化准备说明</h3>
+              <p>页面汇总「可能需要提前了解的事项」，帮助你对照官方文档与自己的实际情况，而不是代替官方说明。</p>
+            </div>
+          </article>
+          <article class="step">
+            <div>
+              <h3>确认风险后再行动</h3>
+              <p>向导会单独标出网络可达性、支付方式、账号安全与政策变动等提示。是否继续、如何继续，由你本人决定。</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <div class="section-head">
+          <div class="eyebrow">RISKS &amp; PRIVACY</div>
+          <h2>风险提示与隐私说明</h2>
+          <p>准备阶段就把不确定因素写清楚，比事后踩坑更重要。以下内容仅为通用提醒，不构成法律或合规建议。</p>
+        </div>
+        <div class="notice-grid">
+          <article class="notice alert">
+            <span class="label">NETWORK &amp; PAYMENT</span>
+            <h3>网络与支付风险</h3>
+            <ul>
+              <li>部分服务在不同地区的可用性、支付方式与账单规则不同，且可能随时调整。</li>
+              <li>向导<strong>不承诺</strong>任何地区或网络环境下的可访问性，也不提供规避地区或平台限制的方法。</li>
+              <li>支付前请仔细核对收款方、币种、自动续费与退款政策；不要向不明第三方转账。</li>
+              <li>账号、验证码与支付信息请只在官方渠道使用，谨防钓鱼与「代开」诈骗。</li>
+            </ul>
+          </article>
+          <article class="notice safe">
+            <span class="label">PRIVACY</span>
+            <h3>隐私说明</h3>
+            <ul>
+              <li>作品介绍页本身为静态页面，不收集你的订阅账号或支付信息。</li>
+              <li>实际向导站点（ai.mintryu.com）的数据处理以该站公示的隐私说明为准。</li>
+              <li>建议不要在向导或任何非官方页面输入银行卡号、一次性验证码或完整身份证件信息。</li>
+              <li>与 AI 服务相关的数据与对话隐私，请以各产品官方政策为准。</li>
+            </ul>
+          </article>
+        </div>
+        <p class="disclaimer">重要声明：本项目仅提供信息整理与路径引导，不对第三方服务的可用性、扣费结果或账号状态负责。请遵守当地法律法规及各平台服务条款；遇到不确定的操作，以官方文档与正规客服为准。</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <div class="section-head">
+          <div class="eyebrow">AUDIENCE</div>
+          <h2>适用人群</h2>
+          <p>写给第一次认真考虑订阅主流 AI 的人，也写给已经听过很多说法、希望有一份冷静清单的人。</p>
+        </div>
+        <div class="audience">
+          <article class="who">
+            <b>大陆地区新手</b>
+            <p>刚接触 ChatGPT / Claude / Grok / Gemini，需要按步骤理清「先看什么、后问什么」。</p>
+          </article>
+          <article class="who">
+            <b>想先对比再决定的人</b>
+            <p>不急着立刻付费，希望用卡片分支快速扫过不同产品的准备要点。</p>
+          </article>
+          <article class="who">
+            <b>在意风险边界的人</b>
+            <p>希望明确「向导能帮到哪、帮不到哪」，避免夸大承诺与灰色操作描述。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="launch shell">
+      <div class="launch-box">
+        <h2>准备好了，就打开向导</h2>
+        <p>从选一个产品开始。信息供参考，决策权在你。</p>
+        <div class="cta-row">
+          <a class="cta" href="https://ai.mintryu.com" target="_blank" rel="noopener noreferrer">前往 ai.mintryu.com <span aria-hidden="true">→</span></a>
+          <a class="cta-ghost" href="/">返回首页</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="shell">
+    <span>© 2026 MINT RYU · AI SUBSCRIPTION GUIDE</span>
+    <span>INFORMATION ONLY · NOT A PROXY SERVICE</span>
+  </footer>
+</body>
+</html>

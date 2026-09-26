@@ -1,0 +1,4 @@
+# Local-only values for `wrangler dev` / `vitest`. Copy to .dev.vars and change them.
+# Production values are Worker secrets (wrangler secret put ...) and must never be committed.
+ADMIN_PASSWORD=local-development-only
+SESSION_SECRET=replace-with-a-long-random-local-string

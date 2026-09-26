@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>人格验牌 · 验一验你是谁</title>
+  <meta name="description" content="16 道站队题，验出你的圈层身份与精神内核">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style-qr96.css">
+</head>
+<body>
+  <main id="app">
+
+    <!-- 首页 -->
+    <section id="view-home" class="view">
+      <div class="home-inner">
+        <p class="home-sub">中文互联网人格鉴定所</p>
+        <h1 class="home-title">人格验牌</h1>
+        <p class="home-desc">16 道站队题<br>验出你的<span class="hl">圈层身份</span> × <span class="hl">精神内核</span></p>
+        <button id="btn-start" class="btn-primary">开始验牌</button>
+        <p class="home-tip">约 60 秒 · 结果可分享</p>
+      </div>
+    </section>
+
+    <!-- 答题页 -->
+    <section id="view-quiz" class="view hidden">
+      <div class="quiz-inner" id="quiz-inner">
+        <div class="progress-track"><div id="progress-bar" class="progress-bar"></div></div>
+        <p id="quiz-step" class="quiz-step"></p>
+        <h2 id="quiz-title" class="quiz-title"></h2>
+        <div class="options">
+          <button id="opt-a" class="option"></button>
+          <button id="opt-b" class="option"></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 计算中 -->
+    <section id="view-computing" class="view hidden">
+      <div class="computing-inner">
+        <div class="spinner"></div>
+        <p class="computing-text">验牌中<span id="dots"></span></p>
+      </div>
+    </section>
+
+    <!-- 结果页 -->
+    <section id="view-result" class="view hidden">
+      <div id="card" class="card">
+        <div class="card-art" id="card-art"></div>
+        <div class="card-body">
+          <div class="tags">
+            <span id="tag-circle" class="tag"></span>
+            <span id="tag-spirit" class="tag"></span>
+          </div>
+          <p id="combo-line" class="combo"></p>
+          <div class="result-proof">
+            <div class="result-meter" aria-label="身份倾向">
+              <div class="meter-row"><span id="primary-name"></span><strong id="primary-pct"></strong></div>
+              <div id="meter-track" class="meter-track" role="progressbar" aria-label="主身份浓度" aria-valuemin="0" aria-valuemax="100"><i id="meter-fill"></i></div>
+              <div class="runner-row"><span>次倾向 · <b id="runner-name"></b></span><span id="runner-pct"></span></div>
+              <p class="score-note">两项为独立人格浓度，并非互斥概率</p>
+            </div>
+            <p class="reason-title">为什么是这张牌</p>
+            <ul id="reason-list" class="reason-list"></ul>
+          </div>
+          <div class="card-bottom">
+            <p class="card-brand">人格验牌 · 验一验你是谁</p>
+            <div id="qrcode" class="qr"></div>
+          </div>
+        </div>
+      </div>
+      <div class="actions">
+        <button id="btn-download" class="btn-primary">下载卡片</button>
+        <button id="btn-retry" class="btn-ghost">再测一次</button>
+      </div>
+      <p class="share-hint">分享本页链接，好友打开可直接看到你的结果</p>
+    </section>
+
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="js/scoring.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/avatars.js"></script>
+  <script src="js/app-qr96.js"></script>
+</body>
+</html>
