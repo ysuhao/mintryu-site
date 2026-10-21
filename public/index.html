@@ -87,6 +87,15 @@
       transition: opacity .4s;
     }
 
+    /* ---------- meteors (over the grid, under the stage; they fade as the drawer rises) ---------- */
+    .meteors {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      width: 100%; height: 100%;
+      opacity: calc(1 - var(--p));
+      /* Dimmed behind the text column so they never fight the copy. */
+      mask: linear-gradient(to right, rgb(0 0 0 / .4) 0%, rgb(0 0 0 / .4) 28%, #000 58%);
+    }
+
     /* ---------- stage: who I am + three apps ---------- */
     .stage {
       position: sticky;
@@ -369,6 +378,7 @@
 
     @media (max-width: 960px) {
       :root { --peek: 68px; }
+      .meteors { mask: none; opacity: calc((1 - var(--p)) * .7); }
       .stage-inner {
         width: min(620px, 100% - 40px);
         grid-template-columns: minmax(0, 1fr);
@@ -426,6 +436,7 @@
   <span class="snap-top" aria-hidden="true"></span>
   <div class="grid" aria-hidden="true"></div>
   <div class="grid grid--glow" aria-hidden="true"></div>
+  <canvas class="meteors" aria-hidden="true"></canvas>
 
   <main class="stage" id="top">
     <a class="mark" href="/" aria-label="Mint Ryu 主页">
@@ -757,6 +768,295 @@
         });
       }, { rootMargin: '-35% 0px -60% 0px' });
       document.querySelectorAll('.block[id]').forEach((section) => spy.observe(section));
+    })();
+
+    // Colorful meteors flare up over the stage, shed twinkling glitter and light the grid as they cross it.
+    (() => {
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const root = document.documentElement;
+      const canvas = document.querySelector('.meteors');
+      const ctx = canvas.getContext('2d');
+      // Aurora: mint through cyan, sky and violet to pink.
+      const COLORS = ['#2dd4bf', '#22d3ee', '#60a5fa', '#a78bfa', '#f472b6'];
+      const HEADING = (150 * Math.PI) / 180; // down and to the left, 30° below the horizon
+      const GAP = 2400; // mean wait between meteors, in ms
+      const GRID = 48; // matches .grid --size
+
+      const rand = (min, max) => min + Math.random() * (max - min);
+      const pick = (list) => list[Math.floor(Math.random() * list.length)];
+      const alpha = (hex, a) => hex + Math.round(Math.max(0, Math.min(1, a)) * 255).toString(16).padStart(2, '0');
+      // Skip launches while the tab is hidden or the drawer covers the stage.
+      const awake = () => !document.hidden && Number(root.style.getPropertyValue('--p') || 0) < 0.98;
+
+      let W = 0;
+      let H = 0;
+      const resize = () => {
+        const dpr = Math.min(devicePixelRatio || 1, 2);
+        W = innerWidth;
+        H = innerHeight;
+        canvas.width = Math.round(W * dpr);
+        canvas.height = Math.round(H * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      };
+
+      // Glint sprites, rendered once per color, so hundreds of sparkles stay cheap to draw.
+      const SPRITE = 64;
+      const sprites = new Map();
+      const sprite = (color, spikes) => {
+        const key = color + spikes;
+        if (sprites.has(key)) return sprites.get(key);
+        const image = document.createElement('canvas');
+        image.width = SPRITE;
+        image.height = SPRITE;
+        const g = image.getContext('2d');
+        const mid = SPRITE / 2;
+        const glow = g.createRadialGradient(mid, mid, 0, mid, mid, mid);
+        glow.addColorStop(0, '#ffffff');
+        glow.addColorStop(0.1, alpha(color, 0.9));
+        glow.addColorStop(0.35, alpha(color, 0.22));
+        glow.addColorStop(1, alpha(color, 0));
+        g.fillStyle = glow;
+        g.fillRect(0, 0, SPRITE, SPRITE);
+        if (spikes) {
+          // Four thin diffraction spikes: the ✦ a camera draws around a bright star.
+          g.globalCompositeOperation = 'lighter';
+          [[1, 0], [0, 1]].forEach(([dx, dy]) => {
+            const ray = g.createLinearGradient(mid - dx * mid, mid - dy * mid, mid + dx * mid, mid + dy * mid);
+            ray.addColorStop(0, alpha(color, 0));
+            ray.addColorStop(0.5, '#ffffff');
+            ray.addColorStop(1, alpha(color, 0));
+            g.fillStyle = ray;
+            g.beginPath();
+            g.moveTo(mid - dx * mid, mid - dy * mid);
+            g.lineTo(mid + dy * 1.6, mid + dx * 1.6);
+            g.lineTo(mid + dx * mid, mid + dy * mid);
+            g.lineTo(mid - dy * 1.6, mid - dx * 1.6);
+            g.closePath();
+            g.fill();
+          });
+        }
+        sprites.set(key, image);
+        return image;
+      };
+      const stamp = (image, x, y, size, a) => {
+        ctx.globalAlpha = Math.max(0, Math.min(1, a));
+        ctx.drawImage(image, x - size / 2, y - size / 2, size, size);
+        ctx.globalAlpha = 1;
+      };
+
+      const meteors = [];
+      const sparks = [];
+      let raf = 0;
+      let last = 0;
+      const launch = (x, y, { heading = HEADING + rand(-0.06, 0.06), boost = 1 } = {}) => {
+        const scale = Math.min(1, Math.max(0.6, W / 1440));
+        const head = pick(COLORS);
+        meteors.push({
+          x,
+          y,
+          dx: Math.cos(heading),
+          dy: Math.sin(heading),
+          speed: rand(760, 1250) * scale * boost,
+          length: rand(150, 300) * scale * boost,
+          width: rand(1.3, 2.3) * Math.sqrt(boost),
+          life: rand(0.75, 1.25),
+          age: 0,
+          head,
+          tail: pick(COLORS.filter((color) => color !== head)),
+          phase: rand(0, Math.PI * 2),
+          burst: Math.random() < 0.4,
+          debt: 0,
+        });
+        if (!raf) {
+          last = performance.now();
+          raf = requestAnimationFrame(frame);
+        }
+      };
+      // Meteors flare up mid-sky, mostly over the empty right side, the way real ones do.
+      const launchRandom = () => launch(rand(W * 0.42, W * 1.08), rand(-H * 0.06, H * 0.5));
+      const shower = () => {
+        const heading = HEADING + rand(-0.04, 0.04);
+        let at = 0;
+        for (let i = Math.round(rand(4, 7)); i > 0; i--) {
+          at += rand(90, 320);
+          setTimeout(() => awake() && launch(rand(W * 0.35, W * 1.1), rand(-H * 0.08, H * 0.45), { heading: heading + rand(-0.02, 0.02) }), at);
+        }
+      };
+
+      // Glitter shed by the head: it drifts off the path and twinkles out behind the meteor.
+      const shed = (m, hx, hy, dt, rate) => {
+        m.debt += dt * 130 * rate;
+        for (; m.debt >= 1; m.debt -= 1) {
+          const side = rand(-1, 1);
+          const back = rand(0, 20);
+          const drift = rand(8, 26) * side;
+          sparks.push({
+            x: hx - m.dx * back - m.dy * side * 3,
+            y: hy - m.dy * back + m.dx * side * 3,
+            vx: m.dx * m.speed * 0.03 - m.dy * drift,
+            vy: m.dy * m.speed * 0.03 + m.dx * drift + rand(6, 16),
+            size: Math.random() < 0.3 ? rand(12, 22) : rand(5, 11),
+            life: rand(0.45, 1.3),
+            age: 0,
+            color: Math.random() < 0.3 ? '#ffffff' : Math.random() < 0.6 ? m.head : m.tail,
+            twinkle: rand(12, 28),
+            phase: rand(0, Math.PI * 2),
+          });
+        }
+      };
+      const drawSparks = (dt) => {
+        const drag = Math.exp(-2.2 * dt);
+        for (let i = sparks.length - 1; i >= 0; i--) {
+          const s = sparks[i];
+          s.age += dt;
+          if (s.age >= s.life) {
+            sparks[i] = sparks[sparks.length - 1];
+            sparks.pop();
+            continue;
+          }
+          s.vx *= drag;
+          s.vy *= drag;
+          s.x += s.vx * dt;
+          s.y += s.vy * dt;
+          const t = s.age / s.life;
+          // A sharp twinkle: mostly dim, with brief bright glints.
+          const glint = Math.max(0, Math.sin(s.phase + s.age * s.twinkle)) ** 3;
+          stamp(sprite(s.color, s.size >= 12), s.x, s.y, s.size * (1 - t * 0.4), (1 - t) ** 1.4 * (0.3 + 0.7 * glint));
+        }
+      };
+
+      // The background grid is masked to the bottom-right corner; light it only where it shows.
+      const gridShows = (x, y) => Math.max(0, 1 - Math.hypot((x - W) / (W * 1.1), (y - H) / (H * 0.85)) / 0.62);
+      const lightGrid = (x, y, color, a) => {
+        const k = gridShows(x, y) * a;
+        if (k < 0.02) return;
+        const r = 120;
+        const glow = ctx.createRadialGradient(x, y, 0, x, y, r);
+        glow.addColorStop(0, alpha(color, 0.75 * k));
+        glow.addColorStop(1, alpha(color, 0));
+        ctx.strokeStyle = glow;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        for (let gx = Math.ceil((x - r) / GRID) * GRID; gx < x + r; gx += GRID) {
+          ctx.moveTo(gx + 0.5, y - r);
+          ctx.lineTo(gx + 0.5, y + r);
+        }
+        for (let gy = Math.ceil((y - r) / GRID) * GRID; gy < y + r; gy += GRID) {
+          ctx.moveTo(x - r, gy + 0.5);
+          ctx.lineTo(x + r, gy + 0.5);
+        }
+        ctx.stroke();
+      };
+
+      const draw = (m, dt) => {
+        const t = m.age / m.life;
+        const a = Math.min(1, t / 0.12) * Math.min(1, (1 - t) / 0.45);
+        // Some meteors flash once just before they burn out.
+        const flash = m.burst ? Math.exp(-(((t - 0.7) / 0.07) ** 2)) : 0;
+        const travelled = m.speed * m.age;
+        const hx = m.x + m.dx * travelled;
+        const hy = m.y + m.dy * travelled;
+        const len = Math.min(m.length, travelled);
+        const nx = -m.dy * m.width;
+        const ny = m.dx * m.width;
+
+        lightGrid(hx, hy, m.head, a);
+
+        // Tail: a sliver that tapers away from the head and cools into a second color.
+        const tail = ctx.createLinearGradient(hx, hy, hx - m.dx * len, hy - m.dy * len);
+        tail.addColorStop(0, alpha(m.head, a));
+        tail.addColorStop(0.4, alpha(m.tail, a * 0.5));
+        tail.addColorStop(1, alpha(m.tail, 0));
+        ctx.fillStyle = tail;
+        // A soft bloom, so the tail glows instead of reading as a hairline.
+        ctx.shadowColor = alpha(m.head, a * 0.9);
+        ctx.shadowBlur = 14;
+        ctx.beginPath();
+        ctx.moveTo(hx + nx, hy + ny);
+        ctx.lineTo(hx - m.dx * len, hy - m.dy * len);
+        ctx.lineTo(hx - nx, hy - ny);
+        ctx.closePath();
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        // A white-hot core along the first stretch of the tail.
+        const cx = hx - m.dx * len * 0.35;
+        const cy = hy - m.dy * len * 0.35;
+        const core = ctx.createLinearGradient(hx, hy, cx, cy);
+        core.addColorStop(0, `rgba(255, 255, 255, ${0.85 * a})`);
+        core.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        ctx.strokeStyle = core;
+        ctx.lineWidth = m.width * 0.7;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(hx, hy);
+        ctx.lineTo(cx, cy);
+        ctx.stroke();
+
+        const r = m.width * 7;
+        const glow = ctx.createRadialGradient(hx, hy, 0, hx, hy, r);
+        glow.addColorStop(0, `rgba(255, 255, 255, ${a})`);
+        glow.addColorStop(0.2, alpha(m.head, a * 0.8));
+        glow.addColorStop(1, alpha(m.head, 0));
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(hx, hy, r, 0, Math.PI * 2);
+        ctx.fill();
+
+        // The head twinkles like a star: a ✦ flare that shimmers in size and brightness.
+        const shimmer = 0.75 + 0.15 * Math.sin(m.age * 47 + m.phase) + 0.1 * Math.sin(m.age * 29);
+        stamp(sprite(m.head, true), hx, hy, m.width * 20 * shimmer * (1 + flash * 1.6), a * (0.8 + flash));
+        shed(m, hx, hy, dt, a * (1 + flash * 3));
+      };
+
+      function frame(now) {
+        const dt = Math.min(0.05, (now - last) / 1000);
+        last = now;
+        ctx.clearRect(0, 0, W, H);
+        ctx.globalCompositeOperation = 'lighter';
+        for (let i = meteors.length - 1; i >= 0; i--) {
+          const m = meteors[i];
+          m.age += dt;
+          if (m.age >= m.life) meteors.splice(i, 1);
+          else draw(m, dt);
+        }
+        drawSparks(dt);
+        // Sleep between meteors instead of spinning an empty loop.
+        raf = meteors.length || sparks.length ? requestAnimationFrame(frame) : 0;
+      }
+
+      let timer = 0;
+      const scheduleMeteor = () => {
+        clearTimeout(timer);
+        // Exponential gaps feel natural: mostly short waits, now and then a long quiet stretch.
+        const mean = GAP * (W < 600 ? 1.5 : 1);
+        const gap = Math.min(-Math.log(1 - Math.random()) * mean, mean * 3) + 300;
+        timer = setTimeout(() => {
+          if (awake()) launchRandom();
+          scheduleMeteor();
+        }, gap);
+      };
+      const scheduleShower = () => {
+        setTimeout(() => {
+          if (awake()) shower();
+          scheduleShower();
+        }, rand(18000, 32000));
+      };
+
+      // Click empty sky and a meteor streaks right through the pointer.
+      addEventListener('click', (event) => {
+        if (event.target.closest('a, button, input, label, summary, .drawer')) return;
+        const back = 140;
+        launch(event.clientX - Math.cos(HEADING) * back, event.clientY - Math.sin(HEADING) * back, { heading: HEADING, boost: 1.15 });
+      });
+      addEventListener('resize', resize);
+      document.addEventListener('visibilitychange', () => { if (!document.hidden) scheduleMeteor(); });
+
+      resize();
+      scheduleMeteor();
+      scheduleShower();
+      // One meteor crosses the sky right after the signature finishes writing.
+      setTimeout(() => awake() && launch(W * 0.86, H * 0.08, { heading: HEADING, boost: 1.2 }), 3100);
     })();
 
   </script>
