@@ -34,7 +34,7 @@ const PROJECTS = [
   },
   {
     links: ["https://mignet.mintryu.com/"],
-    entity: { "@type": "SoftwareApplication", "@id": "https://mignet.mintryu.com/#app", name: "mignet", url: "https://mignet.mintryu.com/", applicationCategory: "BusinessApplication", operatingSystem: "Windows 10, Windows 11", isAccessibleForFree: true, license: "https://www.gnu.org/licenses/gpl-3.0.html", description: "常驻 Windows 桌面的实体印章：在 Word 文档上拿起、瞄准、单击落章。免费下载，GPLv3 开源。" }
+    entity: { "@type": "SoftwareApplication", "@id": "https://mignet.mintryu.com/#app", name: "mignet", url: "https://mignet.mintryu.com/", applicationCategory: "BusinessApplication", operatingSystem: "Windows 10, Windows 11", isAccessibleForFree: true, license: "https://www.gnu.org/licenses/gpl-3.0.html", codeRepository: "https://github.com/ysuhao/mignet", description: "常驻 Windows 桌面的实体印章：在 Word 文档上拿起、瞄准、单击落章。免费下载，GPLv3 开源。" }
   },
   {
     links: [`${SITE_ORIGIN}/works/hansa/`],
@@ -42,7 +42,7 @@ const PROJECTS = [
   },
   {
     links: [`${SITE_ORIGIN}/works/mint-final-channel/`],
-    entity: { "@type": "SoftwareApplication", "@id": `${SITE_ORIGIN}/works/mint-final-channel/#app`, name: "Mint Final Channel（Mint 的混音通道条）", url: `${SITE_ORIGIN}/works/mint-final-channel/`, applicationCategory: "MultimediaApplication", applicationSubCategory: "VST3 音频插件", description: "同时为直播新手和专业创作者设计的双模式 VST3 混音通道条：Simple 一键处理，Formal 展开完整混音控制，音频全部在本地处理。" }
+    entity: { "@type": "SoftwareApplication", "@id": `${SITE_ORIGIN}/works/mint-final-channel/#app`, name: "Mint Final Channel（Mint 的混音通道条）", url: `${SITE_ORIGIN}/works/mint-final-channel/`, applicationCategory: "MultimediaApplication", applicationSubCategory: "VST3 音频插件", operatingSystem: "Windows x64", softwareVersion: "0.1.0", isAccessibleForFree: true, license: "https://opensource.org/licenses/MIT", codeRepository: "https://github.com/ysuhao/mint-final-channel", downloadUrl: "https://github.com/ysuhao/mint-final-channel/releases/latest", description: "同时为直播新手和专业创作者设计的双模式 VST3 混音通道条：Simple 一键处理，Formal 展开完整混音控制，音频全部在本地处理。" }
   },
   {
     links: [`${SITE_ORIGIN}/works/ai-guide/`, "https://ai.mintryu.com/"],
@@ -162,7 +162,7 @@ async function llmsTxt(env) {
     "- [mignet](https://mignet.mintryu.com/)：常驻 Windows 桌面的实体印章，在 Word 文档上拿起、瞄准、单击落章；免费下载，GPLv3 开源（https://github.com/ysuhao/mignet）",
     "- [Mint 同传](https://live.mintryu.com/)：韩语与普通话双向实时语音同传，扫码收听与查看字幕",
     `- [HANSA 韩学事](${SITE_ORIGIN}/works/hansa/)：为高丽大学首尔与世宗校区留学生整理学校公告、课表、作业和 A 饭记账的 Android 校园助手`,
-    `- [Mint Final Channel](${SITE_ORIGIN}/works/mint-final-channel/)：同时为直播新手和专业创作者设计的双模式 VST3 混音通道条（开发中）`,
+    `- [Mint Final Channel](${SITE_ORIGIN}/works/mint-final-channel/)：同时为直播新手和专业创作者设计的双模式 VST3 混音通道条（开发中）；0.1.0 Windows x64 版与 MIT 开源代码见 https://github.com/ysuhao/mint-final-channel`,
     `- [AI 订阅向导 mintguide](https://ai.mintryu.com/)：面向中国大陆新手的 ChatGPT / Claude / Grok / Gemini 订阅准备向导；介绍页 ${SITE_ORIGIN}/works/ai-guide/`,
     `- [豪意值检测](${SITE_ORIGIN}/works/haoyi-check/)：15 道题的自嘲向互动测验`,
     `- [人格验牌](${SITE_ORIGIN}/persona-check/)：16 道站队题的中文互联网圈层测验`,
