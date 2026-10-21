@@ -38,5 +38,21 @@ binding here unless you intend to change production.
 
 `blogPost()` adds description, canonical, hreflang alternates, Open Graph and Twitter card tags. All URLs are built
 from `SITE_ORIGIN` (`https://mintryu.com`), never from the request host. `?lang=` is kept only when that translation
-exists; otherwise the Chinese original URL is canonical. Covers are used only when they are `/media/<file>` or an
+exists; otherwise the Chinese original URL is canonical.
+
+## Search and AI discovery
+
+- Posts carry `BlogPosting` + `BreadcrumbList` JSON-LD (author `https://mintryu.com/#mint`, translations linked
+  with `workTranslation` / `translationOfWork`); the index carries `Blog` JSON-LD, localized title and
+  description, and hreflang alternates for all four languages.
+- `/blog/sitemap.xml` lists the index and every published post in every available language, with hreflang
+  alternates. The root `/sitemap.xml` (home worker) points to it.
+- `/blog/rss.xml` (`?lang=` supported) and `/blog/<slug>.md` (Markdown copy with a `Link: rel="canonical"` header
+  back to the HTML page).
+- `/admin`, `/api/blog/*` and error pages are `noindex`.
+- A `#` heading inside a post renders as `h2`, so the title stays the page's only `h1`. An excerpt shorter than
+  30 characters is extended with the opening of the body for the meta description.
+
+`src/index.ts` was rebuilt from the deployed bundle on 2026-10-21 (it compiled back to the identical bundle),
+so this directory matches production again. Covers are used only when they are `/media/<file>` or an
 `https://` URL; otherwise the share image falls back to `/mascots/hachiware-sticker.png` with a `summary` card.

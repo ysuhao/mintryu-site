@@ -1,0 +1,28 @@
+// "mintryu-site-edge": the same home-worker.mjs, placed in front of the static assets of "mintryu-site"
+// on the paths below. "mintryu-site" serves assets before its Worker everywhere except "/", and that
+// setting can only change together with a full asset upload, so these routes give the SEO layer the
+// paths it needs in the meantime. Once "mintryu-site" is redeployed with these paths in
+// assets.run_worker_first, this Worker and its routes can be deleted.
+// Routes are https-only: plain-http requests must keep reaching "mintryu-https-redirect" (http://mintryu.com/*).
+{
+  "$schema": "../blog-worker/node_modules/wrangler/config-schema.json",
+  "name": "mintryu-site-edge",
+  "main": "home-worker.mjs",
+  "compatibility_date": "2026-07-13",
+  "workers_dev": false,
+  "services": [
+    { "binding": "ASSETS", "service": "mintryu-site" },
+    { "binding": "BLOG_SERVICE", "service": "mintryu-blog" }
+  ],
+  "routes": [
+    { "pattern": "https://mintryu.com/robots.txt", "zone_name": "mintryu.com" },
+    { "pattern": "https://mintryu.com/sitemap.xml", "zone_name": "mintryu.com" },
+    { "pattern": "https://mintryu.com/sitemap-pages.xml", "zone_name": "mintryu.com" },
+    { "pattern": "https://mintryu.com/llms.txt", "zone_name": "mintryu.com" },
+    { "pattern": "https://mintryu.com/avatar.jpg", "zone_name": "mintryu.com" },
+    { "pattern": "https://mintryu.com/avatar.webp", "zone_name": "mintryu.com" },
+    { "pattern": "https://mintryu.com/works/*", "zone_name": "mintryu.com" },
+    { "pattern": "https://mintryu.com/presentations*", "zone_name": "mintryu.com" },
+    { "pattern": "https://mintryu.com/persona-check*", "zone_name": "mintryu.com" }
+  ]
+}
