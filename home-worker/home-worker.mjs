@@ -4,23 +4,6 @@
 // share tags and JSON-LD a static page is missing. Existing tags are never overwritten, so a page
 // that sets its own metadata keeps it.
 
-const thumbnails = {
-  "/media/e0f574e6-a3a7-49a6-8569-a5650d1cfea3.png": "/thumbnails/e0f574e6-a3a7-49a6-8569-a5650d1cfea3.png.webp",
-  "/media/f00533d4-0148-4efd-97a4-3c0ef5d25a65.png": "/thumbnails/f00533d4-0148-4efd-97a4-3c0ef5d25a65.png.webp",
-  "/media/185a5379-e67e-4b29-b3f0-cf1089caad1a.jpg": "/thumbnails/185a5379-e67e-4b29-b3f0-cf1089caad1a.jpg.webp",
-  "/media/85036923-1a09-4a5e-9fce-1496974253ec.png": "/thumbnails/85036923-1a09-4a5e-9fce-1496974253ec.png.webp",
-  "/media/7ecd8ca9-1c45-4a8a-8dab-2b3f98442774.png": "/thumbnails/7ecd8ca9-1c45-4a8a-8dab-2b3f98442774.png.webp",
-  "/media/a5664d22-ccc0-45e3-9d90-2c684c757822.png": "/thumbnails/a5664d22-ccc0-45e3-9d90-2c684c757822.png.webp",
-  "/media/3800be42-31b1-4f75-81e2-784bd410985f.png": "/thumbnails/3800be42-31b1-4f75-81e2-784bd410985f.png.webp",
-  "/media/ab9900c3-c3c5-4583-bbb8-723c0684bc4a.png": "/thumbnails/ab9900c3-c3c5-4583-bbb8-723c0684bc4a.png.webp",
-  "/media/b45fc461-8b01-42a2-82d4-97731a2da91d.png": "/thumbnails/b45fc461-8b01-42a2-82d4-97731a2da91d.png.webp",
-  "/media/ed4580ce-f9a4-4d53-ba61-3f5743f8cd47.webp": "/thumbnails/ed4580ce-f9a4-4d53-ba61-3f5743f8cd47.webp.webp",
-  "/media/42f517ae-3a45-4bcd-b198-1a8dce1aaa01.webp": "/thumbnails/42f517ae-3a45-4bcd-b198-1a8dce1aaa01.webp.webp",
-  "/media/653cf53e-261a-42d3-8e8e-2aeccdc1d782.png": "/thumbnails/653cf53e-261a-42d3-8e8e-2aeccdc1d782.png.webp",
-  "/media/6dc69b50-a278-4c60-b467-a52cc98bc79c.png": "/thumbnails/6dc69b50-a278-4c60-b467-a52cc98bc79c.png.webp",
-  "/media/d9eb4270-8961-4b27-9fd5-a70e3949cf91.png": "/thumbnails/d9eb4270-8961-4b27-9fd5-a70e3949cf91.png.webp"
-};
-
 const SITE_ORIGIN = "https://mintryu.com";
 const SITE_NAME = "Mint";
 const PERSON_ID = `${SITE_ORIGIN}/#mint`;
@@ -83,7 +66,8 @@ const projectByLink = (link) => PROJECTS.find((project) => project.links.include
 // Static pages besides the homepage. `description` is only used when the page has none of its own.
 const PRESENTATIONS = "/presentations/";
 const PAGES = {
-  "/presentations/": { name: "发表目录" },
+  "/works/": { name: "其他作品", collection: true },
+  "/presentations/": { name: "发表目录", collection: true },
   "/presentations/jochiwon-bm/": { parent: PRESENTATIONS, presentation: true },
   "/presentations/jwcc-ucm/": { parent: PRESENTATIONS, presentation: true, description: "JEDI에서 JWCC, 그리고 UCM까지. 미 국방부의 클라우드 구매 방식이 어떻게 바뀌었고 정보시스템 관리에 어떤 과제를 남겼는지 다룬 고려대학교 MIS 발표입니다." },
   "/presentations/geo-interactive/": { parent: PRESENTATIONS, presentation: true },
@@ -109,22 +93,27 @@ function jsonLd(data) {
   return `<script type="application/ld+json">${body}</script>`;
 }
 
+// The homepage's #latest-posts: the newest post as a featured card, then up to four rows.
 export function renderPostCards(posts, language) {
   if (!posts.length) return '<p class="posts-status">第一篇文章正在路上。欢迎稍后再来。</p>';
-  return posts.slice(0, 3).map((post, index) => {
-    const href = escape(articleHref(post, language));
+  const parts = (post) => {
     const date = (post.publishedAt ?? post.updatedAt).slice(0, 10);
-    const time = `<time datetime="${escape(date)}">${escape(date.replaceAll("-", "."))}</time>`;
-    const title = escape(post.title);
-    const lang = post.contentLanguage;
-    if (index) return `<a class="post-row" href="${href}">${time}<strong lang="${lang}">${title}</strong><span aria-hidden="true">↗</span></a>`;
-    const thumbnail = thumbnails[post.coverUrl];
-    const image = thumbnail ? `<img class="featured-thumb" src="${escape(thumbnail)}" alt="" width="336" height="210" loading="lazy" decoding="async">` : "";
-    return `<a class="featured-post${image ? "" : " no-cover"}" href="${href}"><div><span class="featured-kicker">最新文章 ✦ NOTES</span><h3 lang="${lang}">${title}</h3>${post.excerpt ? `<p lang="${lang}">${escape(post.excerpt)}</p>` : ""}<div class="featured-meta">${time}<span>阅读文章 ↗</span></div></div>${image}</a>`;
+    return {
+      href: escape(articleHref(post, language)),
+      time: `<time class="mono" datetime="${escape(date)}">${escape(date.replaceAll("-", "."))}</time>`,
+      title: escape(post.title),
+      lang: post.contentLanguage
+    };
+  };
+  const [latest, ...rest] = posts;
+  const top = parts(latest);
+  const featured = `<a class="featured" href="${top.href}"><span class="kicker mono">Latest ✦ 最新</span><h3 lang="${top.lang}">${top.title}</h3>${latest.excerpt ? `<p lang="${top.lang}">${escape(latest.excerpt)}</p>` : ""}${top.time}</a>`;
+  const rows = rest.slice(0, 4).map((post) => {
+    const row = parts(post);
+    return `<li><a href="${row.href}">${row.time}<strong lang="${row.lang}">${row.title}</strong><span class="arrow" aria-hidden="true">↗</span></a></li>`;
   }).join("");
+  return rows ? `${featured}<ol class="posts">${rows}</ol>` : featured;
 }
-
-const mintariaWorkCard = "<div class=\"work-visual\"><div class=\"mini persona\" style=\"background:linear-gradient(140deg,#fff,#e6f6ee);text-align:center\"><small>MINTARIA · AI VOICE</small><img src=\"https://mintaria.mintryu.com/assets/mintaria-app.svg\" alt=\"\" width=\"40\" height=\"40\" style=\"width:40px;height:40px;object-fit:contain;margin:8px auto 0;border:1px solid var(--ink);border-radius:10px;image-rendering:auto\"><b style=\"font-size:15px\">萌音</b><span>免费下载</span></div></div><div class=\"work-body\"><small>WINDOWS · REALTIME AI VOICE</small><h3>Mintaria · 萌音</h3><p>Windows 上本地运行的免费实时 AI 变声软件，声音在本机处理、不上传。</p><span class=\"work-cta\">访问官网 ↗</span></div>";
 
 async function blogPosts(env, language, limit) {
   const posts = [];
@@ -317,7 +306,7 @@ function pageGraph(path, page, state) {
   crumbs.push({ name, item: url });
   return [
     {
-      "@type": path === PRESENTATIONS ? "CollectionPage" : "WebPage",
+      "@type": page.collection ? "CollectionPage" : "WebPage",
       "@id": `${url}#webpage`,
       url,
       name,
@@ -355,25 +344,24 @@ export default {
       const language = languageOf(url.searchParams.get("lang"));
       let cards;
       try {
-        cards = renderPostCards(await blogPosts(env, language, 3), language);
+        cards = renderPostCards(await blogPosts(env, language, 5), language);
       } catch {
         cards = '<p class="posts-status">文章暂时无法加载。<a href="/blog">前往文章列表 ↗</a></p>';
       }
       const blogHref = language === "zh-CN" ? "/blog" : `/blog?lang=${language}`;
-      rewriter = rewriter.on("#blog .posts", { element(element) {
+      rewriter = rewriter.on("#latest-posts", { element(element) {
         element.setInnerContent(cards, { html: true });
       } }).on("#blog-all", { element(element) {
         element.setAttribute("href", blogHref);
-      } }).on(".language-switcher a[data-language]", { element(element) {
+      } }).on(".langs a[data-language]", { element(element) {
         const active = element.getAttribute("data-language") === language;
-        element.setAttribute("class", active ? "active" : "");
-        if (active) element.setAttribute("aria-current", "page");
-        else element.removeAttribute("aria-current");
-      } }).on('#works a.work[href="/works/persona-check/"]', { element(element) {
-        element.setAttribute("href", "https://mintaria.mintryu.com/");
-        element.setAttribute("target", "_blank");
-        element.setAttribute("rel", "noopener noreferrer");
-        element.setInnerContent(mintariaWorkCard, { html: true });
+        if (active) {
+          element.setAttribute("class", "is-active");
+          element.setAttribute("aria-current", "page");
+        } else {
+          element.removeAttribute("class");
+          element.removeAttribute("aria-current");
+        }
       } });
       headers.set("cache-control", "no-cache");
     }

@@ -2,751 +2,763 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Mint 的个人主页：代码、声音、摄影与正在发生的生活。">
-  <meta property="og:title" content="Mint. — 写代码，做声音，记录一点光。">
-  <meta property="og:description" content="个人作品、文章、音乐与生活记录。">
-  <meta name="theme-color" content="#fff8e9">
-  <title>Mint. — 写代码，做声音，记录一点光。</title>
-  <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png?v=20260921">
-  <link rel="apple-touch-icon" sizes="512x512" href="/favicon.png?v=20260921">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#000000">
+  <title>Mint Ryu — Mintaria 萌音、mignet 的独立开发者</title>
+  <meta name="description" content="Mint Ryu（Mint）的个人主页：Windows 本地实时 AI 变声软件 Mintaria 萌音、Word 桌面印章 mignet、直播混音声卡机架 Melorb，以及高丽大学课堂发表和关于 AI、软件与韩国生活的博客文章。">
+  <meta property="og:title" content="Mint Ryu — 写代码，做声音，记录一点光">
+  <meta property="og:description" content="独立开发者 Mint Ryu 的主页：Mintaria 萌音、mignet、Melorb，课堂发表和博客文章。">
+  <meta property="og:image" content="https://mintryu.com/avatar.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="460">
+  <meta property="og:image:height" content="460">
+  <meta property="og:image:alt" content="Mint Ryu 的头像">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <style>
     :root {
-      --paper: #fff8e9;
-      --paper-deep: #ffefd0;
-      --paper-white: #fffdf8;
-      --ink: #182449;
-      --ink-soft: #4f5a79;
-      --blue: #9bd5f3;
-      --blue-deep: #4b86bd;
-      --yellow: #ffd866;
-      --yellow-deep: #e39b2e;
-      --pink: #f6b0bb;
-      --pink-deep: #c85f78;
-      --mint: #b9e4ce;
-      --line: #182449;
-      --shadow: 7px 8px 0 var(--ink);
-      --shadow-soft: 0 16px 30px rgba(42, 54, 91, .12);
-      --radius-lg: 30px;
-      --font-display: "Nunito", "Noto Sans SC", "PingFang SC", sans-serif;
-      --font-body: "Noto Sans SC", "PingFang SC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --bg: #000;
+      --fg: oklch(0.97 0 0);
+      --muted: oklch(0.76 0 0);
+      --dim: oklch(0.56 0 0);
+      --line: oklch(1 0 0 / 0.09);
+      --line-strong: oklch(1 0 0 / 0.16);
+      --sheet: oklch(0.135 0 0);
+      --raise: oklch(0.18 0 0);
+      /* Jhey's coral accent, swapped for Mint's mint. */
+      --accent: oklch(0.86 0.15 172);
+      --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
+      --peek: 76px;
+      --ease: cubic-bezier(.22, .8, .24, 1);
+      --p: 0;
     }
 
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html {
+      background: var(--bg);
+      color: var(--fg);
+      scroll-behavior: smooth;
+      scrollbar-color: var(--accent) transparent;
+      scrollbar-width: thin;
+    }
+    /* Only snap when the stage fits one screen; on short screens snapping would fight reading the cards. */
+    html.fits { scroll-snap-type: y proximity; }
     body {
       margin: 0;
-      min-height: 100vh;
-      color: var(--ink);
-      background:
-        radial-gradient(circle at 8% 5%, rgba(246, 176, 187, .38) 0 4px, transparent 5px 100%),
-        radial-gradient(circle at 92% 12%, rgba(155, 213, 243, .48) 0 5px, transparent 6px 100%),
-        radial-gradient(720px 460px at 96% -8%, rgba(155, 213, 243, .44), transparent 70%),
-        radial-gradient(650px 440px at -6% 94%, rgba(246, 176, 187, .32), transparent 70%),
-        linear-gradient(135deg, #fffdf7 0%, var(--paper) 48%, #fff4d8 100%);
-      font-family: var(--font-body);
+      font: 300 16px/1.65 var(--sans);
       -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: .35;
-      background-image: radial-gradient(rgba(24, 36, 73, .17) .7px, transparent .8px);
-      background-size: 18px 18px;
-      mask-image: linear-gradient(to bottom, black, transparent 86%);
-    }
+    ::selection { background: var(--accent); color: #000; }
     a { color: inherit; }
-    img { display: block; max-width: 100%; }
-    :focus-visible { outline: 3px solid var(--pink-deep); outline-offset: 4px; border-radius: 10px; }
+    img, svg { display: block; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
 
-    .skip-link {
-      position: fixed; z-index: 20; top: 12px; left: 12px; transform: translateY(-180%);
-      padding: 10px 14px; border: 2px solid var(--ink); border-radius: 10px;
-      background: var(--yellow); font-weight: 800;
+    .mono {
+      font: 500 12px/1.4 var(--mono);
+      letter-spacing: .08em;
+      text-transform: uppercase;
     }
-    .skip-link:focus { transform: translateY(0); }
-    .shell { width: min(1160px, calc(100% - 36px)); margin: 0 auto; }
+    .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    .skip {
+      position: fixed; z-index: 50; top: 12px; left: 12px; padding: 8px 12px; border-radius: 8px;
+      background: var(--accent); color: #000; text-decoration: none; transform: translateY(-200%);
+    }
+    .skip:focus { transform: none; }
+    .snap-top { position: absolute; top: 0; height: 1px; width: 1px; scroll-snap-align: start; }
 
-    .topbar {
-      display: flex; align-items: center; justify-content: space-between; gap: 22px;
-      min-height: 82px; border-bottom: 2px solid var(--line);
+    /* ---------- background grid (fades in from the bottom-right, lights up under the cursor) ---------- */
+    .grid {
+      --size: 48px;
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        linear-gradient(to right, var(--line) 1px, transparent 1px) 0 0 / var(--size) var(--size),
+        linear-gradient(to bottom, var(--line) 1px, transparent 1px) 0 0 / var(--size) var(--size);
+      mask: radial-gradient(110% 85% at 100% 100%, #000 0%, transparent 62%);
     }
-    .brand {
-      display: inline-flex; align-items: center; gap: 9px; text-decoration: none;
-      font: 900 22px/1 var(--font-display); letter-spacing: -.04em;
+    .grid--glow {
+      --line: oklch(0.86 0.15 172 / .32);
+      mask: radial-gradient(180px circle at var(--x, -400px) var(--y, -400px), #000, transparent);
+      opacity: 0;
+      transition: opacity .4s;
     }
-    .brand-dot { display: inline-block; width: 11px; height: 11px; border: 2px solid var(--ink); border-radius: 50%; background: var(--pink); }
-    .topnav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; }
-    .topnav a { 
-      padding: 9px 13px; border: 2px solid transparent; border-radius: 999px;
-      color: var(--ink-soft); font-size: 12px; font-weight: 800; text-decoration: none;
-    }
-    .topnav a:hover { border-color: var(--ink); background: var(--paper-white); color: var(--ink); transform: rotate(-2deg); }
-    .language-switcher { display: inline-flex; align-items: center; gap: 2px; padding: 3px; border: 2px solid var(--ink); border-radius: 999px; background: var(--paper-white); box-shadow: 2px 3px 0 rgba(24,36,73,.18); }
-    .language-switcher-label { padding: 0 5px; color: var(--ink-soft); font-size: 10px; font-weight: 900; white-space: nowrap; }
-    .language-switcher a { display: inline-flex; align-items: center; justify-content: center; min-height: 25px; padding: 4px 7px; border-radius: 999px; color: var(--ink); font-size: 10px; font-weight: 900; text-decoration: none; white-space: nowrap; }
-    .language-switcher a:hover, .language-switcher a.active { background: var(--yellow); transform: none; }
 
-    .hero {
-      display: grid; grid-template-columns: minmax(0, 1fr) minmax(380px, .83fr); gap: 58px; align-items: center;
-      padding: 70px 0 84px;
+    /* ---------- stage: who I am + three apps ---------- */
+    .stage {
+      position: sticky;
+      /* A stage taller than the screen pins by its bottom edge, so every card stays reachable. */
+      top: min(0px, calc(100svh - var(--stage-h, 0px)));
+      z-index: 1;
+      min-height: 100svh;
     }
-    .hero-copy { position: relative; z-index: 1; }
-    .eyebrow, .section-kicker {
-      display: inline-flex; align-items: center; gap: 9px; margin: 0;
-      font: 900 11px/1 var(--font-display); letter-spacing: .17em; text-transform: uppercase;
+    .mark {
+      position: absolute; top: 22px; left: 24px; z-index: 2;
+      display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px;
+      color: var(--fg); opacity: calc(1 - var(--p) * .7); transition: color .2s, transform .3s var(--ease);
     }
-    .eyebrow::before, .section-kicker::before { content: "✦"; color: var(--pink-deep); font-size: 16px; }
-    h1 {
-      max-width: 690px; margin: 19px 0 17px; font: 900 clamp(51px, 8vw, 92px)/.95 var(--font-display);
-      letter-spacing: -.075em;
+    .mark:hover { color: var(--accent); transform: rotate(-12deg); }
+    .mark svg { width: 22px; height: 22px; }
+    .stage-inner {
+      width: min(1120px, 100% - 64px);
+      min-height: 100svh;
+      margin: 0 auto;
+      padding: 72px 0 calc(var(--peek) + 28px) clamp(0px, 6vw, 96px);
+      display: grid;
+      grid-template-columns: minmax(0, 560px);
+      align-content: center;
+      transform-origin: 50% 100%;
+      transform: translateY(calc(var(--p) * -4vh)) scale(calc(1 - var(--p) * .06));
+      opacity: calc(1 - var(--p) * .82);
+      will-change: transform, opacity;
     }
-    h1 .blue { color: var(--blue-deep); }
-    h1 .pink { color: var(--pink-deep); }
-    .hero-lead { max-width: 620px; margin: 0; color: var(--ink-soft); font-size: 18px; line-height: 1.9; }
-    .hero-lead em { color: var(--ink); font-style: normal; font-weight: 900; }
-    .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 25px 0 27px; }
-    .tag {
-      display: inline-flex; align-items: center; min-height: 31px; padding: 5px 12px;
-      border: 2px solid var(--ink); border-radius: 999px; background: var(--paper-white);
-      font-size: 12px; font-weight: 800; box-shadow: 2px 3px 0 rgba(24,36,73,.24);
-    }
-    .tag:nth-child(2) { background: var(--blue); transform: rotate(1.5deg); }
-    .tag:nth-child(3) { background: var(--yellow); transform: rotate(-1.5deg); }
-    .tag:nth-child(4) { background: var(--pink); transform: rotate(1deg); }
-    .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
-    .button {
-      display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 46px; padding: 0 19px;
-      border: 2px solid var(--ink); border-radius: 14px; background: var(--yellow); box-shadow: 4px 5px 0 var(--ink);
-      font-size: 13px; font-weight: 900; text-decoration: none; transition: transform .18s ease, box-shadow .18s ease;
-    }
-    .button:hover { transform: translate(2px, 2px) rotate(-1deg); box-shadow: 2px 3px 0 var(--ink); }
-    .button.secondary { background: var(--paper-white); }
-    .social-mini { display: flex; gap: 7px; margin-left: 2px; }
-    .social-mini a {
-      width: 42px; height: 42px; display: grid; place-items: center; border: 2px solid var(--ink); border-radius: 50%;
-      background: var(--paper-white); text-decoration: none; box-shadow: 3px 3px 0 var(--ink); transition: transform .18s ease;
-    }
-    .social-mini a:hover { transform: translateY(-3px) rotate(6deg); }
-    .social-mini svg { width: 19px; height: 19px; fill: var(--ink); }
 
-    .hero-art { position: relative; min-height: 455px; }
-    .hero-art::before {
-      content: ""; position: absolute; inset: 26px 12px 10px 22px; border: 3px solid var(--ink); border-radius: 45% 55% 48% 52%;
-      background: var(--blue); transform: rotate(3deg); box-shadow: var(--shadow);
+    .name-row { position: relative; min-height: 132px; margin-bottom: 20px; }
+    .avatar {
+      width: 124px; height: 124px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 0 0 1px var(--line-strong), 0 0 0 6px var(--bg), 0 0 0 7px oklch(0.86 0.15 172 / .35), 0 24px 60px oklch(0 0 0 / .6);
+      transform: rotate(-4deg);
+      transition: transform .5s var(--ease);
     }
-    .art-sheet {
-      position: absolute; inset: 0 24px 38px 0; overflow: hidden; border: 3px solid var(--ink); border-radius: 30px;
-      background: var(--paper-white); transform: rotate(-3deg); box-shadow: 5px 6px 0 var(--ink);
-    }
-    .art-sheet::before {
-      content: ""; position: absolute; top: -72px; right: -48px; width: 215px; height: 215px; border-radius: 50%; background: var(--yellow);
-    }
-    .art-sheet::after {
-      content: ""; position: absolute; left: -44px; bottom: -83px; width: 175px; height: 175px; border-radius: 50%; background: var(--pink);
-    }
-    .art-label {
-      position: absolute; z-index: 2; top: 20px; left: 22px; padding: 8px 12px; border: 2px solid var(--ink); border-radius: 9px;
-      background: var(--paper); font: 900 10px/1 var(--font-display); letter-spacing: .1em; transform: rotate(-2deg);
-    }
-    .mascot {
-      position: absolute; z-index: 2; object-fit: contain; filter: drop-shadow(4px 5px 0 rgba(24,36,73,.18));
-    }
-    .mascot.hachiware { width: 57%; left: 2%; bottom: 9%; transform: rotate(-5deg); }
-    .mascot.usagi { width: 48%; right: 0; bottom: 4%; transform: rotate(7deg); }
-    .bubble {
-      position: absolute; z-index: 3; max-width: 150px; padding: 9px 12px; border: 2px solid var(--ink); border-radius: 17px;
-      background: #fff; font-size: 12px; font-weight: 900; line-height: 1.35; box-shadow: 3px 4px 0 var(--ink);
-    }
-    .bubble::after { content: ""; position: absolute; width: 11px; height: 11px; border-right: 2px solid var(--ink); border-bottom: 2px solid var(--ink); background: #fff; transform: rotate(45deg); }
-    .bubble.one { top: 86px; left: 34px; transform: rotate(-5deg); }
-    .bubble.one::after { bottom: -8px; left: 32px; }
-    .bubble.two { top: 146px; right: 13px; background: var(--yellow); transform: rotate(4deg); }
-    .bubble.two::after { bottom: -8px; right: 29px; background: var(--yellow); }
-    .art-caption {
-      position: absolute; z-index: 4; right: 0; bottom: 0; padding: 12px 15px; border: 2px solid var(--ink); border-radius: 14px;
-      background: var(--pink); font-size: 12px; font-weight: 900; transform: rotate(4deg); box-shadow: 4px 4px 0 var(--ink);
-    }
-    .sun { position: absolute; z-index: 3; color: var(--yellow-deep); font-size: 26px; }
-    .sun.a { top: 16px; right: 18px; transform: rotate(14deg); }
-    .sun.b { bottom: 47px; left: 12px; color: var(--pink-deep); font-size: 19px; transform: rotate(-12deg); }
+    .avatar:hover { transform: rotate(3deg) scale(1.04); }
+    .sig { position: absolute; left: 150px; top: 4px; width: 250px; height: auto; overflow: visible; color: var(--fg); }
+    .sig path { fill: none; stroke: currentColor; stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; }
+    /* 1.01, not 1: a dash ending exactly at the path start still paints a round-cap dot before drawing begins. */
+    .sig .ink { stroke-dasharray: 1 2; stroke-dashoffset: 1.01; animation: draw var(--dur, .5s) var(--delay, 0s) cubic-bezier(.45, .05, .35, 1) forwards; }
+    .sig .leaf { transform-box: fill-box; transform-origin: 20% 90%; animation: pop .55s 2.55s var(--ease) both; }
+    .sig .leaf path { stroke: var(--accent); }
+    .sig .leaf .body { fill: oklch(0.86 0.15 172 / .14); }
+    .sig .eyes circle { fill: var(--accent); stroke: none; transform-box: fill-box; transform-origin: center; animation: blink 5s 4s infinite; }
+    @keyframes draw { to { stroke-dashoffset: 0; } }
+    @keyframes pop { from { opacity: 0; transform: scale(.2) rotate(-30deg); } to { opacity: 1; transform: none; } }
+    @keyframes blink { 0%, 94%, 100% { transform: scaleY(1); } 97% { transform: scaleY(.1); } }
 
-    .now-card {
-      display: grid; grid-template-columns: auto minmax(0,1fr) auto; gap: 18px; align-items: center;
-      margin-bottom: 42px; padding: 18px 22px; border: 2px solid var(--ink); border-radius: 18px; background: var(--mint);
-      box-shadow: var(--shadow-soft); transform: rotate(.5deg);
-    }
-    .now-mark { display: grid; place-items: center; width: 54px; height: 54px; border: 2px solid var(--ink); border-radius: 16px; background: var(--yellow); font: 900 12px var(--font-display); transform: rotate(-5deg); }
-    .now-card small { display: block; margin-bottom: 4px; font: 900 10px var(--font-display); letter-spacing: .16em; }
-    .now-card strong { display: block; font-size: 15px; line-height: 1.5; }
-    .now-card p { margin: 3px 0 0; color: var(--ink-soft); font-size: 12px; line-height: 1.6; }
-    .now-stamp { padding: 7px 10px; border: 2px solid var(--ink); border-radius: 9px; background: var(--paper-white); font: 900 10px var(--font-display); transform: rotate(5deg); }
+    .roles { margin: 0 0 26px; color: var(--fg); }
+    .roles span { color: var(--muted); }
 
-    .stack { display: flex; flex-direction: column; gap: 25px; }
-    .section-card { border: 3px solid var(--ink); border-radius: 30px; background: rgba(255, 253, 248, .84); box-shadow: var(--shadow); overflow: hidden; }
-    .section-card.pink { background: rgba(255, 245, 239, .9); }
-    .section-card.blue { background: rgba(239, 249, 255, .9); }
-    summary {
-      display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 21px 24px; cursor: pointer; list-style: none; user-select: none;
+    /* three featured apps: Mintaria pinned first, then the two newest */
+    .apps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; list-style: none; margin: 0; padding: 0; }
+    .app {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      padding: 8px 8px 14px;
+      border: 1px solid var(--line-strong);
+      border-radius: 16px;
+      background:
+        radial-gradient(260px circle at var(--mx, 50%) var(--my, -30%), oklch(0.86 0.15 172 / .08), transparent 60%),
+        oklch(0.1 0 0 / .85);
+      text-decoration: none;
+      isolation: isolate;
+      transition: transform .35s var(--ease);
     }
-    summary::-webkit-details-marker { display: none; }
-    summary:hover { background: rgba(255,255,255,.38); }
-    summary .summary-copy { display: flex; align-items: baseline; flex-wrap: wrap; gap: 10px 14px; }
-    summary .label { color: var(--pink-deep); font: 900 11px var(--font-display); letter-spacing: .17em; }
-    summary .title { font: 900 25px/1 var(--font-display); letter-spacing: -.04em; }
-    summary .count { color: var(--ink-soft); font-size: 11px; font-weight: 700; }
-    .arrow { display: grid; place-items: center; width: 35px; height: 35px; flex: 0 0 auto; border: 2px solid var(--ink); border-radius: 50%; background: var(--yellow); font-size: 17px; font-weight: 900; transition: transform .2s ease; }
-    details[open] .arrow { transform: rotate(180deg); }
-    .detail-wrap { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s ease; }
-    details[open] .detail-wrap { grid-template-rows: 1fr; }
-    .detail-inner { overflow: hidden; min-height: 0; }
-    .detail { margin: 0 23px 24px; padding-top: 18px; border-top: 2px dashed rgba(24,36,73,.4); }
-    details[open] .detail { animation: reveal .45s ease both; }
-    @keyframes reveal { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-    /* JS-enhanced accordion (Web Animations); native <details> + rules above remain the no-JS fallback. */
-    :is(#works, #blog, #contact) .arrow { transition: transform .32s cubic-bezier(.22, .8, .24, 1); }
-    :is(#works, #blog, #contact)[data-accordion] > .detail-wrap { grid-template-rows: 1fr; transition: none; }
-    :is(#works, #blog, #contact)[data-accordion] .detail { animation: none; }
-    :is(#works, #blog, #contact)[data-accordion-state] > .detail-wrap { overflow: hidden; }
-    :is(#works, #blog, #contact)[data-accordion-state="closing"] .arrow { transform: rotate(0deg); }
+    .app::after {
+      content: "";
+      position: absolute; inset: -1px; z-index: -1;
+      padding: 1px; border-radius: inherit;
+      background: radial-gradient(200px circle at var(--mx, -200px) var(--my, -200px), var(--accent), transparent 70%);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+      opacity: 0;
+      transition: opacity .3s;
+    }
+    a.app:hover { transform: translateY(-3px); }
+    a.app:hover::after, a.app:focus-visible::after { opacity: 1; }
+    .app--pinned { border-color: oklch(0.86 0.15 172 / .32); }
+    .app-art { position: relative; height: 104px; overflow: hidden; border-radius: 10px; background: oklch(0.08 0 0); }
+    .app-art img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s var(--ease); }
+    a.app:hover .app-art img { transform: scale(1.07); }
+    .app.is-soon .app-art img { filter: saturate(.85); }
+    .app-tag {
+      position: absolute; top: 14px; left: 14px; z-index: 1;
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 7px; border-radius: 99px;
+      background: oklch(0 0 0 / .6); color: var(--muted); font-size: 9.5px;
+      backdrop-filter: blur(6px);
+    }
+    .app-tag svg { width: 11px; height: 11px; }
+    .app--pinned .app-tag { color: var(--accent); }
+    .app.is-soon .app-tag { border: 1px solid oklch(0.86 0.15 172 / .5); color: var(--accent); }
+    .app-go {
+      position: absolute; top: 14px; right: 16px; z-index: 1;
+      color: var(--accent); font-size: 13px;
+      opacity: 0; transform: translate(-3px, 3px);
+      transition: opacity .2s, transform .3s var(--ease);
+    }
+    a.app:hover .app-go, a.app:focus-visible .app-go { opacity: 1; transform: none; }
+    .app-name { margin: 12px 4px 2px; font: 500 16px/1.3 var(--sans); }
+    .app-name span { color: var(--muted); font-weight: 300; }
+    .app-desc { margin: 0 4px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+    .app-meta { margin: auto 4px 0; padding-top: 10px; color: var(--dim); font-size: 10px; }
+    .app.is-soon { cursor: default; }
 
-    .works-sub { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-    .work {
-      display: grid; grid-template-columns: 132px minmax(0,1fr); min-height: 156px; overflow: hidden;
-      border: 2px solid var(--ink); border-radius: 18px; background: var(--paper-white); text-decoration: none;
-      box-shadow: 3px 4px 0 rgba(24,36,73,.18); transition: transform .18s ease, box-shadow .18s ease;
+    /* everything else stays folded into one line that opens /works/ */
+    .more {
+      display: grid;
+      grid-template-columns: 16px auto minmax(0, 1fr) auto;
+      align-items: baseline;
+      gap: 12px;
+      margin-top: 14px;
+      padding: 13px 6px 13px 4px;
+      border-block: 1px solid var(--line);
+      text-decoration: none;
     }
-    .work:hover { transform: translate(-2px, -3px) rotate(-.5deg); box-shadow: 6px 7px 0 var(--ink); }
-    .work-visual { display: grid; place-items: center; min-height: 156px; overflow: hidden; background: var(--blue); }
-    .work:nth-child(2n) .work-visual { background: var(--pink); }
-    .work:nth-child(3n) .work-visual { background: var(--yellow); }
-    .work-visual > img { width: 100%; height: 100%; object-fit: cover; }
-    .work-body { display: flex; min-width: 0; flex-direction: column; justify-content: center; padding: 15px 16px; }
-    .work-body small { color: var(--blue-deep); font: 900 9px/1.2 var(--font-display); letter-spacing: .11em; }
-    .work-body h3 { margin: 7px 0 6px; font-size: 17px; line-height: 1.25; }
-    .work-body p { margin: 0 0 10px; color: var(--ink-soft); font-size: 11.5px; line-height: 1.6; }
-    .work-cta { align-self: flex-start; padding: 5px 9px; border: 2px solid var(--ink); border-radius: 999px; background: var(--paper); font-size: 10px; font-weight: 900; }
-    .mini { position: relative; width: 88%; min-height: 102px; padding: 13px; overflow: hidden; border: 2px solid var(--ink); border-radius: 15px; background: var(--paper-white); box-shadow: 3px 4px 0 rgba(24,36,73,.22); }
-    .mini::before, .mini::after { content: ""; position: absolute; width: 62px; height: 62px; border-radius: 50%; opacity: .52; }
-    .mini::before { top: -29px; right: -16px; background: var(--blue); }
-    .mini::after { bottom: -31px; left: -16px; background: var(--pink); }
-    .mini > * { position: relative; z-index: 1; }
-    .mini small { display: block; color: var(--ink-soft); font: 900 8px var(--font-display); letter-spacing: .1em; }
-    .mini b { display: block; margin-top: 8px; font: 900 19px/1 var(--font-display); }
-    .mini span { display: inline-block; margin-top: 9px; padding: 4px 7px; border: 1px solid var(--ink); border-radius: 999px; background: var(--yellow); font-size: 8px; font-weight: 900; }
-    .mini.hansa { background: #f5fff8; }
-    .mini.hansa header { display: flex; justify-content: space-between; align-items: center; color: #2d6554; font: 900 9px var(--font-display); }
-    .mini.hansa header i { width: 7px; height: 7px; border-radius: 50%; background: var(--pink-deep); }
-    .hansa-lines { display: grid; gap: 6px; margin-top: 15px; padding: 10px; border: 1px solid rgba(24,36,73,.24); border-radius: 9px; background: #fff; }
-    .hansa-lines i { display: block; height: 5px; border-radius: 99px; background: var(--mint); }
-    .hansa-lines i:nth-child(2) { width: 75%; background: var(--pink); }
-    .hansa-lines i:nth-child(3) { width: 88%; background: var(--blue); }
-    .mini.audio { padding: 0; background: var(--ink); }
-    .mini.audio::before { background: var(--blue); opacity: .34; }
-    .mini.audio::after { background: var(--pink); opacity: .42; }
-    .audio-head { display: flex; justify-content: space-between; padding: 12px; color: #fff; font: 900 9px var(--font-display); }
-    .audio-knobs { display: flex; gap: 6px; align-items: end; height: 54px; padding: 0 12px 13px; }
-    .audio-knobs i { display: block; width: 12px; border-radius: 9px; background: var(--yellow); }
-    .audio-knobs i:nth-child(1) { height: 26px; }
-    .audio-knobs i:nth-child(2) { height: 42px; background: var(--pink); }
-    .audio-knobs i:nth-child(3) { height: 33px; background: var(--blue); }
-    .audio-knobs i:nth-child(4) { height: 47px; background: var(--mint); }
-    .mini.ai b { font-size: 17px; }
-    .mini.ai .mini-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px; }
-    .mini.ai .mini-chips i { padding: 3px 6px; border: 1px solid var(--ink); border-radius: 999px; background: var(--paper); font-size: 7px; font-style: normal; }
-    .mini.persona { background: linear-gradient(140deg, #fff, #eaf8ff); }
-    .mini.persona::before { background: var(--pink); }
-    .mini.persona::after { background: var(--blue); }
-    .mini.haoyi { color: #fff; background: var(--ink); }
-    .mini.haoyi::before { background: var(--pink); }
-    .mini.haoyi::after { background: var(--blue); }
-    .mini.haoyi b { color: var(--yellow); font-size: 32px; }
-    .mini.haoyi span { color: var(--ink); }
-    .mini.live { background: #fffdf3; }
-    .mini.live b { font-size: 17px; }
-    .live-bar { height: 7px; margin-top: 14px; border: 1px solid var(--ink); border-radius: 999px; background: linear-gradient(90deg, var(--blue-deep) 0 64%, var(--paper-deep) 64%); }
-    .mini.live span { background: var(--pink); }
+    .more svg { width: 13px; height: 13px; color: var(--muted); transform: translateY(2px); transition: color .2s, transform .3s var(--ease); }
+    .more-label { transition: color .2s, transform .3s var(--ease); }
+    .more-names { overflow: hidden; color: var(--dim); font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
+    .more-count { color: var(--dim); font-size: 10.5px; }
+    .more:hover .more-label, .more:focus-visible .more-label { color: var(--accent); transform: translateX(3px); }
+    .more:hover svg, .more:focus-visible svg { color: var(--accent); transform: translate(2px, 1px) rotate(-8deg); }
+    .more:hover .more-count { color: var(--accent); }
 
-    .posts { display: grid; gap: 10px; }
-    .featured-post {
-      display: grid; grid-template-columns: minmax(0,1fr) 168px; gap: 18px; align-items: center;
-      margin-bottom: 4px; padding: 18px 18px 16px; border: 3px solid var(--ink); border-radius: 22px;
-      background: var(--paper-white); text-decoration: none; box-shadow: 5px 6px 0 var(--ink); transform: rotate(-.35deg);
-      transition: transform .18s ease, box-shadow .18s ease;
-    }
-    .featured-post:hover { transform: translate(-2px,-3px) rotate(-.6deg); box-shadow: 7px 8px 0 var(--ink); }
-    .featured-kicker { display: inline-flex; align-items: center; gap: 8px; color: var(--pink-deep); font: 900 10px var(--font-display); letter-spacing: .16em; }
-    .featured-post h3 { margin: 8px 0 8px; font: 900 clamp(20px, 3vw, 28px)/1.25 var(--font-display); letter-spacing: -.04em; }
-    .featured-post p { margin: 0; color: var(--ink-soft); font-size: 13px; line-height: 1.75; }
-    .featured-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 12px; }
-    .featured-meta time { padding: 6px 9px; border: 2px solid var(--ink); border-radius: 999px; background: var(--yellow); font: 900 10px var(--font-display); }
-    .featured-meta span { padding: 6px 9px; border: 2px solid var(--ink); border-radius: 999px; background: var(--blue); font-size: 10px; font-weight: 900; }
-    .featured-thumb {
-      width: 168px; aspect-ratio: 16/10; object-fit: cover; border: 2px solid var(--ink); border-radius: 16px;
-      box-shadow: 3px 4px 0 rgba(24,36,73,.16); transform: rotate(3deg);
-    }
-    .post-row {
-      display: grid; grid-template-columns: 104px minmax(0,1fr) auto; gap: 14px; align-items: center;
-      padding: 15px 16px; border: 2px solid transparent; border-radius: 14px; text-decoration: none; transition: background .18s ease, border-color .18s ease;
-    }
-    .post-row:hover { border-color: var(--ink); background: var(--paper-white); }
-    .post-row time { color: var(--pink-deep); font: 900 10px var(--font-display); letter-spacing: .04em; }
-    .post-row strong { font-size: 14px; line-height: 1.55; }
-    .post-row > span { font-size: 17px; }
-    .blog-all { display: inline-flex; margin-top: 6px; padding: 8px 11px; border: 2px solid var(--ink); border-radius: 999px; background: var(--yellow); font-size: 11px; font-weight: 900; text-decoration: none; }
+    .links { display: flex; flex-wrap: wrap; gap: 4px 10px; margin-top: 22px; color: var(--muted); }
+    .links span { color: var(--dim); }
+    .links a { text-decoration: none; transition: color .2s; }
+    .links a:hover { color: var(--accent); }
 
-    .contact-lines { display: flex; flex-wrap: wrap; gap: 10px; }
-    .contact-lines a { padding: 10px 13px; border: 2px solid var(--ink); border-radius: 12px; background: var(--paper-white); font-size: 13px; font-weight: 800; text-decoration: none; box-shadow: 2px 3px 0 rgba(24,36,73,.16); }
-    .contact-lines a:hover { background: var(--yellow); transform: rotate(-1deg); }
+    .status { list-style: none; margin: 24px 0 0; padding: 0; display: grid; gap: 9px; color: var(--muted); }
+    .status li { display: flex; align-items: center; gap: 10px; }
+    .status svg { width: 14px; height: 14px; flex: none; color: var(--dim); }
+    .status time { color: var(--fg); }
 
-    .thanks { margin-top: 60px; padding: 29px 0 0; border-top: 2px dashed rgba(24,36,73,.4); text-align: center; }
-    .thanks .section-kicker { justify-content: center; color: var(--pink-deep); }
-    .thanks-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 18px; }
-    .thanks-grid a { width: 48px; height: 48px; display: grid; place-items: center; border: 2px solid var(--ink); border-radius: 13px; background: var(--paper-white); box-shadow: 3px 3px 0 rgba(24,36,73,.18); transition: transform .18s ease; }
-    .thanks-grid a:hover { transform: translateY(-4px) rotate(4deg); }
-    .thanks-grid img { width: 25px; height: 25px; object-fit: contain; }
-    .brand-note { max-width: 650px; margin: 15px auto 0; color: var(--ink-soft); font-size: 10px; line-height: 1.7; }
-    footer { display: flex; justify-content: space-between; gap: 18px; margin-top: 29px; padding: 23px 0 40px; color: var(--ink-soft); font: 900 10px var(--font-display); letter-spacing: .12em; }
-
-    @media (max-width: 900px) {
-      .hero { grid-template-columns: 1fr; gap: 30px; padding-top: 52px; }
-      .hero-art { max-width: 580px; width: 100%; margin: 0 auto; }
-      .works-sub { grid-template-columns: 1fr; }
+    /* ---------- drawer ---------- */
+    .drawer {
+      position: relative;
+      z-index: 2;
+      width: min(1240px, 100% - 16px);
+      min-height: 100svh;
+      margin: calc(-1 * var(--peek)) auto 0;
+      border: 1px solid var(--line-strong);
+      border-bottom: 0;
+      border-radius: 28px 28px 0 0;
+      background: var(--sheet);
+      box-shadow: 0 -30px 80px oklch(0 0 0 / .75);
+      scroll-snap-align: start;
     }
-    @media (max-width: 620px) {
-      .shell { width: calc(100% - 28px); }
-      .topbar { align-items: flex-start; padding: 18px 0; }
-      .topnav { gap: 4px; }
-      .topnav a { padding: 7px 8px; font-size: 10px; }
-      .hero { padding: 44px 0 58px; }
-      h1 { font-size: clamp(49px, 15vw, 72px); }
-      .hero-lead { font-size: 16px; }
-      .hero-art { min-height: 375px; }
-      .art-sheet { right: 10px; bottom: 28px; }
-      .bubble { font-size: 10px; }
-      .bubble.one { left: 20px; top: 70px; }
-      .bubble.two { top: 122px; right: 2px; }
-      .art-caption { right: 0; font-size: 10px; }
-      .now-card { grid-template-columns: auto minmax(0, 1fr); padding: 14px; }
-      .now-stamp { grid-column: 2; justify-self: start; margin-top: -8px; }
-      summary { padding: 18px 16px; }
-      summary .title { font-size: 21px; }
-      .detail { margin: 0 15px 17px; }
-      .work { grid-template-columns: 1fr; }
-      .work-visual { min-height: 128px; }
-      .work-body { padding: 14px; }
-      .post-row { grid-template-columns: minmax(0,1fr) auto; gap: 8px; }
-      .post-row time { display: none; }
-      .featured-post { grid-template-columns: 1fr; padding: 16px; }
-      .featured-thumb { width: 100%; max-width: 280px; }
-      footer { flex-direction: column; }
+    .drawer-head {
+      position: sticky; top: 0; z-index: 3;
+      display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+      height: var(--peek);
+      padding: 10px 28px 0;
+      border-radius: 28px 28px 0 0;
+      background: color-mix(in oklch, var(--sheet) 86%, transparent);
+      backdrop-filter: blur(14px);
+    }
+    .grab {
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 96px; height: 24px; padding: 0; border: 0; background: none; cursor: pointer;
+    }
+    .grab span:first-child {
+      display: block; width: 40px; height: 4px; margin: 10px auto 0; border-radius: 99px;
+      background: oklch(1 0 0 / .28); transition: background .2s, width .3s var(--ease);
+    }
+    .grab:hover span:first-child { width: 56px; background: var(--accent); }
+    .head-side { color: var(--dim); font-size: 11px; }
+    .head-side:last-child { justify-self: end; }
+    .head-side a { text-decoration: none; }
+    .head-side a:hover { color: var(--accent); }
+    .hint-open { display: none; }
+    .drawer[data-open] .hint-open { display: inline; }
+    .drawer[data-open] .hint-closed { display: none; }
+    .hint-closed b { display: inline-block; font-weight: 500; animation: nudge 1.8s ease-in-out infinite; }
+    @keyframes nudge { 50% { transform: translateY(3px); } }
+    .tabs { display: flex; gap: 6px; }
+    .tabs a {
+      position: relative; padding: 8px 12px; border-radius: 99px;
+      color: var(--muted); text-decoration: none; transition: color .2s, background .2s;
+    }
+    .tabs a:hover { color: var(--fg); background: oklch(1 0 0 / .06); }
+    .tabs a.is-active { color: var(--fg); }
+    .tabs a.is-active::after { content: ""; position: absolute; left: 50%; bottom: 2px; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); transform: translateX(-50%); }
+
+    .drawer-body { width: min(940px, 100% - 56px); margin: 0 auto; padding: 40px 0 0; }
+    .block {
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr);
+      gap: 40px;
+      padding: 52px 0;
+      border-top: 1px solid var(--line);
+      scroll-margin-top: calc(var(--peek) - 8px);
+    }
+    .block:first-child { border-top: 0; padding-top: 12px; }
+    .block-label { position: sticky; top: calc(var(--peek) + 28px); align-self: start; margin: 0; color: var(--muted); font-weight: 500; }
+    .block-label span { display: block; margin-top: 4px; color: var(--dim); font: 300 13px/1.4 var(--sans); letter-spacing: 0; text-transform: none; }
+
+    .lede { margin: 0 0 18px; font: 400 clamp(24px, 2.6vw, 30px)/1.35 var(--sans); letter-spacing: -.01em; }
+    .about p:not(.lede) { max-width: 38em; margin: 0 0 14px; color: var(--muted); font-size: 16px; line-height: 1.85; }
+    .about em { color: var(--fg); font-style: normal; text-decoration: underline 2px var(--accent); text-underline-offset: 4px; }
+    .facts { display: grid; gap: 10px; margin: 28px 0 0; padding: 20px 0 0; border-top: 1px dashed var(--line-strong); }
+    .facts div { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 16px; }
+    .facts dt { color: var(--dim); }
+    .facts dd { margin: 0; color: var(--fg); font-size: 14.5px; }
+
+    .langs { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 18px; }
+    .langs a { padding: 3px 7px; border: 1px solid var(--line-strong); border-radius: 99px; color: var(--muted); font: 500 10px/1.4 var(--mono); text-decoration: none; }
+    .langs a:hover { color: var(--fg); }
+    .langs a.is-active { border-color: var(--accent); color: var(--accent); }
+    .featured {
+      display: block; padding: 22px 24px; border: 1px solid var(--line-strong); border-radius: 16px;
+      background: var(--raise); text-decoration: none; transition: border-color .25s, transform .35s var(--ease);
+    }
+    .featured:hover { border-color: oklch(0.86 0.15 172 / .6); transform: translateY(-2px); }
+    .featured .kicker { color: var(--accent); font-size: 11px; }
+    .featured h3 { margin: 10px 0 8px; font: 500 22px/1.4 var(--sans); }
+    .featured p { margin: 0; color: var(--muted); font-size: 14.5px; line-height: 1.8; }
+    .featured time { display: block; margin-top: 14px; color: var(--dim); font-size: 11px; }
+    .posts { list-style: none; margin: 10px 0 0; padding: 0; }
+    .posts a {
+      display: grid; grid-template-columns: 100px minmax(0, 1fr) auto; gap: 18px; align-items: baseline;
+      padding: 14px 4px; border-bottom: 1px solid var(--line); text-decoration: none;
+    }
+    .posts time { color: var(--dim); font-size: 11px; }
+    .posts strong { font-weight: 400; transition: color .2s; }
+    .posts .arrow { color: var(--dim); transition: transform .3s var(--ease), color .2s; }
+    .posts a:hover strong { color: var(--accent); }
+    .posts a:hover .arrow { color: var(--accent); transform: translate(2px, -2px); }
+    .posts-status { margin: 0; color: var(--muted); }
+    .posts-status a { color: var(--accent); }
+    .all { display: inline-flex; gap: 6px; margin-top: 18px; color: var(--muted); text-decoration: none; }
+    .all:hover { color: var(--accent); }
+
+    .class-list { list-style: none; margin: 0; padding: 0; }
+    .class-list a {
+      display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 18px;
+      padding: 16px 4px; border-bottom: 1px solid var(--line); text-decoration: none;
+    }
+    .class-list .mono { color: var(--dim); font-size: 10.5px; }
+    .class-list b { font-weight: 400; font-size: 17px; transition: color .2s; }
+    .class-list small { color: var(--muted); font-size: 13px; }
+    .class-list .arrow { grid-column: 2; grid-row: 1 / 4; align-self: center; color: var(--dim); transition: transform .3s var(--ease), color .2s; }
+    .class-list a:hover b, .class-list a:hover .arrow { color: var(--accent); }
+    .class-list a:hover .arrow { transform: translate(2px, -2px); }
+
+    .contact { list-style: none; margin: 0; padding: 0; }
+    .contact a {
+      display: grid; grid-template-columns: 110px minmax(0, 1fr) auto; gap: 18px; align-items: baseline;
+      padding: 14px 4px; border-bottom: 1px solid var(--line); text-decoration: none;
+    }
+    .contact .mono { color: var(--dim); }
+    .contact span:nth-child(2) { font-size: 17px; transition: color .2s; }
+    .contact .arrow { color: var(--dim); }
+    .contact a:hover span:nth-child(2), .contact a:hover .arrow { color: var(--accent); }
+
+    .thanks { padding: 44px 0 0; border-top: 1px solid var(--line); text-align: center; }
+    .thanks .mono { color: var(--dim); }
+    .thanks-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 22px; margin: 20px 0 0; }
+    .thanks-grid a { display: grid; place-items: center; min-width: 36px; height: 36px; opacity: .45; transition: opacity .2s, transform .3s var(--ease); }
+    .thanks-grid a:hover { opacity: 1; transform: translateY(-3px); }
+    .thanks-grid img { width: auto; max-width: 72px; height: 22px; object-fit: contain; filter: grayscale(1) brightness(0) invert(1); }
+    .brand-note { max-width: 640px; margin: 18px auto 0; color: var(--dim); font-size: 11px; line-height: 1.7; }
+
+    .foot {
+      display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px;
+      margin-top: 52px; padding: 22px 0 calc(28px + env(safe-area-inset-bottom));
+      border-top: 1px solid var(--line); color: var(--dim); font-size: 10.5px;
+    }
+    .foot p { margin: 0; }
+    .foot span + span::before { content: "·"; margin: 0 10px; }
+    .foot a { text-decoration: none; }
+    .foot a:hover { color: var(--accent); }
+
+    @media (max-width: 960px) {
+      :root { --peek: 68px; }
+      .stage-inner {
+        width: min(620px, 100% - 40px);
+        grid-template-columns: minmax(0, 1fr);
+        align-content: start;
+        padding-top: 84px;
+        padding-left: 0;
+      }
+      .mark { left: 16px; top: 18px; }
+      .name-row { min-height: 112px; }
+      .avatar { width: 104px; height: 104px; }
+      .sig { left: auto; right: -6px; top: 4px; width: 190px; }
+      .drawer { width: 100%; border-radius: 22px 22px 0 0; border-inline: 0; }
+      .drawer-head { grid-template-columns: minmax(0, 1fr); justify-items: center; padding-inline: 12px; border-radius: 22px 22px 0 0; }
+      .head-side { display: none; }
+      .tabs { gap: 0; }
+      .tabs a { padding: 8px 10px; font-size: 11px; }
+      .drawer-body { width: calc(100% - 40px); padding-top: 24px; }
+      .block { grid-template-columns: minmax(0, 1fr); gap: 20px; padding: 40px 0; }
+      .block-label { position: static; display: flex; align-items: baseline; gap: 10px; }
+      .block-label span { margin: 0; }
+    }
+    @media (max-width: 560px) {
+      /* Cards stack into horizontal rows: art on the left, text on the right. */
+      .apps { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+      .app {
+        display: grid;
+        grid-template-columns: 120px minmax(0, 1fr);
+        grid-template-rows: auto auto 1fr;
+        column-gap: 14px;
+        padding: 8px;
+      }
+      .app-art { grid-row: 1 / 4; height: 92px; }
+      .app-name { margin: 6px 0 2px; }
+      .app-desc { margin: 0; }
+      .app-meta { margin: 0; padding: 8px 0 0; align-self: end; }
+      .app-go { top: 12px; right: 14px; opacity: 1; transform: none; color: var(--dim); }
+      .more { grid-template-columns: 16px minmax(0, 1fr) auto; }
+      .more-names { display: none; }
+      .posts a { grid-template-columns: minmax(0, 1fr) auto; }
+      .posts time { grid-column: 1 / -1; }
+      .contact a { grid-template-columns: 76px minmax(0, 1fr) auto; }
+      .contact span:nth-child(2) { font-size: 15px; overflow-wrap: anywhere; }
+      .facts div { grid-template-columns: 72px minmax(0, 1fr); }
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after { animation: none !important; transition: none !important; }
+      .sig .ink { stroke-dashoffset: 0; }
+      .stage-inner { transform: none; }
     }
   </style>
 </head>
 <body>
-  <a class="skip-link" href="#content">跳到主要内容</a>
-  <div class="shell">
-    <header class="topbar">
-      <a class="brand" href="/" aria-label="Mint 个人主页">Mint<span class="brand-dot" aria-hidden="true"></span></a>
-      <nav class="topnav" aria-label="页面导航">
-        <a href="#works">作品</a>
-        <a href="#blog">文章</a>
+  <a class="skip" href="#apps">跳到产品</a>
+  <span class="snap-top" aria-hidden="true"></span>
+  <div class="grid" aria-hidden="true"></div>
+  <div class="grid grid--glow" aria-hidden="true"></div>
+
+  <main class="stage" id="top">
+    <a class="mark" href="/" aria-label="Mint Ryu 主页">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 20C3 12 9 4 20 4c.6 9-5.4 16-16 16Z"/>
+        <path d="M4 20 15 9"/>
+      </svg>
+    </a>
+
+    <div class="stage-inner">
+      <section class="intro" aria-labelledby="name">
+        <div class="name-row">
+          <h1 class="sr" id="name">Mint Ryu</h1>
+          <img class="avatar" src="/avatar.jpg" alt="Mint 的头像：抱着橙色小方块玩偶的狗耳朵小人" width="460" height="460">
+          <svg class="sig" viewBox="0 0 260 130" role="img" aria-label="Mint 的手写签名和一片小薄荷叶">
+            <path class="ink" pathLength="1" style="--dur:1.5s" d="M12 96C20 74 26 44 32 30C35 23 39 26 39 34C39 52 39 68 41 82C45 60 52 36 60 28C64 24 67 29 66 38C64 56 64 72 68 86C72 94 79 88 83 78C86 70 88 64 90 60C90 68 90 78 93 84C96 89 101 82 104 74C106 68 108 63 110 60C110 68 110 78 111 86C115 72 121 60 129 60C137 60 135 74 136 82C137 90 144 89 150 80C156 70 160 52 164 30C162 52 160 72 164 86C168 93 178 90 186 80"/>
+            <path class="ink" pathLength="1" style="--dur:.12s;--delay:1.55s" d="M89.5 47.5l1.6-1.4"/>
+            <path class="ink" pathLength="1" style="--dur:.3s;--delay:1.7s" d="M151 53C162 50 174 47 189 45"/>
+            <path class="ink" pathLength="1" style="--dur:.5s;--delay:2s" d="M22 113C80 104 150 106 232 95"/>
+            <g class="leaf">
+              <path class="body" d="M203 90C198 68 213 46 247 42C251 71 236 93 203 90Z"/>
+              <path d="M203 90l-6 7"/>
+              <g class="eyes"><circle cx="220" cy="70" r="2.4"/><circle cx="231" cy="66" r="2.4"/></g>
+              <path d="M221 78q5 3 10-1.5"/>
+            </g>
+          </svg>
+        </div>
+        <p class="roles mono">Mint Ryu <span>· Indie studio</span><br>Code · Sound · Light</p>
+
+        <h2 class="sr">软件</h2>
+        <ul class="apps" id="apps">
+          <li>
+            <a class="app app--pinned" href="https://mintaria.mintryu.com/">
+              <span class="app-art"><img src="/images/mintaria.jpg" alt="" width="720" height="480"></span>
+              <span class="app-tag mono">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><path d="M10 1.8 14.2 6l-2 .7-2.4 2.4.2 3-1.3 1.3-6-6L4 6.1l3 .2 2.4-2.4ZM5.4 10.6 1.8 14.2"/></svg>
+                置顶
+              </span>
+              <span class="app-go" aria-hidden="true">↗</span>
+              <span class="app-name">Mintaria <span>萌音</span></span>
+              <span class="app-desc">本地实时 AI 变声</span>
+              <span class="app-meta mono">v5.1.5 · Windows</span>
+            </a>
+          </li>
+          <li>
+            <a class="app" href="https://mignet.mintryu.com/">
+              <span class="app-art"><img src="/images/mignet.jpg" alt="" width="720" height="480"></span>
+              <span class="app-tag mono">New</span>
+              <span class="app-go" aria-hidden="true">↗</span>
+              <span class="app-name">mignet</span>
+              <span class="app-desc">Word 里的桌面印章</span>
+              <span class="app-meta mono">Windows · GPLv3</span>
+            </a>
+          </li>
+          <li>
+            <div class="app is-soon">
+              <span class="app-art"><img src="/images/melorb.jpg" alt="" width="720" height="480"></span>
+              <span class="app-tag mono">Soon</span>
+              <span class="app-name">Melorb <span>弥洛</span></span>
+              <span class="app-desc">直播混音声卡机架</span>
+              <span class="app-meta mono">C++20 · In dev</span>
+            </div>
+          </li>
+        </ul>
+
+        <a class="more" href="/works/">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" aria-hidden="true"><path d="M3 2.2 13 7.6l-4.4 1.2-1.9 4.3Z"/></svg>
+          <span class="more-label mono">More work</span>
+          <span class="more-names">Mint 同传 · AI 订阅向导 · HANSA · Final Channel</span>
+          <span class="more-count mono">04 ↗</span>
+        </a>
+
+        <nav class="links mono" aria-label="快速链接">
+          <a href="#about">关于</a><span aria-hidden="true">·</span>
+          <a href="#writing">文章</a><span aria-hidden="true">·</span>
+          <a href="mailto:me@mintryu.com">Email</a><span aria-hidden="true">·</span>
+          <a href="https://x.com/Ryusoohow" target="_blank" rel="noopener noreferrer">X</a><span aria-hidden="true">·</span>
+          <a href="https://www.youtube.com/@mint8733" target="_blank" rel="noopener noreferrer">YouTube</a>
+        </nav>
+
+        <ul class="status mono" aria-label="现在">
+          <li>
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="8" cy="8" r="6.2"/><path d="M8 4.5V8l2.4 1.6" stroke-linecap="round"/></svg>
+            <span>Seoul · <time id="clock">--:--</time></span>
+          </li>
+          <li>
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><path d="M8 1.5 9.6 6.4 14.5 8 9.6 9.6 8 14.5 6.4 9.6 1.5 8 6.4 6.4Z"/></svg>
+            <span>Shipped Mintaria 5.1.5 · Oct 21</span>
+          </li>
+          <li>
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><path d="M2 14 9 7M8 3l5 5M6.5 4.5 10 1l5 5-3.5 3.5"/></svg>
+            <span>Building Melorb 弥洛</span>
+          </li>
+        </ul>
+      </section>
+    </div>
+  </main>
+
+  <section class="drawer" id="drawer" aria-label="关于、文章与更多">
+    <div class="drawer-head">
+      <button class="grab" type="button" aria-controls="drawer" aria-expanded="false"><span aria-hidden="true"></span><span class="sr">展开抽屉</span></button>
+      <span class="head-side mono">More from Mint</span>
+      <nav class="tabs mono" aria-label="抽屉目录">
+        <a href="#about">关于</a>
+        <a href="#writing">文章</a>
+        <a href="#class">课堂材料</a>
         <a href="#contact">联系</a>
-        <div class="language-switcher" aria-label="文章语言切换">
-          <span class="language-switcher-label">文章语言</span>
-          <a class="active" data-language="zh-CN" href="/#blog" aria-current="page">简中</a>
-          <a data-language="zh-TW" href="/?lang=zh-TW#blog">繁中</a>
-          <a data-language="ko" href="/?lang=ko#blog">한국어</a>
-          <a data-language="en" href="/?lang=en#blog">EN</a>
-        </div>
       </nav>
-    </header>
+      <span class="head-side mono">
+        <span class="hint-closed">Scroll <b>↓</b></span>
+        <a class="hint-open" href="#top">↑ Products</a>
+      </span>
+    </div>
 
-    <main id="content">
-      <section class="hero" aria-labelledby="hero-title">
-        <div class="hero-copy">
-          <p class="eyebrow">Mint's little desk / personal homepage</p>
-          <h1 id="hero-title">写代码，<br><span class="blue">做声音，</span><br>记录一点<span class="pink">光。</span></h1>
-          <p class="hero-lead">我是 Mint。这里放着我做过的东西、写下的文章，还有一些没有必要解释得太清楚的生活碎片。<em>欢迎随便逛逛。</em></p>
-          <div class="tag-row" aria-label="个人标签">
-            <span class="tag">C++ / JUCE</span>
-            <span class="tag">音乐</span>
-            <span class="tag">摄影</span>
-            <span class="tag">韩国生活</span>
-          </div>
-          <div class="hero-actions">
-            <a class="button" href="#works">看看我做的东西 <span aria-hidden="true">↓</span></a>
-            <a class="button secondary" href="#blog">翻翻文章 <span aria-hidden="true">↗</span></a>
-            <div class="social-mini" aria-label="社交链接">
-              <a href="https://x.com/ryusoohow" target="_blank" rel="noopener noreferrer" aria-label="X @ryusoohow" title="X @ryusoohow">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-              </a>
-              <a href="https://www.youtube.com/@mint8733" target="_blank" rel="noopener noreferrer" aria-label="YouTube @mint8733" title="YouTube @mint8733">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.5A3.02 3.02 0 0 0 .5 6.19C0 8.07 0 12 0 12s0 3.93.5 5.81a3.02 3.02 0 0 0 2.12 2.14c1.88.5 9.38.5 9.38.5s7.5 0 9.38-.5a3.02 3.02 0 0 0 2.12-2.14C24 15.93 24 12 24 12s0-3.93-.5-5.81zM9.55 15.57V8.43L15.82 12z"/></svg>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div class="hero-art" aria-label="蓝色伙伴和黄色兔子伙伴的手绘贴纸插画">
-          <div class="art-sheet">
-            <span class="art-label">TODAY'S MOOD: LET'S MAKE SOMETHING</span>
-            <span class="bubble one">做点什么好呢？</span>
-            <span class="bubble two">先打开一个新项目！</span>
-            <img class="mascot hachiware" src="/mascots/hachiware-sticker.png" alt="戴耳机的蓝色伙伴插画">
-            <img class="mascot usagi" src="/mascots/usagi-sticker.png" alt="举手欢呼的黄色兔子伙伴插画">
-          </div>
-          <span class="sun a" aria-hidden="true">✦</span>
-          <span class="sun b" aria-hidden="true">✿</span>
-          <span class="art-caption">个人工作台 · 作品 / 文章 / 生活</span>
+    <div class="drawer-body">
+      <section class="block" id="about" aria-labelledby="about-title">
+        <h2 class="block-label mono" id="about-title">About<span>关于我</span></h2>
+        <div class="about">
+          <p class="lede">我是 Mint。写代码，做声音，记录一点光。</p>
+          <p>大部分时间在做和声音有关的软件：从 C++ 的实时音频内核，到普通人打开就能用的界面。也会为身边的小麻烦写工具，比如给高丽大学留学生做的 HANSA，和能在 Word 里真的“盖一下章”的 mignet。</p>
+          <p>我在意的不是功能有多少，而是用起来有没有那一下“诶，好玩”。所以一直想<em>把好用的小工具，做得更像小玩具</em>。</p>
+          <dl class="facts">
+            <div><dt class="mono">Stack</dt><dd>C++20 · JUCE · CUDA · WebRTC · Astro</dd></div>
+            <div><dt class="mono">Into</dt><dd>音乐 · 摄影 · 韩国生活</dd></div>
+            <div><dt class="mono">Now</dt><dd>Mintaria 5.1.5 刚发布；Melorb 的前端在路上</dd></div>
+          </dl>
         </div>
       </section>
 
-      <section class="now-card" aria-label="最近状态">
-        <span class="now-mark">NOW</span>
+      <section class="block" id="writing" aria-labelledby="writing-title">
         <div>
-          <small>最近在做什么</small>
-          <strong>把好用的小工具，做得更像小玩具。</strong>
-          <p>写一点代码，调一点声音，再把过程留下来。</p>
+          <h2 class="block-label mono" id="writing-title">Writing<span>文章</span></h2>
+          <nav class="langs" aria-label="文章语言">
+            <a class="is-active" data-language="zh-CN" href="/#writing" aria-current="page">简中</a>
+            <a data-language="zh-TW" href="/?lang=zh-TW#writing">繁中</a>
+            <a data-language="ko" href="/?lang=ko#writing">한국어</a>
+            <a data-language="en" href="/?lang=en#writing">EN</a>
+          </nav>
         </div>
-        <span class="now-stamp">慢慢更新中</span>
+        <div>
+          <!-- home-worker fills this with the latest posts from the blog worker. -->
+          <div class="latest" id="latest-posts">
+            <p class="posts-status">最新文章都在 <a href="/blog">文章列表</a> 里。</p>
+          </div>
+          <a class="all mono" id="blog-all" href="/blog">All writing <span aria-hidden="true">↗</span></a>
+        </div>
       </section>
 
-      <div class="stack">
-        <details id="works" class="section-card pink" open>
-          <summary>
-            <span class="summary-copy"><span class="label">PORTFOLIO</span><span class="title">我做过的东西</span><span class="count">6 个小项目</span></span>
-            <span class="arrow" aria-hidden="true">↓</span>
-          </summary>
-          <div class="detail-wrap"><div class="detail-inner"><div class="detail">
-            <div class="works-sub">
-              <a class="work" href="/works/hansa/">
-                <div class="work-visual"><div class="mini hansa"><header>HANSA 韩学事 <i></i></header><div class="hansa-lines"><i></i><i></i><i></i></div></div></div>
-                <div class="work-body"><small>KOREA UNIVERSITY · ANDROID</small><h3>HANSA 韩学事</h3><p>给高丽大学留学生用的公告、课表、作业与 A 饭助手。</p><span class="work-cta">项目官网与下载 ↗</span></div>
+      <section class="block" id="class" aria-labelledby="class-title">
+        <h2 class="block-label mono" id="class-title">Class<span>课堂材料</span></h2>
+        <div>
+          <ul class="class-list">
+            <li>
+              <a href="/presentations/jochiwon-bm/">
+                <span class="mono">数字创业 · 商业模式 · 2026.10.12</span>
+                <b>Yext 如何赚钱？B2B SaaS 商业模式分析</b>
+                <small>韩 / 中 · 4 张卡片，可点开看详情</small>
+                <span class="arrow" aria-hidden="true">↗</span>
               </a>
-              <a class="work" href="/works/mint-final-channel/">
-                <div class="work-visual"><div class="mini audio"><div class="audio-head"><span>MINT CHANNEL</span><span>VST3</span></div><div class="audio-knobs"><i></i><i></i><i></i><i></i></div></div></div>
-                <div class="work-body"><small>VST3 · C++20 · AUDIO DSP</small><h3>Mint 的混音通道条</h3><p>从一键处理到完整混音控制，给声音创作者的小工具。</p><span class="work-cta">查看作品 ↗</span></div>
+            </li>
+            <li>
+              <a href="/presentations/jwcc-ucm/">
+                <span class="mono">MIS · 管理信息系统 · 2026.10.06</span>
+                <b>JWCC UCM：从单一供应商到开放云市场</b>
+                <small>韩 / 中 / EN · 11 页 · 10 分钟</small>
+                <span class="arrow" aria-hidden="true">↗</span>
               </a>
-              <a class="work" href="/works/ai-guide/">
-                <div class="work-visual"><div class="mini ai"><small>SUBSCRIPTION WIZARD</small><b>AI 订阅向导</b><span class="mini-chips"><i>ChatGPT</i><i>Claude</i><i>Grok</i><i>Gemini</i></span></div></div>
-                <div class="work-body"><small>GUIDED WIZARD · CARD BRANCHING</small><h3>AI 订阅向导</h3><p>用卡片分支，把 AI 订阅准备路径讲得简单一点。</p><span class="work-cta">查看作品 ↗</span></div>
+            </li>
+            <li>
+              <a href="/works/geo-classroom/">
+                <span class="mono">数字创业 · GEO · 2026.09.28</span>
+                <b>AI 替人挑选的时代，为什么“真的”反而看不见？</b>
+                <small>韩 / 中 · 单页 · 5 分钟</small>
+                <span class="arrow" aria-hidden="true">↗</span>
               </a>
-              <a class="work" href="/works/persona-check/">
-                <div class="work-visual"><div class="mini persona"><small>CHINESE INTERNET PERSONA</small><b>人格验牌</b><span>16 题 · 60 秒</span></div></div>
-                <div class="work-body"><small>INTERACTIVE QUIZ · SHAREABLE RESULT</small><h3>人格验牌</h3><p>用 16 道站队题，验出你的中文互联网圈层身份。</p><span class="work-cta">查看作品 ↗</span></div>
+            </li>
+            <li>
+              <a href="/presentations/geo-interactive/">
+                <span class="mono">数字创业 · 互动演示 · 2026.09.21</span>
+                <b>AI Agent × 超个性化：小商家的 GEO 机会</b>
+                <small>韩 / 中对照 · 互动版</small>
+                <span class="arrow" aria-hidden="true">↗</span>
               </a>
-              <a class="work" href="/works/haoyi-check/">
-                <div class="work-visual"><div class="mini haoyi"><small>JIAHAO METER · 2026</small><b>88</b><span>豪意值 / 100</span></div></div>
-                <div class="work-body"><small>INTERACTIVE QUIZ · 15 QUESTIONS</small><h3>豪意值检测</h3><p>用 15 道题量化你的豪意值：阴阳、自嘲，但不刻薄。</p><span class="work-cta">开始检测 ↗</span></div>
+            </li>
+            <li>
+              <a href="/presentations/esg-strategy/">
+                <span class="mono">研究方法 · 联合分析</span>
+                <b>ESG 经营活动的战略设计</b>
+                <small>中文 · 研究图解</small>
+                <span class="arrow" aria-hidden="true">↗</span>
               </a>
-              <a class="work" href="https://live.mintryu.com" target="_blank" rel="noopener noreferrer">
-                <div class="work-visual"><div class="mini live"><small>ONE PROJECT IN THE BOX</small><b>Mint 同传</b><div class="live-bar"></div><span>LIVE · 韩语 → 普通话</span></div></div>
-                <div class="work-body"><small>LIVE AI · GEMINI · WEBRTC</small><h3>Mint 同传</h3><p>一个现场课堂同传实验，也是我做过的一个作品。</p><span class="work-cta">打开项目 ↗</span></div>
-              </a>
-            </div>
-          </div></div></div>
-        </details>
+            </li>
+          </ul>
+          <a class="all mono" href="/presentations/">All presentations <span aria-hidden="true">↗</span></a>
+        </div>
+      </section>
 
-        <details id="blog" class="section-card blue" open>
-          <summary>
-            <span class="summary-copy"><span class="label">BLOG</span><span class="title">最近写了什么</span><span class="count">代码之外，也记生活</span></span>
-            <span class="arrow" aria-hidden="true">↓</span>
-          </summary>
-          <div class="detail-wrap"><div class="detail-inner"><div class="detail">
-            <div class="posts">
-              <a class="featured-post" id="latest-blog-featured" href="/blog/jev-the-ai-that-refuses-to-chat">
-                <div>
-                  <span class="featured-kicker">最新文章 ✦ NOTES</span>
-                  <h3>一个拒绝聊天的 AI：Jev 到底是个什么东西</h3>
-                  <p>Jev 不是聊天模型。它是 TypeSafe AI 在 2026 年 9 月 15 日放出的 System One 通用分类器：只给选项和概率，多一个字都没有。</p>
-                  <div class="featured-meta"><time datetime="2026-09-19">2026.09.19</time><span>阅读文章 ↗</span></div>
-                </div>
-                <img class="featured-thumb" src="/mascots/hachiware-sticker.png" alt="文章封面：蓝白小伙伴贴纸" width="168" height="105">
-              </a>
-              <a class="post-row" id="latest-blog-1" href="/blog/shanghai-metro-16-commute"><time datetime="2026-08-03">2026.08.03</time><strong>上海最便宜的地铁，最贵的通勤</strong><span aria-hidden="true">↗</span></a>
-              <a class="post-row" id="latest-blog-2" href="/blog/ai-shopping-saved-10-cost-770"><time datetime="2026-07-27">2026.07.27</time><strong>京东 AI 帮我省了 10 块钱，顺便让我多花了 770</strong><span aria-hidden="true">↗</span></a>
-            </div>
-            <a class="blog-all" id="blog-all" href="/blog">查看全部文章 ↗</a>
-          </div></div></div>
-        </details>
+      <section class="block" id="contact" aria-labelledby="contact-title">
+        <h2 class="block-label mono" id="contact-title">Contact<span>想说点什么？</span></h2>
+        <ul class="contact">
+          <li><a href="mailto:me@mintryu.com"><span class="mono">Email</span><span>me@mintryu.com</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+          <li><a href="https://x.com/Ryusoohow" target="_blank" rel="noopener noreferrer"><span class="mono">X</span><span>@Ryusoohow</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+          <li><a href="https://www.youtube.com/@mint8733" target="_blank" rel="noopener noreferrer"><span class="mono">YouTube</span><span>@mint8733</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+          <li><a href="https://github.com/ysuhao" target="_blank" rel="noopener noreferrer"><span class="mono">GitHub</span><span>ysuhao</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+          <li><a href="https://t.me/+14848930101" target="_blank" rel="noopener noreferrer"><span class="mono">Telegram</span><span>+1 484 893 0101</span><span class="arrow" aria-hidden="true">↗</span></a></li>
+        </ul>
+      </section>
 
-        <details id="contact" class="section-card" open>
-          <summary>
-            <span class="summary-copy"><span class="label">CONTACT</span><span class="title">想说点什么？</span><span class="count">欢迎来找我</span></span>
-            <span class="arrow" aria-hidden="true">↓</span>
-          </summary>
-          <div class="detail-wrap"><div class="detail-inner"><div class="detail contact-lines">
-            <a href="mailto:me@mintryu.com">Email: me@mintryu.com</a>
-            <a href="https://t.me/+14848930101" target="_blank" rel="noopener noreferrer">Telegram: +1 4848930101</a>
-            <a href="https://x.com/Ryusoohow" target="_blank" rel="noopener noreferrer">X: @Ryusoohow</a>
-          </div></div></div>
-        </details>
-      </div>
-    </main>
+      <section class="thanks" aria-label="参考与致谢">
+        <p class="mono">Acknowledgements</p>
+        <div class="thanks-grid">
+          <a href="https://cloudflare.com" target="_blank" rel="noopener noreferrer" title="Cloudflare"><img src="/brand-icons/cloudflare.svg" alt="Cloudflare"></a>
+          <a href="https://openai.com" target="_blank" rel="noopener noreferrer" title="OpenAI"><img src="/brand-icons/openai.svg" alt="OpenAI"></a>
+          <a href="https://anthropic.com" target="_blank" rel="noopener noreferrer" title="Anthropic"><img src="/brand-icons/anthropic.svg" alt="Anthropic"></a>
+          <a href="https://deepmind.google" target="_blank" rel="noopener noreferrer" title="Google DeepMind"><img src="/brand-icons/google-deepmind.svg" alt="Google DeepMind"></a>
+          <a href="https://x.ai" target="_blank" rel="noopener noreferrer" title="xAI"><img src="/brand-icons/xai.svg" alt="xAI"></a>
+          <a href="https://apple.com" target="_blank" rel="noopener noreferrer" title="Apple"><img src="/brand-icons/apple.svg" alt="Apple"></a>
+          <a href="https://samsung.com" target="_blank" rel="noopener noreferrer" title="Samsung"><img src="/brand-icons/samsung.svg" alt="Samsung"></a>
+          <a href="https://korea.ac.kr" target="_blank" rel="noopener noreferrer" title="Korea University"><img src="/brand-icons/korea-university.png" alt="Korea University"></a>
+        </div>
+        <p class="brand-note">All trademarks, logos, and brand names belong to their respective owners. Their inclusion here does not imply affiliation, sponsorship, endorsement, or official association.</p>
+      </section>
 
-    <section class="thanks" aria-label="参考与致谢">
-      <p class="section-kicker">ACKNOWLEDGEMENTS</p>
-      <div class="thanks-grid">
-        <a href="https://cloudflare.com" target="_blank" rel="noopener noreferrer" aria-label="Cloudflare 官方网站" title="Cloudflare"><img src="/brand-icons/cloudflare.svg" alt="Cloudflare"></a>
-        <a href="https://openai.com" target="_blank" rel="noopener noreferrer" aria-label="OpenAI 官方网站" title="OpenAI"><img src="/brand-icons/openai.svg" alt="OpenAI"></a>
-        <a href="https://anthropic.com" target="_blank" rel="noopener noreferrer" aria-label="Anthropic 官方网站" title="Anthropic"><img src="/brand-icons/anthropic.svg" alt="Anthropic"></a>
-        <a href="https://deepmind.google" target="_blank" rel="noopener noreferrer" aria-label="Google DeepMind 官方网站" title="Google DeepMind"><img src="/brand-icons/google-deepmind.svg" alt="Google DeepMind"></a>
-        <a href="https://x.ai" target="_blank" rel="noopener noreferrer" aria-label="xAI 官方网站" title="x.AI"><img src="/brand-icons/xai.svg" alt="x.AI"></a>
-        <a href="https://apple.com" target="_blank" rel="noopener noreferrer" aria-label="Apple 官方网站" title="Apple"><img src="/brand-icons/apple.svg" alt="Apple"></a>
-        <a href="https://samsung.com" target="_blank" rel="noopener noreferrer" aria-label="Samsung 官方网站" title="Samsung"><img src="/brand-icons/samsung.svg" alt="Samsung"></a>
-        <a href="https://korea.ac.kr" target="_blank" rel="noopener noreferrer" aria-label="Korea University 官方网站" title="Korea University"><img src="/brand-icons/korea-university.png?v=20260717" alt="Korea University"></a>
-      </div>
-      <p class="brand-note">All trademarks, logos, and brand names belong to their respective owners. Their inclusion here does not imply affiliation, sponsorship, endorsement, or official association.</p>
-    </section>
-    <footer><span>© 2026 MINT RYU</span><span>made with code, sound &amp; a little light</span></footer>
-  </div>
+      <footer class="foot mono">
+        <p><span>© 2026 Mint Ryu</span><span>Rev 2026.10</span><span>Viewport <output id="viewport">—</output></span></p>
+        <a href="#top">Back to top ↑</a>
+      </footer>
+    </div>
+  </section>
 
   <script>
     (() => {
-      const requestedLanguage = new URLSearchParams(window.location.search).get('lang');
-      const language = ['zh-TW', 'ko', 'en'].includes(requestedLanguage) ? requestedLanguage : 'zh-CN';
-      const languageLinks = [...document.querySelectorAll('.language-switcher a[data-language]')];
-      const blogPath = language === 'zh-CN' ? '/blog' : `/blog?lang=${encodeURIComponent(language)}`;
-      const articlePath = (slug) => `/blog/${encodeURIComponent(slug)}${language === 'zh-CN' ? '' : `?lang=${encodeURIComponent(language)}`}`;
-      // The page chrome stays zh-CN; only fetched article text is tagged with the language it is actually in.
-      const contentLanguage = (post) => {
-        const translation = language === 'zh-CN' ? null : post.translations && post.translations[language];
-        return translation && translation.title === post.title ? language : 'zh-CN';
+      const root = document.documentElement;
+      const stage = document.querySelector('.stage');
+      const drawer = document.getElementById('drawer');
+      const head = drawer.querySelector('.drawer-head');
+      const grab = drawer.querySelector('.grab');
+      const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+      const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
+      const scrollBehavior = () => (reduceMotion.matches ? 'auto' : 'smooth');
+
+      // Stage height drives the sticky offset and whether snapping is safe.
+      const measure = () => {
+        const height = stage.offsetHeight;
+        root.style.setProperty('--stage-h', `${height}px`);
+        root.classList.toggle('fits', height <= innerHeight + 1);
       };
-      const setLanguage = (element, lang) => {
-        if (!element) return;
-        if (lang === 'zh-CN') element.removeAttribute('lang');
-        else element.lang = lang;
-      };
-      languageLinks.forEach((link) => {
-        const active = link.dataset.language === language;
-        link.classList.toggle('active', active);
-        if (active) link.setAttribute('aria-current', 'page');
-        else link.removeAttribute('aria-current');
-      });
-      const blogAll = document.getElementById('blog-all');
-      if (blogAll) blogAll.href = blogPath;
-      const featured = document.getElementById('latest-blog-featured');
-      const rows = [document.getElementById('latest-blog-1'), document.getElementById('latest-blog-2')];
-      const apiPath = language === 'zh-CN' ? '/api/blog/posts' : `/api/blog/posts?lang=${encodeURIComponent(language)}`;
-      fetch(apiPath, { headers: { accept: 'application/json' } })
-        .then((response) => response.ok ? response.json() : Promise.reject())
-        .then(({ posts = [] }) => {
-          const [latest, ...rest] = posts;
-          if (featured && latest) {
-            const published = latest.publishedAt || latest.updatedAt || '';
-            const date = published.slice(0, 10);
-            featured.href = articlePath(latest.slug || '');
-            const title = featured.querySelector('h3');
-            const excerpt = featured.querySelector('p');
-            const time = featured.querySelector('time');
-            const thumb = featured.querySelector('img');
-            const latestLanguage = contentLanguage(latest);
-            if (title && latest.title) {
-              title.textContent = latest.title;
-              setLanguage(title, latestLanguage);
-            }
-            if (excerpt && latest.excerpt) {
-              excerpt.textContent = latest.excerpt;
-              setLanguage(excerpt, latestLanguage);
-            }
-            if (time && date) {
-              time.dateTime = date;
-              time.textContent = date.replaceAll('-', '.');
-            }
-            if (thumb && latest.coverUrl) {
-              thumb.src = latest.coverUrl;
-              if (latest.title) {
-                thumb.alt = latestLanguage === 'zh-CN' ? `${latest.title} 封面` : latest.title;
-                setLanguage(thumb, latestLanguage);
-              }
-            }
-          }
-          rest.slice(0, 2).forEach((post, index) => {
-            const row = rows[index];
-            if (!row || !post) return;
-            const published = post.publishedAt || post.updatedAt || '';
-            const date = published.slice(0, 10);
-            row.href = articlePath(post.slug || '');
-            if (date) {
-              row.querySelector('time').dateTime = date;
-              row.querySelector('time').textContent = date.replaceAll('-', '.');
-            }
-            const strong = row.querySelector('strong');
-            if (strong && post.title) {
-              strong.textContent = post.title;
-              setLanguage(strong, contentLanguage(post));
-            }
-          });
-        })
-        .catch(() => {});
-    })();
+      new ResizeObserver(measure).observe(stage);
 
-    (() => {
-      if (typeof Element.prototype.animate !== 'function') return;
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-      const OPEN_MS = 420;
-      const CLOSE_MS = 320;
-      const OPEN_EASE = 'cubic-bezier(.22, .8, .24, 1)';
-      const CLOSE_EASE = 'cubic-bezier(.4, 0, .6, 1)';
-      const sections = new Map();
-
-      ['works', 'blog', 'contact'].forEach((id) => {
-        const details = document.getElementById(id);
-        if (!(details instanceof HTMLDetailsElement)) return;
-        const summary = details.querySelector(':scope > summary');
-        const wrap = details.querySelector(':scope > .detail-wrap');
-        const content = wrap && wrap.querySelector('.detail');
-        if (!summary || !content) return;
-
-        let state = 'idle';
-        let heightAnim = null;
-        let fadeAnim = null;
-        let target = 0;
-        let revealWhenOpen = false;
-
-        const naturalHeight = () => {
-          const style = getComputedStyle(content);
-          return content.offsetHeight + parseFloat(style.marginTop) + parseFloat(style.marginBottom);
-        };
-        const stop = () => {
-          if (heightAnim) heightAnim.cancel();
-          if (fadeAnim) fadeAnim.cancel();
-          heightAnim = null;
-          fadeAnim = null;
-        };
-        const reset = () => {
-          stop();
-          state = 'idle';
-          details.removeAttribute('data-accordion-state');
-          wrap.inert = false;
-        };
-        // After a nav-triggered open, bring the whole card into view if it ended up cut off below the fold.
-        const reveal = () => {
-          revealWhenOpen = false;
-          const rect = details.getBoundingClientRect();
-          if (rect.top > 1 && rect.bottom > window.innerHeight) {
-            details.scrollIntoView({ block: 'start', behavior: reduceMotion.matches ? 'auto' : 'smooth' });
-          }
-        };
-
-        const run = (opening) => {
-          // Start from whatever is on screen right now so reversals never jump.
-          const fromHeight = details.open ? wrap.getBoundingClientRect().height : 0;
-          const current = details.open ? getComputedStyle(content) : null;
-          const fromOpacity = current ? current.opacity : '0';
-          const fromTransform = current && current.transform !== 'none' ? current.transform : (current ? 'translateY(0)' : 'translateY(8px)');
-          details.setAttribute('data-accordion', '');
-          stop();
-
-          state = opening ? 'opening' : 'closing';
-          details.setAttribute('data-accordion-state', state);
-          if (opening) {
-            wrap.inert = false;
-            if (!details.open) details.open = true;
-          } else {
-            if (wrap.contains(document.activeElement)) summary.focus();
-            wrap.inert = true;
-          }
-
-          const full = Math.max(naturalHeight(), 1);
-          target = opening ? full : 0;
-          const share = Math.min(1, Math.abs(target - fromHeight) / full);
-          const duration = Math.max(140, (opening ? OPEN_MS : CLOSE_MS) * share);
-          const easing = opening ? OPEN_EASE : CLOSE_EASE;
-
-          const anim = wrap.animate(
-            [{ height: `${fromHeight}px` }, { height: `${target}px` }],
-            { duration, easing }
-          );
-          fadeAnim = content.animate(
-            [
-              { opacity: fromOpacity, transform: fromTransform },
-              { opacity: opening ? 1 : 0, transform: opening ? 'translateY(0)' : 'translateY(6px)' }
-            ],
-            { duration: opening ? duration : duration * .75, easing, fill: 'both' }
-          );
-          heightAnim = anim;
-          anim.onfinish = () => {
-            if (anim !== heightAnim) return;
-            if (!opening) details.open = false;
-            reset();
-            if (opening && revealWhenOpen) reveal();
-          };
-        };
-
-        // Used by in-page links (#works / #blog / #contact): open if closed or closing, never toggle shut.
-        const ensureOpen = (instant) => {
-          if (state === 'opening') {
-            revealWhenOpen = true;
-            return;
-          }
-          if (state === 'idle' && details.open) return;
-          revealWhenOpen = true;
-          if (instant || reduceMotion.matches) {
-            reset();
-            details.open = true;
-            requestAnimationFrame(reveal);
-            return;
-          }
-          run(true);
-        };
-        sections.set(id, ensureOpen);
-
-        summary.addEventListener('click', (event) => {
-          event.preventDefault();
-          const isOpen = state === 'idle' ? details.open : state === 'opening';
-          if (reduceMotion.matches) {
-            reset();
-            if (isOpen && wrap.contains(document.activeElement)) summary.focus();
-            details.open = !isOpen;
-            return;
-          }
-          run(!isOpen);
-        });
-
-        // Opened/closed by something else (find-in-page, scripts): drop any in-flight animation.
-        details.addEventListener('toggle', () => {
-          if (!details.open && state !== 'idle') reset();
-          if (!details.open) revealWhenOpen = false;
-        });
-
-        // Content can change size mid-open (images, fetched posts, resize): retarget smoothly.
-        if (typeof ResizeObserver === 'function') {
-          new ResizeObserver(() => {
-            if (state === 'opening' && Math.abs(naturalHeight() - target) > 1) run(true);
-          }).observe(content);
+      // --p: 0 while the drawer only peeks, 1 once it covers the screen.
+      let open = false;
+      let queued = false;
+      const progress = () => {
+        queued = false;
+        const peek = head.offsetHeight;
+        const range = Math.max(1, innerHeight - peek);
+        const p = Math.min(1, Math.max(0, (innerHeight - peek - drawer.getBoundingClientRect().top) / range));
+        root.style.setProperty('--p', p.toFixed(3));
+        if (p > 0.6 !== open) {
+          open = !open;
+          drawer.toggleAttribute('data-open', open);
+          grab.setAttribute('aria-expanded', String(open));
+          grab.querySelector('.sr').textContent = open ? '收起抽屉' : '展开抽屉';
         }
+      };
+      const queue = () => {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(progress);
+      };
+      addEventListener('scroll', queue, { passive: true });
+      addEventListener('resize', () => { measure(); queue(); });
+      measure();
+      progress();
+
+      grab.addEventListener('click', () => {
+        if (open) scrollTo({ top: 0, behavior: scrollBehavior() });
+        else drawer.scrollIntoView({ block: 'start', behavior: scrollBehavior() });
       });
 
-      const sectionFromHash = (hash) => {
-        const id = (hash || '').replace(/^#/, '');
-        return sections.has(id) ? id : null;
-      };
-      // Opening happens before the browser's own hash scroll, so the native jump, history entry and URL stay untouched.
-      document.addEventListener('click', (event) => {
-        if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-        const link = event.target instanceof Element ? event.target.closest('a[href^="#"]') : null;
-        const id = link && sectionFromHash(link.getAttribute('href'));
-        if (id) sections.get(id)(false);
+      // Grid spotlight + app card glow follow the pointer.
+      const glow = document.querySelector('.grid--glow');
+      if (finePointer.matches) {
+        addEventListener('pointermove', (event) => {
+          glow.style.setProperty('--x', `${event.clientX}px`);
+          glow.style.setProperty('--y', `${event.clientY}px`);
+          glow.style.opacity = String(1 - Number(getComputedStyle(root).getPropertyValue('--p')));
+        }, { passive: true });
+        root.addEventListener('pointerleave', () => { glow.style.opacity = '0'; });
+      }
+      document.querySelectorAll('.app').forEach((card) => {
+        card.addEventListener('pointermove', (event) => {
+          const rect = card.getBoundingClientRect();
+          card.style.setProperty('--mx', `${event.clientX - rect.left}px`);
+          card.style.setProperty('--my', `${event.clientY - rect.top}px`);
+        });
       });
-      window.addEventListener('hashchange', () => {
-        const id = sectionFromHash(window.location.hash);
-        if (id) sections.get(id)(false);
-      });
-      const initial = sectionFromHash(window.location.hash);
-      if (initial) sections.get(initial)(true);
+
+      // The leaf in the signature watches the cursor.
+      const eyes = document.querySelector('.sig .eyes');
+      if (finePointer.matches) {
+        addEventListener('pointermove', (event) => {
+          const rect = eyes.getBoundingClientRect();
+          const dx = event.clientX - (rect.left + rect.width / 2);
+          const dy = event.clientY - (rect.top + rect.height / 2);
+          const distance = Math.hypot(dx, dy) || 1;
+          const reach = Math.min(1, distance / 240) * 1.8;
+          eyes.style.transform = `translate(${(dx / distance) * reach}px, ${(dy / distance) * reach}px)`;
+        }, { passive: true });
+      }
+
+      // Live clock and viewport readout.
+      const clock = document.getElementById('clock');
+      const time = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Seoul', hour: '2-digit', minute: '2-digit' });
+      const tick = () => { clock.textContent = time.format(new Date()); };
+      tick();
+      setInterval(tick, 15000);
+      const viewport = document.getElementById('viewport');
+      const showViewport = () => { viewport.textContent = `${innerWidth}×${innerHeight}`; };
+      showViewport();
+      addEventListener('resize', showViewport);
+
+      // Drawer tabs follow the section in view.
+      const tabs = [...document.querySelectorAll('.tabs a')];
+      const spy = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          tabs.forEach((tab) => tab.classList.toggle('is-active', tab.hash === `#${entry.target.id}`));
+        });
+      }, { rootMargin: '-35% 0px -60% 0px' });
+      document.querySelectorAll('.block[id]').forEach((section) => spy.observe(section));
     })();
+
   </script>
 </body>
 </html>

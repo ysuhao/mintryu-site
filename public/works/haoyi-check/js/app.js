@@ -12,6 +12,8 @@
   };
 
   let answers = [];
+  let currentQuestion = -1;
+  let transitioning = false;
   let lastResult = null;
 
   function show(name) {
@@ -19,6 +21,10 @@
       views[key].classList.toggle('hidden', key !== name);
     }
     window.scrollTo(0, 0);
+    const target = name === 'quiz' ? $('quiz-title')
+      : name === 'computing' ? views[name].querySelector('.computing-text')
+      : name === 'home' ? $('btn-start') : views[name];
+    if (target) target.focus({ preventScroll: true });
   }
 
   function toast(msg, ms = 2400) {
@@ -42,6 +48,8 @@
 
   /* ---------- 答题 ---------- */
   function renderQuestion(i) {
+    currentQuestion = i;
+    transitioning = false;
     const q = Data.QUESTIONS[i];
     const inner = $('quiz-inner');
     inner.classList.remove('leaving');
@@ -64,6 +72,7 @@
       btn.addEventListener('click', () => pick(i, opt.key));
       box.appendChild(btn);
     });
+    $('quiz-title').focus({ preventScroll: true });
   }
 
   function escapeHtml(s) {
@@ -75,6 +84,9 @@
   }
 
   function pick(i, key) {
+    if (transitioning || i !== currentQuestion) return;
+    transitioning = true;
+    for (const button of $('options').querySelectorAll('button')) button.disabled = true;
     answers[i] = key;
     if (i + 1 < Data.QUESTIONS.length) {
       $('quiz-inner').classList.add('leaving');
@@ -150,6 +162,7 @@
         fill.style.width = `${result.haoyi}%`;
       });
     });
+    fill.parentElement.setAttribute('aria-valuenow', String(result.haoyi));
     $('meter-value').textContent = `${result.haoyi} / 100`;
 
     show('result');
@@ -166,7 +179,7 @@
         await navigator.share({
           title: '豪意值检测',
           text,
-          url: location.href.split('?')[0],
+          url: Scoring.shareUrl(lastResult),
         });
         return;
       }
@@ -191,7 +204,8 @@
   });
 
   $('btn-copy-link').addEventListener('click', async () => {
-    const url = location.href;
+    if (!lastResult) return;
+    const url = Scoring.shareUrl(lastResult);
     try {
       await navigator.clipboard.writeText(url);
       toast('结果链接已复制');
@@ -201,20 +215,35 @@
   });
 
   /* 豪到你了？ */
+  let modalFocus = null;
+  let appWasInert = false;
+  function closeModal() {
+    $('modal-backdrop').classList.add('hidden');
+    $('app').inert = appWasInert;
+    document.removeEventListener('keydown', modalKeys);
+    if (modalFocus && modalFocus.isConnected) modalFocus.focus();
+  }
+  function modalKeys(event) {
+    if (event.key === 'Escape') { event.preventDefault(); closeModal(); }
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      $('modal-close').focus();
+    }
+  }
   $('btn-haodao').addEventListener('click', () => {
     const lines = Data.HAODAO_LINES;
-    const line = lines[Math.floor(Math.random() * lines.length)];
-    $('modal-text').textContent = line;
+    $('modal-text').textContent = lines[Math.floor(Math.random() * lines.length)];
+    modalFocus = document.activeElement;
+    appWasInert = $('app').inert;
+    $('app').inert = true;
     $('modal-backdrop').classList.remove('hidden');
+    document.addEventListener('keydown', modalKeys);
+    $('modal-close').focus();
   });
 
-  $('modal-close').addEventListener('click', () => {
-    $('modal-backdrop').classList.add('hidden');
-  });
-  $('modal-backdrop').addEventListener('click', (e) => {
-    if (e.target === $('modal-backdrop')) {
-      $('modal-backdrop').classList.add('hidden');
-    }
+  $('modal-close').addEventListener('click', closeModal);
+  $('modal-backdrop').addEventListener('click', (event) => {
+    if (event.target === $('modal-backdrop')) closeModal();
   });
 
   /* ---------- 分享链接还原结果 ---------- */

@@ -787,3 +787,11 @@ h1,
     transition: none !important;
   }
 }
+
+/* 通往主站的轻量纸面导航。 */
+#app { flex-direction: column; }
+.site-return { display: flex; justify-content: space-between; gap: 12px; padding: 16px 20px 0; }
+.site-return a { color: #182449; background: #fff8e9; border: 2px solid #182449; border-radius: 10px; padding: 7px 12px; box-shadow: 2px 3px 0 #182449; font-size: 13px; text-decoration: none; }
+.site-return a:last-child { background: #b9e4ce; }
+:focus-visible { outline: 3px solid #182449; outline-offset: 4px; }
+.qr-fallback { display: flex; align-items: center; justify-content: center; color: #221c39; font-size: 11px; text-align: center; overflow-wrap: anywhere; }

@@ -1,0 +1,354 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESG 经营活动战略设计可视化演示</title>
+    <style>
+        :root {
+            --primary-blue: #2c3e50;
+            --accent-green: #27ae60;
+            --accent-blue: #3498db;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --text-dark: #333;
+            --e-color: #e67e22;
+            --s-color: #9b59b6;
+            --g-color: #34495e;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 2px solid var(--bg-light);
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: var(--primary-blue);
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+
+        /* 实验流程部分 */
+        .section-title {
+            display: flex;
+            align-items: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 30px 0 20px;
+            color: var(--primary-blue);
+        }
+
+        .section-title::before {
+            content: "";
+            display: inline-block;
+            width: 5px;
+            height: 24px;
+            background: var(--accent-blue);
+            margin-right: 12px;
+            border-radius: 2px;
+        }
+
+        .flow-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .flow-step {
+            flex: 1;
+            min-width: 180px;
+            text-align: center;
+            padding: 15px;
+            margin: 5px;
+            background: var(--bg-light);
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .flow-step:not(:last-child)::after {
+            content: "→";
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ccc;
+            font-size: 20px;
+        }
+
+        /* 变量矩阵 */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .card-e { border-top: 5px solid var(--e-color); }
+        .card-s { border-top: 5px solid var(--s-color); }
+        .card-g { border-top: 5px solid var(--g-color); }
+
+        .card h3 {
+            margin-top: 0;
+            font-size: 18px;
+        }
+
+        .card ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+
+        .card li {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .highlight {
+            background-color: #fff8e1;
+            font-weight: bold;
+            padding: 2px 5px;
+            border-radius: 3px;
+            color: #d35400;
+        }
+
+        /* 结论仪表盘 */
+        .dashboard {
+            background: var(--primary-blue);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 40px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            text-align: center;
+        }
+
+        .stat-box h4 {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+
+        .stat-box p {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        /* 用户细分表 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: var(--bg-light);
+            color: var(--primary-blue);
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-right: 5px;
+            background: #e1f5fe;
+            color: #01579b;
+        }
+
+        @media (max-width: 768px) {
+            .grid, .dashboard-grid, .flow-container {
+                grid-template-columns: 1fr;
+                flex-direction: column;
+            }
+            .flow-step:not(:last-child)::after {
+                content: "↓";
+                right: auto;
+                bottom: -15px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+    </style>
+<link rel="canonical" href="https://mintryu.com/presentations/esg-strategy/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"></head>
+<body>
+<a href="/presentations/" style="display:inline-block;margin:18px;padding:8px 14px;border:2px solid #182449;border-radius:9px;background:#fff8e9;color:#182449;text-decoration:none;font:700 14px/1.4 system-ui;box-shadow:3px 4px 0 #182449">← 发表目录</a>
+
+<main class="container">
+    <header>
+        <h1>ESG 经营活动战略设计可视化演示</h1>
+        <div class="subtitle">基于联合分析 (Conjoint Analysis) 的消费者偏好研究</div>
+    </header>
+
+    <h2 class="section-title">研究实验逻辑</h2>
+    <div class="flow-container">
+        <div class="flow-step">
+            <strong>属性筛选</strong><br>
+            <small>文献回顾 + 专家访谈<br>确定 E/S/G 各 4 个属性</small>
+        </div>
+        <div class="flow-step">
+            <strong>正交设计</strong><br>
+            <small>SPSS 算法缩减组合<br>从 16 种降至 9 张方案卡</small>
+        </div>
+        <div class="flow-step">
+            <strong>偏好实验</strong><br>
+            <small>受访者对卡片进行排序<br>模拟真实决策过程</small>
+        </div>
+        <div class="flow-step">
+            <strong>效用推导</strong><br>
+            <small>计算各变量“部分价值”<br>得出重要度排名</small>
+        </div>
+    </div>
+
+    <h2 class="section-title">核心变量矩阵 (⭐ 为消费者最重视)</h2>
+    <div class="grid">
+        <div class="card card-e">
+            <h3 style="color: var(--e-color);">环境 (E)</h3>
+            <ul>
+                <li class="highlight">能源效率化措施 ⭐</li>
+                <li>生物多样性保护</li>
+                <li>气候变化战略</li>
+                <li>资源管理</li>
+            </ul>
+        </div>
+        <div class="card card-s">
+            <h3 style="color: var(--s-color);">社会 (S)</h3>
+            <ul>
+                <li class="highlight">社区参与及影响 ⭐</li>
+                <li>员工福利与公平性</li>
+                <li>人权保护</li>
+                <li>客户关系与管理</li>
+            </ul>
+        </div>
+        <div class="card card-g">
+            <h3 style="color: var(--g-color);">治理 (G)</h3>
+            <ul>
+                <li class="highlight">伦理经营 ⭐</li>
+                <li>高管薪酬与责任</li>
+                <li>股东权利保护与参与</li>
+                <li>董事会构成与独立性</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2 class="section-title">结论：资源有限时的黄金组合</h2>
+    <div class="dashboard">
+        <div class="dashboard-grid">
+            <div class="stat-box">
+                <h4>环境优先项</h4>
+                <p>能源效率</p>
+            </div>
+            <div class="stat-box">
+                <h4>社会优先项</h4>
+                <p>社区参与</p>
+            </div>
+            <div class="stat-box">
+                <h4>治理优先项</h4>
+                <p>伦理经营</p>
+            </div>
+        </div>
+        <p style="text-align: center; margin-top: 20px; font-size: 14px; opacity: 0.9;">
+            💡 结论：企业应优先在这三个领域投入，因为它们能带来最高的消费者感知识别度。
+        </p>
+    </div>
+
+    <h2 class="section-title">差异化市场细分策略</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>细分维度</th>
+                <th>高关注群体</th>
+                <th>核心关注点 (ESG 标签)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>性别</strong></td>
+                <td>女性</td>
+                <td>
+                    <span class="tag">能源效率</span>
+                    <span class="tag">社区参与</span>
+                    <span class="tag">伦理经营</span>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>年龄</strong></td>
+                <td>40-50 代</td>
+                <td>
+                    <span class="tag">能源效率</span>
+                    <span class="tag">伦理经营</span>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>职业</strong></td>
+                <td>职场人士</td>
+                <td>
+                    <span class="tag">能源效率</span>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>职业</strong></td>
+                <td>非职场人士</td>
+                <td>
+                    <span class="tag">生物多样性</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <footer style="margin-top: 40px; font-size: 12px; color: #999; text-align: center;">
+        可视化生成：Gemini | 基于论文《运用联合分析的 ESG 经营活动战略设计方案研究》
+    </footer>
+</main>
+
+</body>
+</html>

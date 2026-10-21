@@ -1,9 +1,21 @@
+// The "mintryu-site" Worker: home-worker/home-worker.mjs in front of the static site in public/.
+// public/ must hold every live file — an asset upload replaces the whole set on Cloudflare.
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "mintryu-site",
+  "main": "home-worker/home-worker.mjs",
   "compatibility_date": "2026-07-13",
   "assets": {
     "directory": "./public",
-    "not_found_handling": "404-page"
-  }
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    // Paths the Worker sees before static assets. Keep in sync with RUN_WORKER_FIRST in home-worker/deploy.mjs.
+    "run_worker_first": [
+      "/", "/works/", "/works/*/", "/presentations/", "/presentations/*/", "/persona-check/",
+      "/robots.txt", "/sitemap.xml", "/sitemap-pages.xml", "/llms.txt", "/avatar.jpg", "/avatar.webp"
+    ]
+  },
+  "services": [
+    { "binding": "BLOG_SERVICE", "service": "mintryu-blog" }
+  ]
 }

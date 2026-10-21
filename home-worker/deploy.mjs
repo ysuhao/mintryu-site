@@ -18,7 +18,7 @@ const API = `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT}/workers/sc
 // Paths the Worker must see before static assets. Anything else is served straight from assets, and a
 // path with no asset gets the 404 page without reaching the Worker.
 const RUN_WORKER_FIRST = [
-  '/', '/works/*/', '/presentations/', '/presentations/*/', '/persona-check/',
+  '/', '/works/', '/works/*/', '/presentations/', '/presentations/*/', '/persona-check/',
   '/robots.txt', '/sitemap.xml', '/sitemap-pages.xml', '/llms.txt', '/avatar.jpg', '/avatar.webp',
 ];
 const EXPECTED_BINDINGS = ['ASSETS:assets', 'BLOG_SERVICE:service'];

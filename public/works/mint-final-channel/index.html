@@ -6,12 +6,12 @@
   <meta name="description" content="Mint 的混音通道条：同时为直播小白和专业创作者设计的双模式 VST3 音频工具。">
   <meta property="og:title" content="Mint制作-调音的终结和最后的通道条">
   <meta property="og:description" content="直播小白可以一键获得干净稳定的声音，专业创作者也能展开完整混音控制。">
-  <meta property="og:image" content="./assets/cover.png">
+  <meta property="og:image" content="https://mintryu.com/works/mint-final-channel/assets/cover.png">
   <meta name="theme-color" content="#050819">
   <title>Mint制作-调音的终结和最后的通道条｜作品展示</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@800;900&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
       color-scheme: dark;
@@ -251,11 +251,37 @@
       footer { flex-direction: column; }
     }
   </style>
+
+  <style id="mint-site-chrome">
+    :root { color-scheme:light; --bg:#fff8e9; --panel:#fffdf8; --text:#182449; --cyan:#4b86bd; --purple:#c85f78; --paper:#fff8e9; --ink:#182449; --muted:#59647f; --pink:#f6b0bb; --pink-deep:#c85f78; --blue:#9bd5f3; --blue-deep:#4b86bd; --line:#182449; --glass:#fffdf8; --shadow-1:5px 6px 0 var(--ink); --shadow-2:7px 8px 0 var(--ink); --font-display:Nunito,"Noto Sans SC","PingFang SC",sans-serif; }
+    body { font-family:"Noto Sans SC","PingFang SC",system-ui,sans-serif; background:var(--paper); background-image:radial-gradient(rgba(24,36,73,.12) 1px,transparent 1px); background-size:20px 20px; }
+    .shell { width:min(1160px,calc(100% - 36px)); }
+    .cover,.shot { border:3px solid var(--ink); box-shadow:7px 8px 0 var(--ink); }
+    .feature { border:0; box-shadow:none; background:transparent; }
+    .status,.fact span,.list,figcaption { color:var(--muted); }
+    .site-nav { flex-wrap:wrap; gap:16px; padding:20px 0; min-height:78px; letter-spacing:0; font-size:15px; border-bottom:3px solid var(--ink); }
+    .site-brand { font:900 28px/1 var(--font-display); color:var(--ink); display:flex; align-items:center; gap:9px; }
+    .site-brand .mark { display:inline-block; width:12px; height:12px; border:2px solid var(--ink); border-radius:50%; background:var(--pink); }
+    .site-links { display:flex; flex-wrap:wrap; gap:20px; }
+    .site-links a { padding:5px 0; font-weight:800; }
+    .site-links a[aria-current="page"] { text-decoration:underline; text-decoration-thickness:3px; text-underline-offset:6px; }
+    .site-nav a:focus-visible { outline:3px dashed var(--ink); outline-offset:5px; }
+    h1,h2,h3 { font-family:var(--font-display); font-weight:900; }
+    .section h2,.launch h2 { font-weight:900; }
+    .gradient { color:var(--pink-deep); background:none; -webkit-text-fill-color:currentColor; }
+    .meta span,.status,.fact,.panel,.feature,.product,.step,.notice,.who,.launch-box { border:3px solid var(--ink); background:#fffdf8; box-shadow:5px 6px 0 var(--ink); backdrop-filter:none; }
+    .meta span,.status { background:#b9e4ce; box-shadow:3px 3px 0 var(--ink); }
+    .cta,.cta-ghost { border:3px solid var(--ink); background:var(--yellow,#ffd866); color:var(--ink); box-shadow:5px 6px 0 var(--ink); }
+    .cta:hover,.cta-ghost:hover { box-shadow:7px 8px 0 var(--ink); }
+    .section { border-top:3px dashed var(--ink); }
+    footer { color:var(--muted); border-top:3px solid var(--ink); letter-spacing:0; }
+    @media(max-width:620px) { .site-nav { gap:12px; } .site-links { gap:16px; font-size:14px; } }
+  </style>
 </head>
 <body>
-  <nav class="shell">
-    <a href="/">Mint<span class="mark">.</span></a>
-    <span>WORK / AUDIO SOFTWARE / 2026</span>
+    <nav class="shell site-nav" aria-label="网站导航">
+    <a class="site-brand" href="/">Mint<span class="mark" aria-hidden="true"></span></a>
+    <div class="site-links"><a href="/">首页</a><a href="/blog">博客</a><a href="/#works" aria-current="page">作品</a><a href="/presentations/">发表</a></div>
   </nav>
 
   <main class="shell">

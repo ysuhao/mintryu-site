@@ -22,11 +22,17 @@
     : '下载卡片';
 
   let answers = [];
+  let currentQuestion = -1;
+  let transitioning = false;
   let preparedCardBlob = null;
 
   function show(name) {
     for (const key of Object.keys(views)) views[key].classList.toggle('hidden', key !== name);
     window.scrollTo(0, 0);
+    const target = name === 'quiz' ? $('quiz-title')
+      : name === 'computing' ? views[name].querySelector('.computing-text')
+      : name === 'home' ? $('btn-start') : views[name];
+    if (target) target.focus({ preventScroll: true });
   }
 
   /* ---------- 首页 ---------- */
@@ -41,6 +47,8 @@
 
   /* ---------- 答题 ---------- */
   function renderQuestion(i) {
+    currentQuestion = i;
+    transitioning = false;
     const q = QUESTIONS[i];
     const inner = $('quiz-inner');
     // 重新触发动画
@@ -55,11 +63,19 @@
     $('opt-a').innerHTML = `<span class="opt-key">A</span>${q.options[0]}`;
     $('opt-b').innerHTML = `<span class="opt-key">B</span>${q.options[1]}`;
 
+    $('opt-a').disabled = false;
+    $('opt-b').disabled = false;
+    $('quiz-title').focus({ preventScroll: true });
+
     $('opt-a').onclick = () => pick(i, 'A');
     $('opt-b').onclick = () => pick(i, 'B');
   }
 
   function pick(i, choice) {
+    if (transitioning || i !== currentQuestion) return;
+    transitioning = true;
+    $('opt-a').disabled = true;
+    $('opt-b').disabled = true;
     answers[i] = choice;
     if (i + 1 < QUESTIONS.length) {
       const inner = $('quiz-inner');
@@ -137,20 +153,33 @@
     $('runner-pct').textContent = `${runnerPct}%`;
     $('reason-list').innerHTML = reasons.map(reason => `<li>${reason}</li>`).join('');
 
-    // 二维码：指向测试首页（不带结果参数）
+    // 二维码是辅助入口，库未加载或绘制失败也不能中断结果展示。
     const qrBox = $('qrcode');
     qrBox.innerHTML = '';
-    new QRCode(qrBox, {
-      text: location.origin + location.pathname,
-      width: 96,
-      height: 96,
-      correctLevel: QRCode.CorrectLevel.M,
-    });
-    // qrcode.js 默认隐藏 Canvas、改用异步 Data URL 图片；直接展示 Canvas 可确保导出稳定。
-    const qrCanvas = qrBox.querySelector('canvas');
-    const qrImage = qrBox.querySelector('img');
-    if (qrCanvas) qrCanvas.style.display = 'block';
-    if (qrImage) qrImage.remove();
+    qrBox.classList.remove('qr-fallback');
+    const entryUrl = location.origin + location.pathname;
+    try {
+      if (typeof QRCode !== 'function') throw new Error('QRCode unavailable');
+      new QRCode(qrBox, {
+        text: entryUrl,
+        width: 96,
+        height: 96,
+        correctLevel: QRCode.CorrectLevel.M,
+      });
+      const qrCanvas = qrBox.querySelector('canvas');
+      const qrImage = qrBox.querySelector('img');
+      if (!qrCanvas) throw new Error('QRCode did not render a canvas');
+      // 直接展示 Canvas，避免图片异步生成影响卡片导出。
+      qrCanvas.style.display = 'block';
+      if (qrImage) qrImage.remove();
+    } catch {
+      qrBox.innerHTML = '';
+      qrBox.classList.add('qr-fallback');
+      const link = document.createElement('a');
+      link.href = entryUrl;
+      link.textContent = 'mintryu.com\n打开人格验牌';
+      qrBox.appendChild(link);
+    }
 
     if (prefersMobileSave) {
       document.querySelector('.share-hint').textContent = '点“保存 / 分享卡片”，可存到照片或发送给好友';
@@ -243,15 +272,30 @@
         <img src="${objectUrl}" alt="人格验牌结果卡片">
         <button type="button">完成</button>
       </div>`;
+    const previousFocus = document.activeElement;
+    const app = $('app');
+    const wasInert = app.inert;
+    app.inert = true;
+    const onKeydown = event => {
+      if (event.key === 'Escape') { event.preventDefault(); close(); }
+      if (event.key === 'Tab') {
+        event.preventDefault();
+        overlay.querySelector('button').focus();
+      }
+    };
     const close = () => {
+      document.removeEventListener('keydown', onKeydown);
+      app.inert = wasInert;
       overlay.remove();
       document.body.classList.remove('preview-open');
       URL.revokeObjectURL(objectUrl);
+      if (previousFocus && previousFocus.isConnected) previousFocus.focus();
     };
     overlay.querySelector('button').addEventListener('click', close);
     overlay.addEventListener('click', event => { if (event.target === overlay) close(); });
     document.body.classList.add('preview-open');
     document.body.appendChild(overlay);
+    document.addEventListener('keydown', onKeydown);
     overlay.querySelector('button').focus();
   }
 

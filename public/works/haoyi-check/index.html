@@ -17,6 +17,9 @@
 </head>
 <body>
   <main id="app">
+    <nav class="site-return" aria-label="网站导航">
+      <a href="/">← 首页</a><a href="/#works">作品集 ↗</a>
+    </nav>
 
     <!-- 首页 -->
     <section id="view-home" class="view">
@@ -47,7 +50,7 @@
           <p id="quiz-step" class="quiz-step"></p>
           <span id="quiz-tag" class="quiz-tag"></span>
         </div>
-        <h2 id="quiz-title" class="quiz-title"></h2>
+        <h2 tabindex="-1" id="quiz-title" class="quiz-title"></h2>
         <div id="options" class="options" role="group" aria-label="选项"></div>
       </div>
     </section>
@@ -56,13 +59,13 @@
     <section id="view-computing" class="view hidden">
       <div class="computing-inner">
         <div class="spinner" aria-hidden="true"></div>
-        <p class="computing-text">豪意扫描中<span id="dots"></span></p>
+        <p class="computing-text" tabindex="-1" role="status">豪意扫描中<span id="dots"></span></p>
         <p class="computing-sub">正在核对虚空打碟参数…</p>
       </div>
     </section>
 
     <!-- 结果 -->
-    <section id="view-result" class="view hidden">
+    <section id="view-result" class="view hidden" tabindex="-1" aria-label="检测结果">
       <article class="result-card" id="result-card">
         <div id="result-hero" class="result-hero accent-pink">
           <p class="score-label">HAOYI VALUE</p>
@@ -86,7 +89,7 @@
               <span>豪意浓度</span>
               <strong id="meter-value">0 / 100</strong>
             </div>
-            <div class="meter-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-label="豪意值">
+            <div class="meter-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="豪意值">
               <div id="meter-fill" class="meter-fill"></div>
             </div>
           </div>

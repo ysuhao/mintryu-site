@@ -44,22 +44,20 @@
     if (flags.forceZizai) return { id: 'zizai', name: '自在极意型' };
 
     const scoreAt = (idx) => getOption(idx, answers[idx]).score;
+    const normalized = (indices) => {
+      const score = indices.reduce((sum, idx) => sum + scoreAt(idx), 0);
+      const maximum = indices.reduce((sum, idx) =>
+        sum + Math.max(...Data.QUESTIONS[idx].options.map(option => option.score)), 0);
+      return maximum > 0 ? score / maximum : 0;
+    };
 
-    // 氛围：Q1 穿搭、Q2 打碟、Q3 雨中、Q8 耳机、Q12 健身仪式
-    const vibe = scoreAt(0) + scoreAt(1) + scoreAt(2) + scoreAt(7) + scoreAt(11);
-    // 死装：Q4 中英夹杂、Q6 朋友圈、Q7 金融科技
-    const pose = scoreAt(3) + scoreAt(5) + scoreAt(6);
-    // 小众：Q9 头像、Q10 口头禅、Q11 音乐
-    const niche = scoreAt(8) + scoreAt(9) + scoreAt(10);
-    // 凝视：Q13 评论、Q15 凝视他人
-    const gaze = scoreAt(12) + (answers[14] === 'A' ? 4 : 0);
-
-    // 归一到可比较量级（各桶满分不同）
+    // 从每个题目的选项计算满分，题库调整时仍保持各类型可比较。
     const buckets = [
-      { id: 'vibe', name: '氛围型', n: vibe / 40 },
-      { id: 'pose', name: '死装型', n: pose / 24 },
-      { id: 'niche', name: '小众型', n: niche / 12 },
-      { id: 'gaze', name: '凝视型', n: gaze / 8 },
+      { id: 'vibe', name: '氛围型', n: normalized([0, 1, 2, 7, 11]) },
+      { id: 'pose', name: '死装型', n: normalized([3, 5, 6]) },
+      { id: 'niche', name: '小众型', n: normalized([8, 9, 10]) },
+      { id: 'gaze', name: '凝视型', n: (scoreAt(12) + (answers[14] === 'A' ? 4 : 0)) /
+        (Math.max(...Data.QUESTIONS[12].options.map(option => option.score)) + 4) },
     ];
     buckets.sort((a, b) => b.n - a.n);
     return { id: buckets[0].id, name: buckets[0].name };
@@ -116,12 +114,17 @@
     };
   }
 
+  function shareUrl(result) {
+    const base = typeof location !== 'undefined'
+      ? `${location.origin}${location.pathname}${location.hash || ''}`
+      : 'https://mintryu.com/works/haoyi-check/';
+    const url = new URL(base);
+    url.searchParams.set('r', result.bits);
+    return url.href;
+  }
+
   function shareText(result) {
-    const base =
-      typeof location !== 'undefined'
-        ? `${location.origin}${location.pathname}`
-        : 'https://mintryu.com/works/haoyi-check/';
-    return `我的豪意值 ${result.haoyi}，${result.tier.name}。来测测你几分 👉 ${base}`;
+    return `我的豪意值 ${result.haoyi}，${result.tier.name}。来测测你几分 👉 ${shareUrl(result)}`;
   }
 
   return {
@@ -130,6 +133,7 @@
     isValidBits,
     compute,
     shareText,
+    shareUrl,
     pickTier,
     KEYS,
   };

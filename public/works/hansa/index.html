@@ -6,9 +6,10 @@
   <meta name="description" content="HANSA 韩学事：为高丽大学首尔与世宗校区留学生整理公告、课表、作业和 A 饭记录的独立个人项目。">
   <meta property="og:title" content="HANSA 韩学事｜高丽大学留学生助手">
   <meta property="og:description" content="公告、课表、作业与 A 饭，收进一款轻量校园助手。">
-  <meta property="og:image" content="https://mintryu.com/works/hansa/assets/cover.png">
+  <meta property="og:image" content="https://mintryu.com/works/hansa/assets/paper-cover.png">
   <meta name="theme-color" content="#fff8e9">
   <title>HANSA 韩学事｜Mint 的个人项目</title>
+  <link rel="icon" type="image/svg+xml" href="/works/hansa/assets/hansa-icon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
@@ -60,7 +61,10 @@
       display: inline-flex; align-items: center; gap: 9px; text-decoration: none;
       font: 900 22px/1 var(--font-display); letter-spacing: -.04em;
     }
-    .brand-dot { width: 11px; height: 11px; border: 2px solid var(--ink); border-radius: 50%; background: var(--mint); }
+    .brand-dot { width: 11px; height: 11px; border: 2px solid var(--ink); border-radius: 50%; background: var(--pink); }
+    .app-brand { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+    .app-brand img { width: 68px; height: 68px; border: 2px solid var(--ink); border-radius: 20px 17px 22px 16px; box-shadow: 4px 5px 0 var(--ink); transform: rotate(-4deg); }
+    .release-note { display: inline-block; padding: 9px 13px; margin: 8px 0 4px; border: 2px solid var(--ink); border-radius: 10px; background: var(--yellow); font-size: 13px; font-weight: 900; box-shadow: 3px 3px 0 var(--ink); }
     .back-link {
       display: inline-flex; align-items: center; gap: 7px; padding: 9px 14px;
       border: 1px solid var(--line); border-radius: 999px; background: var(--white);
@@ -333,24 +337,25 @@
       <!-- hero -->
       <section class="hero" aria-labelledby="hero-title">
         <div>
-          <p class="eyebrow">HANSA · 韩学事 · 独立个人项目</p>
+          <div class="app-brand"><img src="/works/hansa/assets/hansa-icon.svg" alt="HANSA 校园手账图标"><p class="eyebrow">HANSA · 韩学事 · 独立个人项目</p></div>
           <h1 id="hero-title">韩国留学日常，<br><em>HANSA</em> 陪你从容一点。</h1>
           <p class="hero-lead">把分散的<strong>学校公告</strong>整理清楚，也把课表、作业与聚餐账单放在一起。<strong>HANSA 韩学事</strong>——为在韩留学生做的轻量校园助手。</p>
+          <p class="release-note">新版 1.1.0 · 2026.10.02 · 纸感界面与全新图标</p>
           <ul class="hero-facts">
             <li><b>已接入</b>高丽大学 · 首尔 / 世宗</li>
             <li><b>平台</b>Android（夸克网盘分发）</li>
             <li><b>性质</b>独立个人项目</li>
           </ul>
           <div class="hero-actions">
-            <a class="btn-download" href="https://pan.quark.cn/s/e7a943fa295b" target="_blank" rel="noopener noreferrer">
+            <a class="btn-download" href="https://pan.quark.cn/s/d555ae6fd739" target="_blank" rel="noopener noreferrer">
               <img src="/works/hansa/assets/quark-netdisk.png" alt="夸克网盘图标">
-              <span>夸克网盘下载<small>HANSA 最新 Android 版本</small></span>
+              <span>夸克网盘下载<small>Android 1.1.0 · 2026.10.02</small></span>
             </a>
             <a class="btn-ghost" href="#video">观看介绍视频 <span aria-hidden="true">↓</span></a>
           </div>
         </div>
         <figure class="hero-figure">
-          <div class="frame"><img src="/works/hansa/assets/cover.png" alt="HANSA 韩学事应用界面封面图" width="1672" height="941" fetchpriority="high"></div>
+          <div class="frame"><img src="/works/hansa/assets/paper-cover.png" alt="HANSA 1.1.0 纸感校园手账界面" width="1280" height="1000" fetchpriority="high"></div>
           <figcaption><span>HANSA 韩学事 · Android</span><span>오늘의 학사 소식</span></figcaption>
         </figure>
       </section>
@@ -360,7 +365,7 @@
         <div class="section-head">
           <p class="section-kicker">What it does</p>
           <h2 id="features-title">四件每天都会用到的事</h2>
-          <p>不是再造一个学校门户，而是把你每天真正要处理的信息，按轻重缓急排好。以下截图均来自真实应用界面。</p>
+          <p>不是再造一个学校门户，而是把你每天真正要处理的信息，按轻重缓急排好。截图来自新版应用；课程、作业、昵称和账单均为示例数据。</p>
         </div>
 
         <article class="feature">
@@ -371,7 +376,7 @@
           </div>
           <div class="feature-media">
             <figure class="shot accent-pink">
-              <img src="/works/hansa/assets/screen-today.png" alt="HANSA 今日页面：按截止紧迫度排列的公告卡片" loading="lazy" width="462" height="1000">
+              <img src="/works/hansa/assets/paper-today.png" alt="HANSA 今日页面：作业优先与学校公告" loading="lazy" width="390" height="844">
               <figcaption>「今日」：紧迫度着色的公告卡片</figcaption>
             </figure>
           </div>
@@ -386,12 +391,12 @@
           </div>
           <div class="feature-media">
             <figure class="shot accent-blue">
-              <img src="/works/hansa/assets/screen-schedule.png" alt="HANSA 课表页面：按星期排列的课程卡片" loading="lazy" width="462" height="1000">
+              <img src="/works/hansa/assets/paper-schedule.png" alt="HANSA 纸感周课表与课程卡片" loading="lazy" width="390" height="844">
               <figcaption>周课表 · 我的课程</figcaption>
             </figure>
             <figure class="shot tall accent-yellow">
-              <img src="/works/hansa/assets/screen-assignment.png" alt="HANSA 添加作业对话框：选择课程、填写内容与截止时间" loading="lazy" width="462" height="1000">
-              <figcaption>从课程直接添加作业</figcaption>
+              <img src="/works/hansa/assets/paper-profile.png" alt="HANSA 修改昵称与上传头像的纸感弹窗" loading="lazy" width="390" height="844">
+              <figcaption>自己的昵称与头像</figcaption>
             </figure>
           </div>
         </article>
@@ -404,7 +409,7 @@
           </div>
           <div class="feature-media">
             <figure class="shot accent-mint">
-              <img src="/works/hansa/assets/screen-split.png" alt="HANSA A 饭页面：总额、每人分摊金额与自动 AA" loading="lazy" width="462" height="1000">
+              <img src="/works/hansa/assets/paper-split.png" alt="HANSA A 饭页面：总额、单独分摊与自动 AA" loading="lazy" width="390" height="844">
               <figcaption>「A 饭」：按人头分摊韩元账单</figcaption>
             </figure>
           </div>
@@ -419,7 +424,7 @@
           </div>
           <div class="feature-media">
             <figure class="shot accent-blue">
-              <img src="/works/hansa/assets/screen-community.png" alt="HANSA 同学板块：发帖与空状态提示" loading="lazy" width="462" height="1000">
+              <img src="/works/hansa/assets/paper-community.png" alt="HANSA 纸感同学讨论板块示例" loading="lazy" width="390" height="844">
               <figcaption>「同学」板块 · 本机原型</figcaption>
             </figure>
           </div>
@@ -431,7 +436,7 @@
         <div class="section-head">
           <p class="section-kicker">Video</p>
           <h2 id="video-title">看看 HANSA</h2>
-          <p>通过一段演示，认识 HANSA 的校园日常。</p>
+          <p>通过一段演示，认识 HANSA 的校园日常。视频为早期版本演示，新版界面以本页截图为准。</p>
         </div>
         <div class="video-card">
           <div class="video-stage" id="video-stage">
@@ -509,16 +514,16 @@
             <h2 id="download-title">下载 HANSA</h2>
             <p class="sub">安装包通过夸克网盘分发。首次打开时选择学校与就读阶段，即可进入「今日」——这些信息只保存在你自己的设备上，可随时切换。</p>
             <div class="download-actions">
-            <a class="btn-download" href="https://pan.quark.cn/s/e7a943fa295b" target="_blank" rel="noopener noreferrer">
+            <a class="btn-download" href="https://pan.quark.cn/s/d555ae6fd739" target="_blank" rel="noopener noreferrer">
               <img src="/works/hansa/assets/quark-netdisk.png" alt="夸克网盘图标">
-              <span>夸克网盘下载<small>HANSA 最新 Android 版本</small></span>
+              <span>夸克网盘下载<small>Android 1.1.0 · 2026.10.02</small></span>
               </a>
               <a class="btn-ghost" href="mailto:me@mintryu.com?subject=HANSA%20%E9%9F%A9%E5%AD%A6%E4%BA%8B%E5%8F%8D%E9%A6%88">写信反馈 <span aria-hidden="true">↗</span></a>
             </div>
-            <p class="download-fine">Android 安装包 · 数据仅保存在你自己的设备上</p>
+            <p class="download-fine">Android 1.1.0 测试版 · 约 3.3 MB · 更新日期 2026.10.02<br>建议直接覆盖安装旧版，不要先卸载；卸载会清除本机课表、作业和账单。iOS 尚未提供签名安装包。</p>
           </div>
           <figure class="shot accent-yellow download-figure">
-            <img src="/works/hansa/assets/screen-school.png" alt="HANSA 首次使用页面：选择学校校区与就读阶段" loading="lazy" width="462" height="1000">
+            <img src="/works/hansa/assets/paper-school.png" alt="HANSA 首次使用页面：选择学校校区与就读阶段" loading="lazy" width="390" height="844">
             <figcaption>首次使用：告诉 HANSA 你在哪所学校</figcaption>
           </figure>
         </div>
