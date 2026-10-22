@@ -68,6 +68,7 @@ const PRESENTATIONS = "/presentations/";
 const PAGES = {
   "/works/": { name: "其他作品", collection: true },
   "/presentations/": { name: "发表目录", collection: true },
+  "/presentations/figma-ax/": { parent: PRESENTATIONS, presentation: true },
   "/presentations/jochiwon-bm/": { parent: PRESENTATIONS, presentation: true },
   "/presentations/jwcc-ucm/": { parent: PRESENTATIONS, presentation: true, description: "JEDI에서 JWCC, 그리고 UCM까지. 미 국방부의 클라우드 구매 방식이 어떻게 바뀌었고 정보시스템 관리에 어떤 과제를 남겼는지 다룬 고려대학교 MIS 발표입니다." },
   "/presentations/geo-interactive/": { parent: PRESENTATIONS, presentation: true },
@@ -166,7 +167,7 @@ async function llmsTxt(env) {
     `- [AI 订阅向导 mintguide](https://ai.mintryu.com/)：面向中国大陆新手的 ChatGPT / Claude / Grok / Gemini 订阅准备向导；介绍页 ${SITE_ORIGIN}/works/ai-guide/`,
     `- [豪意值检测](${SITE_ORIGIN}/works/haoyi-check/)：15 道题的自嘲向互动测验`,
     `- [人格验牌](${SITE_ORIGIN}/persona-check/)：16 道站队题的中文互联网圈层测验`,
-    `- [发表目录](${SITE_ORIGIN}/presentations/)：课堂发表与互动演示（Yext B2B SaaS 商业模式、JWCC UCM、AI Agent 与 GEO、ESG 联合分析）`
+    `- [发表目录](${SITE_ORIGIN}/presentations/)：课堂发表与互动演示（Figma AX 与 AI 时代的工具生存、Yext B2B SaaS 商业模式、JWCC UCM、AI Agent 与 GEO、ESG 联合分析）`
   ];
   const postLines = posts.length
     ? posts.map((post) => {
