@@ -37,6 +37,10 @@ const PROJECTS = [
     entity: { "@type": "SoftwareApplication", "@id": "https://mignet.mintryu.com/#app", name: "mignet", url: "https://mignet.mintryu.com/", applicationCategory: "BusinessApplication", operatingSystem: "Windows 10, Windows 11", isAccessibleForFree: true, license: "https://www.gnu.org/licenses/gpl-3.0.html", codeRepository: "https://github.com/ysuhao/mignet", description: "常驻 Windows 桌面的实体印章：在 Word 文档上拿起、瞄准、单击落章。免费下载，GPLv3 开源。" }
   },
   {
+    links: ["https://melorb.mintryu.com/"],
+    entity: { "@type": "SoftwareApplication", "@id": "https://melorb.mintryu.com/#app", name: "Melorb 弥洛", url: "https://melorb.mintryu.com/", applicationCategory: "MultimediaApplication", operatingSystem: "Windows", description: "开发中的 Windows 直播混音声卡机架：用 Stream 与 Monitor 母泡安排观众和自己听到的混音，每份分身有独立效果链。尚未开放下载。" }
+  },
+  {
     links: [`${SITE_ORIGIN}/works/hansa/`],
     entity: { "@type": "MobileApplication", "@id": `${SITE_ORIGIN}/works/hansa/#app`, name: "HANSA 韩学事", url: `${SITE_ORIGIN}/works/hansa/`, applicationCategory: "EducationalApplication", operatingSystem: "Android", softwareVersion: "1.1.0", description: "为高丽大学首尔与世宗校区留学生整理学校公告、课表、作业和 A 饭记账的校园助手。" }
   },
@@ -161,6 +165,7 @@ async function llmsTxt(env) {
   const projectLines = [
     "- [Mintaria 萌音](https://mintaria.mintryu.com/)：免费的 Windows 本地实时 AI 变声软件，声音在本机处理、不上传；版本、音色、价格与下载以官网为准，详见 https://mintaria.mintryu.com/llms.txt",
     "- [mignet](https://mignet.mintryu.com/)：常驻 Windows 桌面的实体印章，在 Word 文档上拿起、瞄准、单击落章；免费下载，GPLv3 开源（https://github.com/ysuhao/mignet）",
+    "- [Melorb 弥洛](https://melorb.mintryu.com/)：开发中的 Windows 直播混音声卡机架，用 Stream 与 Monitor 母泡分开观众和自己听到的混音；尚未开放下载，详见 https://melorb.mintryu.com/llms.txt",
     "- [Mint 同传](https://live.mintryu.com/)：韩语与普通话双向实时语音同传，扫码收听与查看字幕",
     `- [HANSA 韩学事](${SITE_ORIGIN}/works/hansa/)：为高丽大学首尔与世宗校区留学生整理学校公告、课表、作业和 A 饭记账的 Android 校园助手`,
     `- [Mint Final Channel](${SITE_ORIGIN}/works/mint-final-channel/)：同时为直播新手和专业创作者设计的双模式 VST3 混音通道条（开发中）；0.1.0 Windows x64 版与 MIT 开源代码见 https://github.com/ysuhao/mint-final-channel`,

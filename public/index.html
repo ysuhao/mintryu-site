@@ -206,7 +206,7 @@
     .app-name span { color: var(--muted); font-weight: 300; }
     .app-desc { margin: 0 4px; color: var(--muted); font-size: 13px; line-height: 1.5; }
     .app-meta { margin: auto 4px 0; padding-top: 10px; color: var(--dim); font-size: 10px; }
-    .app.is-soon { cursor: default; }
+    div.app.is-soon { cursor: default; }
 
     /* everything else stays folded into one line that opens /works/ */
     .more {
@@ -531,13 +531,14 @@
             </a>
           </li>
           <li>
-            <div class="app is-soon">
+            <a class="app is-soon" href="https://melorb.mintryu.com/">
               <span class="app-art"><img src="/images/melorb.jpg" alt="" width="720" height="480"></span>
               <span class="app-tag mono">Soon</span>
+              <span class="app-go" aria-hidden="true">↗</span>
               <span class="app-name">Melorb <span>弥洛</span></span>
               <span class="app-desc">直播混音声卡机架</span>
               <span class="app-meta mono">C++20 · In dev</span>
-            </div>
+            </a>
           </li>
         </ul>
 
