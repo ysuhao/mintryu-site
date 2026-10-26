@@ -34,6 +34,14 @@ npm run deploy                   # = wrangler deploy --keep-vars
 set or rotate them with `npx wrangler secret put ADMIN_PASSWORD` (never commit them). Don't change the routes or the KV
 binding here unless you intend to change production.
 
+## Post index
+
+Public pages (`/blog`, posts, RSS, sitemap, `/api/blog/posts`) read every post from the single KV key `index:posts`
+instead of listing `post:*` keys, because the free plan allows only 1,000 KV lists a day and each list used to cost
+one per page view. Admin saves, renames and deletes rewrite the index; it expires after an hour and the next request
+rebuilds it from `post:*`, so a post edited straight in KV appears within an hour. The admin post list still scans
+`post:*` directly.
+
 ## Article sharing metadata
 
 `blogPost()` adds description, canonical, hreflang alternates, Open Graph and Twitter card tags. All URLs are built

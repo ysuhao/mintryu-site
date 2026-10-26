@@ -222,7 +222,12 @@ function inlineMarkdown(value: string): string {
   }
   return result + escapeHtml(value.slice(last));
 }
-async function listPosts(env: Env, includeDrafts = false): Promise<Post[]> {
+// Every post is copied into one KV value, so a public page costs one read instead of a list plus a read per post
+// (the free plan allows 1,000 lists a day). Admin saves and deletes rewrite it, and it expires after an hour so a
+// post edited straight in KV still shows up.
+const POST_INDEX_KEY = "index:posts";
+const POST_INDEX_TTL = 60 * 60;
+async function scanPosts(env: Env): Promise<Post[]> {
   const keys: KVNamespaceListKey<unknown>[] = [];
   let cursor: string | undefined;
   do {
@@ -230,7 +235,24 @@ async function listPosts(env: Env, includeDrafts = false): Promise<Post[]> {
     keys.push(...page.keys);
     cursor = page.list_complete ? void 0 : page.cursor;
   } while (cursor);
-  const posts = (await Promise.all(keys.map((key) => env.BLOG_DATA.get<Post>(key.name, "json")))).filter((post): post is Post => Boolean(post));
+  return (await Promise.all(keys.map((key) => env.BLOG_DATA.get<Post>(key.name, "json")))).filter((post): post is Post => Boolean(post));
+}
+async function savePostIndex(env: Env, posts: Post[]): Promise<void> {
+  await env.BLOG_DATA.put(POST_INDEX_KEY, JSON.stringify(posts), { expirationTtl: POST_INDEX_TTL });
+}
+// A list right after a write can still miss the new key or return a deleted one, so the change is applied on top of the scan.
+async function refreshPostIndex(env: Env, saved: Post | null, removed: string[]): Promise<void> {
+  const drop = new Set(saved ? [...removed, saved.slug] : removed);
+  const posts = (await scanPosts(env)).filter((post) => !drop.has(post.slug));
+  await savePostIndex(env, saved ? [...posts, saved] : posts);
+}
+async function listPosts(env: Env, includeDrafts = false): Promise<Post[]> {
+  let posts = includeDrafts ? null : await env.BLOG_DATA.get<Post[]>(POST_INDEX_KEY, "json");
+  if (!posts) {
+    posts = await scanPosts(env);
+    // Best effort: requests rebuilding at the same moment can hit KV's limit of one write per second to a key.
+    await savePostIndex(env, posts).catch(() => void 0);
+  }
   return posts.filter((post) => includeDrafts || post.status === "published").sort((a, b) => Date.parse(b.publishedAt ?? b.updatedAt) - Date.parse(a.publishedAt ?? a.updatedAt));
 }
 async function getPost(env: Env, slug: string): Promise<Post | null> {
@@ -598,13 +620,14 @@ async function handleApi(request: Request, env: Env, url: URL): Promise<Response
     if (coverUrl && !absoluteShareImage(coverUrl)) return json({ error: "\u5C01\u9762\u5FC5\u987B\u662F\u672C\u7AD9\u5A92\u4F53\u5730\u5740\u6216 HTTPS \u56FE\u7247\u7F51\u5740" }, 400);
     const now = (/* @__PURE__ */ new Date()).toISOString();
     const status = body.status === "published" ? "published" : "draft";
-    const post = { title, slug, excerpt: (body.excerpt ?? "").trim().slice(0, 500), content: (body.content ?? "").slice(0, 1e5), coverUrl: coverUrl.slice(0, 500), status, createdAt: existing?.createdAt ?? now, updatedAt: now, publishedAt: status === "published" ? existing?.publishedAt ?? now : null, translations: sanitizeTranslations(body.translations) ?? existing?.translations };
+    const post: Post = { title, slug, excerpt: (body.excerpt ?? "").trim().slice(0, 500), content: (body.content ?? "").slice(0, 1e5), coverUrl: coverUrl.slice(0, 500), status, createdAt: existing?.createdAt ?? now, updatedAt: now, publishedAt: status === "published" ? existing?.publishedAt ?? now : null, translations: sanitizeTranslations(body.translations) ?? existing?.translations };
     if (existing) await env.BLOG_DATA.put(`backup:${oldSlug}:${crypto.randomUUID()}`, JSON.stringify(existing));
     await env.BLOG_DATA.put(`post:${slug}`, JSON.stringify(post));
     if (oldSlug && oldSlug !== slug) {
       await env.BLOG_DATA.put(`redirect:${oldSlug}`, slug);
       await env.BLOG_DATA.delete(`post:${oldSlug}`);
     }
+    await refreshPostIndex(env, post, oldSlug && oldSlug !== slug ? [oldSlug] : []);
     return json({ post });
   }
   if (url.pathname.startsWith("/api/blog/admin/posts/") && request.method === "DELETE") {
@@ -612,6 +635,7 @@ async function handleApi(request: Request, env: Env, url: URL): Promise<Response
     const existing = await getPost(env, slug);
     if (existing) await env.BLOG_DATA.put(`backup:${slug}:${crypto.randomUUID()}`, JSON.stringify(existing));
     await env.BLOG_DATA.delete(`post:${slug}`);
+    await refreshPostIndex(env, null, [slug]);
     return json({ ok: true });
   }
   if (url.pathname === "/api/blog/admin/upload" && request.method === "POST") {

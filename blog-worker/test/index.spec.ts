@@ -52,6 +52,35 @@ describe('mintryu blog worker', () => {
     expect(articleHtml).toContain('<img class="article-image" src="/media/example.png" alt="线路截图" loading="lazy" decoding="async">');
   });
 
+  it('serves public pages from the post index and keeps it in step with admin saves, renames and deletes', async () => {
+    const login = await SELF.fetch('https://mintryu.com/api/blog/login', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', origin: 'https://mintryu.com' },
+      body: JSON.stringify({ password: env.ADMIN_PASSWORD }),
+    });
+    const headers = { 'content-type': 'application/json', origin: 'https://mintryu.com', cookie: login.headers.get('set-cookie') ?? '' };
+    const save = (post: Record<string, string>) => SELF.fetch('https://mintryu.com/api/blog/admin/posts', { method: 'POST', headers, body: JSON.stringify({ excerpt: '', content: '正文', status: 'published', ...post }) });
+    const index = async () => (await SELF.fetch('https://mintryu.com/blog')).text();
+
+    expect((await save({ title: '索引一', slug: 'index-one' })).status).toBe(200);
+    expect(await index()).toContain('索引一');
+    expect(await env.BLOG_DATA.get('index:posts')).toContain('index-one');
+
+    // Written straight into KV, so it stays off the list until the index is rewritten: pages no longer list keys.
+    const now = new Date().toISOString();
+    await env.BLOG_DATA.put('post:outside', JSON.stringify({ title: '外部写入', slug: 'outside', excerpt: '', content: 'x', coverUrl: '', status: 'published', createdAt: now, updatedAt: now, publishedAt: now }));
+    expect(await index()).not.toContain('外部写入');
+
+    expect((await save({ title: '索引二', slug: 'index-two' })).status).toBe(200);
+    expect((await save({ title: '索引二改名', slug: 'index-renamed', oldSlug: 'index-two' })).status).toBe(200);
+    expect((await SELF.fetch('https://mintryu.com/api/blog/admin/posts/index-one', { method: 'DELETE', headers, body: '{}' })).status).toBe(200);
+    const page = await index();
+    expect(page).toContain('外部写入');
+    expect(page).toContain('href="/blog/index-renamed"');
+    expect(page).not.toContain('href="/blog/index-two"');
+    expect(page).not.toContain('索引一');
+  });
+
   it('renders the selected article translation without changing the Chinese original', async () => {
     const login = await SELF.fetch('https://mintryu.com/api/blog/login', {
       method: 'POST',
