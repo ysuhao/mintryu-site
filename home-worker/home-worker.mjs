@@ -33,6 +33,10 @@ const PROJECTS = [
     entity: { "@type": "SoftwareApplication", "@id": "https://mintaria.mintryu.com/#app", name: "Mintaria 萌音", url: "https://mintaria.mintryu.com/", applicationCategory: "MultimediaApplication", operatingSystem: "Windows x64", isAccessibleForFree: true, description: "免费的 Windows 本地实时 AI 变声软件，声音在本机处理、不上传，适合游戏开黑、语音聊天和直播。" }
   },
   {
+    links: ["https://mintaria.mintryu.com/android/"],
+    entity: { "@type": "MobileApplication", "@id": "https://mintaria.mintryu.com/android/#app", name: "Mintaria Mobile（Mintaria 安卓版）", url: "https://mintaria.mintryu.com/android/", applicationCategory: "MultimediaApplication", operatingSystem: "Android 8.0+", description: "安卓手机上的录音变声 App：录一段话，在手机里变成另一个声音再播放，方便发微信、QQ 语音。不用 root，声音只在手机里处理。一次买断，与电脑版分开购买。" }
+  },
+  {
     links: ["https://mignet.mintryu.com/"],
     entity: { "@type": "SoftwareApplication", "@id": "https://mignet.mintryu.com/#app", name: "mignet", url: "https://mignet.mintryu.com/", applicationCategory: "BusinessApplication", operatingSystem: "Windows 10, Windows 11", isAccessibleForFree: true, license: "https://www.gnu.org/licenses/gpl-3.0.html", codeRepository: "https://github.com/ysuhao/mignet", description: "常驻 Windows 桌面的实体印章：在 Word 文档上拿起、瞄准、单击落章。免费下载，GPLv3 开源。" }
   },
@@ -164,6 +168,7 @@ async function llmsTxt(env) {
   }
   const projectLines = [
     "- [Mintaria 萌音](https://mintaria.mintryu.com/)：免费的 Windows 本地实时 AI 变声软件，声音在本机处理、不上传；版本、音色、价格与下载以官网为准，详见 https://mintaria.mintryu.com/llms.txt",
+    "- [Mintaria Mobile（安卓版）](https://mintaria.mintryu.com/android/)：安卓手机上的录音变声 App，录一段话在手机里换个声音，方便发微信、QQ 语音；不用 root，声音只在手机里处理，一次买断，与电脑版分开购买",
     "- [mignet](https://mignet.mintryu.com/)：常驻 Windows 桌面的实体印章，在 Word 文档上拿起、瞄准、单击落章；免费下载，GPLv3 开源（https://github.com/ysuhao/mignet）",
     "- [Melorb 弥洛](https://melorb.mintryu.com/)：开发中的 Windows 直播混音声卡机架，用 Stream 与 Monitor 母泡分开观众和自己听到的混音；尚未开放下载，详见 https://melorb.mintryu.com/llms.txt",
     "- [Mint 同传](https://live.mintryu.com/)：韩语与普通话双向实时语音同传，扫码收听与查看字幕",
