@@ -388,14 +388,17 @@
     .class-list a:hover .arrow { transform: translate(2px, -2px); }
 
     .contact { list-style: none; margin: 0; padding: 0; }
-    .contact a {
+    .contact a, .contact button {
       display: grid; grid-template-columns: 110px minmax(0, 1fr) auto; gap: 18px; align-items: baseline;
       padding: 14px 4px; border-bottom: 1px solid var(--line); text-decoration: none;
     }
+    .contact button { width: 100%; border: 0; border-bottom: 1px solid var(--line); background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
     .contact .mono { color: var(--dim); }
     .contact span:nth-child(2) { font-size: 17px; transition: color .2s; }
     .contact .arrow { color: var(--dim); }
-    .contact a:hover span:nth-child(2), .contact a:hover .arrow { color: var(--accent); }
+    .contact button .arrow { font-size: 12px; }
+    .contact a:hover span:nth-child(2), .contact a:hover .arrow,
+    .contact button:hover span:nth-child(2), .contact button:hover .arrow, .contact button.is-copied .arrow { color: var(--accent); }
 
     .thanks { padding: 44px 0 0; border-top: 1px solid var(--line); text-align: center; }
     .thanks .mono { color: var(--dim); }
@@ -458,7 +461,7 @@
       .more-names { display: none; }
       .posts a { grid-template-columns: minmax(0, 1fr) auto; }
       .posts time { grid-column: 1 / -1; }
-      .contact a { grid-template-columns: 76px minmax(0, 1fr) auto; }
+      .contact a, .contact button { grid-template-columns: 76px minmax(0, 1fr) auto; }
       .contact span:nth-child(2) { font-size: 15px; overflow-wrap: anywhere; }
       .facts div { grid-template-columns: 72px minmax(0, 1fr); }
     }
@@ -552,7 +555,7 @@
         <nav class="links mono" aria-label="快速链接">
           <a href="#about">关于</a><span aria-hidden="true">·</span>
           <a href="#writing">文章</a><span aria-hidden="true">·</span>
-          <a href="mailto:me@mintryu.com">Email</a><span aria-hidden="true">·</span>
+          <a href="#contact">联系</a><span aria-hidden="true">·</span>
           <a href="https://x.com/Ryusoohow" target="_blank" rel="noopener noreferrer">X</a><span aria-hidden="true">·</span>
           <a href="https://www.youtube.com/@mint8733" target="_blank" rel="noopener noreferrer">YouTube</a>
         </nav>
@@ -698,6 +701,8 @@
       <section class="block" id="contact" aria-labelledby="contact-title">
         <h2 class="block-label mono" id="contact-title">Contact<span>想说点什么？</span></h2>
         <ul class="contact">
+          <li><button type="button" data-copy="KwonNayeon"><span class="mono">WeChat</span><span>KwonNayeon</span><span class="arrow">复制</span></button></li>
+          <li><button type="button" data-copy="4362111"><span class="mono">QQ</span><span>4362111</span><span class="arrow">复制</span></button></li>
           <li><a href="mailto:me@mintryu.com"><span class="mono">Email</span><span>me@mintryu.com</span><span class="arrow" aria-hidden="true">↗</span></a></li>
           <li><a href="https://x.com/Ryusoohow" target="_blank" rel="noopener noreferrer"><span class="mono">X</span><span>@Ryusoohow</span><span class="arrow" aria-hidden="true">↗</span></a></li>
           <li><a href="https://www.youtube.com/@mint8733" target="_blank" rel="noopener noreferrer"><span class="mono">YouTube</span><span>@mint8733</span><span class="arrow" aria-hidden="true">↗</span></a></li>
@@ -1189,6 +1194,18 @@
       document.addEventListener('visibilitychange', () => { if (!document.hidden) load(); });
       load();
     })();
+
+    // WeChat and QQ have no web link, so their contact rows copy the ID instead.
+    document.querySelectorAll('.contact [data-copy]').forEach((button) => {
+      const label = button.querySelector('.arrow');
+      button.addEventListener('click', async () => {
+        let ok = false;
+        try { await navigator.clipboard.writeText(button.dataset.copy); ok = true; } catch {}
+        label.textContent = ok ? '已复制' : '请手动复制';
+        button.classList.toggle('is-copied', ok);
+        setTimeout(() => { label.textContent = '复制'; button.classList.remove('is-copied'); }, 2000);
+      });
+    });
 
   </script>
 </body>
