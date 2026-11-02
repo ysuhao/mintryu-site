@@ -197,7 +197,7 @@ async function llmsTxt(env) {
     "## 作者",
     "- 名字：Mint Ryu（也写作 Mint、MINT RYU）",
     `- 主页：${SITE_ORIGIN}/`,
-    "- 邮箱：me@mintryu.com",
+    "- 邮箱：me@mintryu.com、2025461029@korea.edu",
     "- X：https://x.com/Ryusoohow ；YouTube：https://www.youtube.com/@mint8733 ；GitHub：https://github.com/ysuhao",
     "",
     "## 软件与作品",
