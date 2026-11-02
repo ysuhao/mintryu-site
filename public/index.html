@@ -18,6 +18,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
   <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <script>document.documentElement.classList.add('js');</script>
   <style>
     :root {
       --bg: #000;
@@ -45,8 +46,6 @@
       scrollbar-color: var(--accent) transparent;
       scrollbar-width: thin;
     }
-    /* Only snap when the stage fits one screen; on short screens snapping would fight reading the cards. */
-    html.fits { scroll-snap-type: y proximity; }
     body {
       margin: 0;
       font: 300 16px/1.65 var(--sans);
@@ -69,7 +68,6 @@
       background: var(--accent); color: #000; text-decoration: none; transform: translateY(-200%);
     }
     .skip:focus { transform: none; }
-    .snap-top { position: absolute; top: 0; height: 1px; width: 1px; scroll-snap-align: start; }
 
     /* ---------- background grid (fades in from the bottom-right, lights up under the cursor) ---------- */
     .grid {
@@ -227,12 +225,12 @@
     .more:hover svg, .more:focus-visible svg { color: var(--accent); transform: translate(2px, 1px) rotate(-8deg); }
     .more:hover .more-count { color: var(--accent); }
 
-    .links { display: flex; flex-wrap: wrap; gap: 4px 10px; margin-top: 22px; color: var(--muted); }
+    .links { display: flex; flex-wrap: wrap; align-items: center; gap: 0 10px; margin-top: 10px; color: var(--muted); }
     .links span { color: var(--dim); }
-    .links a { text-decoration: none; transition: color .2s; }
+    .links a { display: inline-flex; align-items: center; min-height: 36px; text-decoration: none; transition: color .2s; }
     .links a:hover { color: var(--accent); }
 
-    .status { list-style: none; margin: 24px 0 0; padding: 0; display: grid; gap: 9px; color: var(--muted); }
+    .status { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 9px; color: var(--muted); }
     .status li { display: flex; align-items: center; gap: 10px; }
     .status svg { width: 14px; height: 14px; flex: none; color: var(--dim); }
     .status time { color: var(--fg); }
@@ -288,7 +286,6 @@
       border-radius: 28px 28px 0 0;
       background: var(--sheet);
       box-shadow: 0 -30px 80px oklch(0 0 0 / .75);
-      scroll-snap-align: start;
     }
     .drawer-head {
       position: sticky; top: 0; z-index: 3;
@@ -317,14 +314,12 @@
     .drawer[data-open] .hint-closed { display: none; }
     .hint-closed b { display: inline-block; font-weight: 500; animation: nudge 1.8s ease-in-out infinite; }
     @keyframes nudge { 50% { transform: translateY(3px); } }
-    .tabs { display: flex; gap: 6px; }
+    .tabs { position: relative; display: grid; grid-template-columns: repeat(5, 84px); }
     .tabs a {
-      position: relative; padding: 8px 12px; border-radius: 99px;
-      color: var(--muted); text-decoration: none; transition: color .2s, background .2s;
+      position: relative; z-index: 1; display: grid; place-items: center; min-height: 44px;
+      color: var(--muted); text-decoration: none; transition: color .2s;
     }
-    .tabs a:hover { color: var(--fg); background: oklch(1 0 0 / .06); }
-    .tabs a.is-active { color: var(--fg); }
-    .tabs a.is-active::after { content: ""; position: absolute; left: 50%; bottom: 2px; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); transform: translateX(-50%); }
+    .tabs a:hover, .tabs a.is-active { color: var(--fg); }
 
     .drawer-body { width: min(940px, 100% - 56px); margin: 0 auto; padding: 40px 0 0; }
     .block {
@@ -435,8 +430,10 @@
       .drawer { width: 100%; border-radius: 22px 22px 0 0; border-inline: 0; }
       .drawer-head { grid-template-columns: minmax(0, 1fr); justify-items: center; padding-inline: 12px; border-radius: 22px 22px 0 0; }
       .head-side { display: none; }
-      .tabs { gap: 0; }
-      .tabs a { padding: 8px 10px; font-size: 11px; }
+      .tabs { width: 100%; grid-template-columns: repeat(5, 1fr); }
+      .tabs a { font-size: 13px; letter-spacing: .02em; }
+      .avatar { display: none; }
+      .links a { min-height: 44px; }
       .drawer-body { width: calc(100% - 40px); padding-top: 24px; }
       .block { grid-template-columns: minmax(0, 1fr); gap: 20px; padding: 40px 0; }
       .block-label { position: static; display: flex; align-items: baseline; gap: 10px; }
@@ -465,6 +462,154 @@
       .contact span:nth-child(2) { font-size: 15px; overflow-wrap: anywhere; }
       .facts div { grid-template-columns: 72px minmax(0, 1fr); }
     }
+    /* ---------- Mint in bed: layered art in the bottom-right corner, a header on phones ---------- */
+    .scene {
+      position: fixed; z-index: 0; right: -36px; bottom: calc(var(--peek) - 40px);
+      width: min(62vw, 900px, 100vh); aspect-ratio: 1376 / 768; pointer-events: none;
+      opacity: calc(1 - var(--p) * 1.2);
+      mask-image: linear-gradient(to right, transparent, #000 22%), linear-gradient(to bottom, transparent, #000 10%);
+      mask-composite: intersect;
+    }
+    .rig { position: absolute; inset: 0; transform-origin: 56% 100%; animation: breath 5.6s ease-in-out infinite alternate; translate: var(--px, 0) var(--py, 0); transition: translate .5s var(--ease); }
+    .rig img { position: absolute; display: block; max-width: none; }
+    .rig .base { inset: 0; width: 100%; height: 100%; }
+    .rig .closed { left: 42.878%; top: 45.573%; width: 28.343%; height: 22.135%; opacity: 0; animation: blink 7.3s linear infinite; }
+    .scene.is-winking .closed { animation: none; opacity: 1; }
+    .rig .ear-l { left: 34.157%; top: 3.906%; width: 15.988%; height: 30.599%; transform-origin: 62% 92%; animation: ear-l 11s ease-in-out infinite; }
+    .rig .ear-r { left: 62.863%; top: 5.859%; width: 16.715%; height: 28.255%; transform-origin: 30% 90%; animation: ear-r 13s ease-in-out infinite; }
+    .rig .glow-phone { position: absolute; inset: 0; background: radial-gradient(26% 40% at 66% 58%, oklch(.86 .06 240 / .3), transparent 70%); mix-blend-mode: screen; animation: flick 8s steps(1) infinite; }
+    html[data-d="full"] .rig, html[data-d="full"] .rig * { animation-play-state: paused; }
+    @keyframes breath { from { transform: scale(1); } to { transform: scale(1.009); } }
+    @keyframes blink { 0%, 90%, 92.4%, 95%, 96.6%, 100% { opacity: 0; } 90.6%, 91.8%, 95.5%, 96.1% { opacity: 1; } }
+    @keyframes ear-l { 0%, 86%, 100% { transform: none; } 89% { transform: rotate(-3.2deg); } 92% { transform: rotate(.8deg); } 95% { transform: rotate(-1.6deg); } }
+    @keyframes ear-r { 0%, 70%, 82%, 100% { transform: none; } 73% { transform: rotate(3deg); } 76% { transform: rotate(-.8deg); } 79% { transform: rotate(1.6deg); } }
+    @keyframes flick { 0% { opacity: .7; } 14% { opacity: 1; } 27% { opacity: .55; } 41% { opacity: .9; } 58% { opacity: .62; } 72% { opacity: 1; } 86% { opacity: .75; } }
+    html.over-face { cursor: pointer; }
+
+    /* ---------- latest posts and class material drifting by (built from the page by JS) ---------- */
+    .feed {
+      position: fixed; z-index: 1; right: 44px; top: calc(50vh - var(--peek) - 240px);
+      width: 340px; height: 210px; overflow: hidden;
+      transform: perspective(1000px) rotateY(-8deg) rotateZ(3deg); transform-origin: 100% 50%;
+      opacity: calc(1 - var(--p) * 1.5);
+      mask-image: linear-gradient(to bottom, transparent, #000 24%, #000 78%, transparent);
+    }
+    .feed-track { display: grid; gap: 9px; animation: feed 32s linear infinite; }
+    .feed:hover .feed-track, .feed:focus-within .feed-track { animation-play-state: paused; }
+    @keyframes feed { to { transform: translateY(calc(-50% - 4.5px)); } }
+    .feed a {
+      display: block; padding: 9px 13px; border: 1px solid var(--line-strong); border-radius: 13px;
+      background: oklch(.2 .012 300 / .62); font-size: 12.5px; line-height: 1.45; text-decoration: none;
+      backdrop-filter: blur(8px); transition: border-color .2s;
+    }
+    .feed a:hover { border-color: var(--accent); }
+    .feed b { display: block; color: var(--dim); font: 500 10px/1.6 var(--mono); letter-spacing: .06em; }
+    @media (min-width: 961px) and (max-width: 1099px), (min-width: 961px) and (max-height: 639px) { .feed { display: none; } }
+
+    /* ---------- the drawer as layers; without JS the page stays one long scroll ---------- */
+    html:not(.js) .stage { position: relative; }
+    html:not(.js) .tabs .indicator, html:not(.js) .scrim, html:not(.js) .preview, html:not(.js) .preview-scrim, html:not(.js) .more-panel { display: none; }
+    html.js, html.js body { height: 100dvh; overflow: hidden; overscroll-behavior: none; scroll-behavior: auto; }
+    html.js { --sheet-top: 44px; }
+    html.js .stage { position: fixed; inset: 0; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; }
+    html.js .stage-inner { min-height: 100%; }
+    html.dragging, html.dragging * { user-select: none; cursor: grabbing; }
+    html.snap .stage-inner, html.snap .scene, html.snap .feed, html.snap .meteors, html.snap .mark { transition: transform .5s var(--ease), opacity .5s var(--ease); }
+    .safe-probe { position: fixed; left: 0; bottom: 0; width: 0; height: env(safe-area-inset-bottom); pointer-events: none; }
+
+    .scrim { position: fixed; inset: 0; z-index: 2; display: none; width: 100%; border: 0; background: none; }
+    html[data-d="half"] .scrim, html[data-d="full"] .scrim { display: block; }
+
+    html.js .drawer {
+      position: fixed; z-index: 3; top: var(--sheet-top); left: 0; right: 0;
+      height: calc(100dvh - var(--sheet-top)); min-height: 0; margin: 0 auto; overflow: hidden;
+      transform: translateY(var(--y, calc(100dvh - var(--sheet-top) - var(--peek))));
+      transform-origin: 50% 0; transition: scale .45s var(--ease), filter .35s;
+    }
+    html.snap .drawer { transition: transform .5s var(--ease), scale .45s var(--ease), filter .35s; }
+    html.js .drawer.is-back { scale: .965; filter: brightness(.55); }
+    html.js .drawer-head { position: relative; border-bottom: 1px solid var(--line); border-radius: 0; cursor: grab; touch-action: none; user-select: none; }
+    .tabs .indicator {
+      position: absolute; left: 0; bottom: 4px; width: 20%; height: 36px; border-radius: 12px;
+      background: oklch(.86 .15 172 / .12); box-shadow: inset 0 0 0 1px oklch(.86 .15 172 / .35);
+      transform: translateX(calc(var(--tab, 1) * 100%)); opacity: min(1, calc(var(--p) * 4));
+    }
+    html.js .drawer-body {
+      position: absolute; top: var(--peek); left: 0; right: 0; bottom: 0; width: 100%; margin: 0; padding: 0;
+      display: flex; overflow: auto hidden; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none;
+    }
+    html.js .pane { flex: 0 0 100%; min-width: 0; overflow: hidden; scroll-snap-align: start; scroll-snap-stop: always; touch-action: pan-x; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: var(--accent) transparent; }
+    html[data-d="full"] .pane { overflow: hidden auto; touch-action: pan-x pan-y; }
+    html.js .block { width: min(940px, 100% - 56px); margin: 0 auto; padding: 36px 0 52px; border-top: 0; scroll-margin-top: 0; }
+    html.js .block-label { top: 36px; }
+    html.js .thanks, html.js .foot { width: min(940px, 100% - 56px); margin-inline: auto; }
+    .group-label { margin: 28px 0 4px; color: var(--dim); font-size: 11px; }
+    .group-label:first-child { margin-top: 0; }
+    .class-list .arrow, .posts .arrow { padding: 14px; margin: -14px; }
+
+    /* More work: a side drawer on wide screens, a shelf that unfolds in place on phones. */
+    html.js .more-panel {
+      position: fixed; z-index: 4; top: 0; right: 0; bottom: 0; width: min(440px, 100%); padding: 20px 28px 28px;
+      border-left: 1px solid var(--line-strong); background: oklch(.135 0 0 / .94); backdrop-filter: blur(14px);
+      box-shadow: -30px 0 80px oklch(0 0 0 / .6); overflow-y: auto; overscroll-behavior: contain;
+      transform: translateX(102%); visibility: hidden; transition: transform .5s var(--ease), visibility 0s .5s;
+    }
+    html.js .more-panel.is-open { transform: none; visibility: visible; transition: transform .5s var(--ease); }
+    .more-panel-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .icon-button { display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 12px; background: none; color: var(--muted); cursor: pointer; transition: color .2s, background .2s; }
+    .icon-button:hover { color: var(--accent); background: oklch(1 0 0 / .06); }
+    .more[aria-expanded="true"] .more-label, .more[aria-expanded="true"] .more-count { color: var(--accent); }
+
+    /* Second layer: a preview that rises over the drawer. */
+    .preview-scrim { position: fixed; inset: 0; z-index: 5; width: 100%; border: 0; background: oklch(0 0 0 / .4); opacity: 0; visibility: hidden; transition: opacity .3s, visibility 0s .3s; }
+    .preview-scrim.is-open { opacity: 1; visibility: visible; transition: opacity .3s; }
+    .preview {
+      position: fixed; z-index: 6; left: 0; right: 0; bottom: 0; width: min(640px, 100%); margin: 0 auto;
+      padding: 0 28px calc(28px + env(safe-area-inset-bottom)); border: 1px solid var(--line-strong); border-bottom: 0; border-radius: 24px 24px 0 0;
+      background: oklch(.17 0 0); box-shadow: 0 -24px 70px oklch(0 0 0 / .7);
+      transform: translateY(calc(102% + var(--sy, 0px))); visibility: hidden; transition: transform .45s var(--ease), visibility 0s .45s;
+    }
+    .preview.is-open { transform: translateY(var(--sy, 0px)); visibility: visible; transition: transform .45s var(--ease); }
+    .preview.is-dragging { transition: none; }
+    .preview-grab { display: grid; place-items: center; height: 30px; margin: 0 -28px; cursor: grab; touch-action: none; }
+    .preview-grab i { display: block; width: 40px; height: 4px; border-radius: 4px; background: oklch(1 0 0 / .28); }
+    .preview .kicker { margin: 0; color: var(--accent); font-size: 11px; }
+    .preview h3 { margin: 10px 0; font: 500 24px/1.4 var(--sans); }
+    .preview-body { margin: 0 0 20px; color: var(--muted); font-size: 15px; line-height: 1.75; }
+    .preview-body:empty { display: none; }
+    .preview-cta { display: flex; align-items: center; justify-content: space-between; min-height: 56px; margin-top: 20px; padding: 0 18px; border-radius: 14px; background: var(--accent); color: #000; font-weight: 500; text-decoration: none; }
+
+    @media (hover: none) { .now.is-open .now-card { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; } }
+
+    @media (max-width: 960px) {
+      html.js { --sheet-top: 40px; }
+      .scene {
+        --scene-h: min(56vw, 300px); --rig-w: calc(var(--scene-h) * 2.24);
+        position: fixed; left: 0; right: 0; top: 0; bottom: auto; width: 100%; height: var(--scene-h); aspect-ratio: auto; overflow: hidden;
+        opacity: calc(.95 - var(--p)); transform: translateY(calc(var(--st, 0) * -1px));
+        mask-image: linear-gradient(to bottom, #000 74%, transparent); mask-composite: add;
+      }
+      html:not(.js) .scene { position: absolute; }
+      .rig { inset: 0 auto auto 68%; width: var(--rig-w); aspect-ratio: 1376 / 768; margin-left: calc(var(--rig-w) * -.56); }
+      .stage-inner { padding-top: 66px; }
+      .name-row { min-height: 96px; margin-bottom: 8px; }
+      .sig { left: 0; right: auto; top: 0; width: 150px; }
+      .roles { margin-bottom: 12px; }
+      .feed { position: relative; z-index: 1; right: auto; top: auto; width: auto; height: 50px; margin: 0 0 14px; transform: none; opacity: 1; mask-image: none; }
+      .feed-track { animation: ticker 20s infinite; }
+      @keyframes ticker { 0%, 17% { transform: translateY(0); } 20%, 37% { transform: translateY(-59px); } 40%, 57% { transform: translateY(-118px); } 60%, 77% { transform: translateY(-177px); } 80%, 97% { transform: translateY(-236px); } 100% { transform: translateY(-295px); } }
+      .feed a { height: 50px; padding: 6px 12px; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; backdrop-filter: none; }
+      html.js .drawer-head { padding-top: 16px; }
+      html.js .block { width: calc(100% - 40px); padding-top: 20px; }
+      html.js .thanks, html.js .foot { width: calc(100% - 40px); }
+      html.js .more-panel { position: static; width: auto; padding: 0; border: 0; border-bottom: 1px solid var(--line); background: none; box-shadow: none; backdrop-filter: none; overflow: hidden; transform: none; max-height: 0; transition: max-height .42s var(--ease), visibility 0s .42s; }
+      html.js .more-panel.is-open { max-height: 620px; transition: max-height .42s var(--ease); }
+      .more-panel-head, .more-panel .all { display: none; }
+      .preview { padding-inline: 20px; }
+      .preview-grab { margin-inline: -20px; }
+      .preview h3 { font-size: 20px; }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -475,10 +620,19 @@
 </head>
 <body>
   <a class="skip" href="#apps">跳到产品</a>
-  <span class="snap-top" aria-hidden="true"></span>
   <div class="grid" aria-hidden="true"></div>
   <div class="grid grid--glow" aria-hidden="true"></div>
+  <div class="scene" aria-hidden="true">
+    <div class="rig">
+      <img class="base" src="/images/mint-base.webp" alt="" width="1376" height="768" decoding="async">
+      <img class="ear-l" src="/images/mint-earL.webp" alt="" width="220" height="235" decoding="async">
+      <img class="ear-r" src="/images/mint-earR.webp" alt="" width="230" height="217" decoding="async">
+      <img class="closed" src="/images/mint-closed.webp" alt="" width="390" height="170" decoding="async">
+      <div class="glow-phone"></div>
+    </div>
+  </div>
   <canvas class="meteors" aria-hidden="true"></canvas>
+  <span class="safe-probe" aria-hidden="true"></span>
 
   <main class="stage" id="top">
     <a class="mark" href="/" aria-label="Mint Ryu 主页">
@@ -520,7 +674,7 @@
               <span class="app-go" aria-hidden="true">↗</span>
               <span class="app-name">Mintaria <span>萌音</span></span>
               <span class="app-desc">本地实时 AI 变声</span>
-              <span class="app-meta mono">v6.0.0 · Windows</span>
+              <span class="app-meta mono">v7.1.2 · Windows</span>
             </a>
           </li>
           <li>
@@ -548,13 +702,22 @@
         <a class="more" href="/works/">
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" aria-hidden="true"><path d="M3 2.2 13 7.6l-4.4 1.2-1.9 4.3Z"/></svg>
           <span class="more-label mono">More work</span>
-          <span class="more-names">Mint 同传 · AI 订阅向导 · HANSA · Final Channel</span>
-          <span class="more-count mono">04 ↗</span>
+          <span class="more-names">Mint 同传 · AI 订阅向导 · HANSA · Final Channel · mignet</span>
+          <span class="more-count mono">05 →</span>
         </a>
+        <aside class="more-panel" id="more-panel" aria-label="More work">
+          <div class="more-panel-head">
+            <span class="mono">More work</span>
+            <button class="icon-button" type="button" data-close-more aria-label="收起">✕</button>
+          </div>
+          <ul class="class-list"></ul>
+          <a class="all mono" href="#works">在抽屉里看全部作品 <span aria-hidden="true">↑</span></a>
+        </aside>
 
         <nav class="links mono" aria-label="快速链接">
           <a href="#about">关于</a><span aria-hidden="true">·</span>
           <a href="#writing">文章</a><span aria-hidden="true">·</span>
+          <a href="#class">材料</a><span aria-hidden="true">·</span>
           <a href="#contact">联系</a><span aria-hidden="true">·</span>
           <a href="https://x.com/Ryusoohow" target="_blank" rel="noopener noreferrer">X</a><span aria-hidden="true">·</span>
           <a href="https://www.youtube.com/@mint8733" target="_blank" rel="noopener noreferrer">YouTube</a>
@@ -567,7 +730,7 @@
           </li>
           <li>
             <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><path d="M8 1.5 9.6 6.4 14.5 8 9.6 9.6 8 14.5 6.4 9.6 1.5 8 6.4 6.4Z"/></svg>
-            <span>Shipped Mintaria 6.0.0 · Oct 25</span>
+            <span>Shipped Mintaria 7.1.2 · Nov 1</span>
           </li>
           <li>
             <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><path d="M2 14 9 7M8 3l5 5M6.5 4.5 10 1l5 5-3.5 3.5"/></svg>
@@ -591,14 +754,18 @@
     </div>
   </main>
 
-  <section class="drawer" id="drawer" aria-label="关于、文章与更多">
+  <button class="scrim" type="button" aria-label="收起抽屉"></button>
+
+  <section class="drawer" id="drawer" aria-label="作品、文章、课堂材料与更多">
     <div class="drawer-head">
       <button class="grab" type="button" aria-controls="drawer" aria-expanded="false"><span aria-hidden="true"></span><span class="sr">展开抽屉</span></button>
       <span class="head-side mono">More from Mint</span>
       <nav class="tabs mono" aria-label="抽屉目录">
-        <a href="#about">关于</a>
+        <span class="indicator" aria-hidden="true"></span>
+        <a href="#works">作品</a>
         <a href="#writing">文章</a>
-        <a href="#class">课堂材料</a>
+        <a href="#class">材料</a>
+        <a href="#about">关于</a>
         <a href="#contact">联系</a>
       </nav>
       <span class="head-side mono">
@@ -608,20 +775,29 @@
     </div>
 
     <div class="drawer-body">
-      <section class="block" id="about" aria-labelledby="about-title">
-        <h2 class="block-label mono" id="about-title">About<span>关于我</span></h2>
-        <div class="about">
-          <p class="lede">我是 Mint。写代码，做声音，记录一点光。</p>
-          <p>大部分时间在做和声音有关的软件：从 C++ 的实时音频内核，到普通人打开就能用的界面。也会为身边的小麻烦写工具，比如给高丽大学留学生做的 HANSA，和能在 Word 里真的“盖一下章”的 mignet。</p>
-          <p>我在意的不是功能有多少，而是用起来有没有那一下“诶，好玩”。所以一直想<em>把好用的小工具，做得更像小玩具</em>。</p>
-          <dl class="facts">
-            <div><dt class="mono">Stack</dt><dd>C++20 · JUCE · CUDA · WebRTC · Astro</dd></div>
-            <div><dt class="mono">Into</dt><dd>音乐 · 摄影 · 韩国生活</dd></div>
-            <div><dt class="mono">Now</dt><dd>Mintaria 6.0.0 刚发布；Melorb 官网已上线，软件还在开发</dd></div>
-          </dl>
+      <div class="pane">
+      <section class="block" id="works" aria-labelledby="works-title">
+        <h2 class="block-label mono" id="works-title">Work<span>全部作品</span></h2>
+        <div>
+          <p class="group-label mono">软件</p>
+          <ul class="class-list">
+            <li><a href="https://mintaria.mintryu.com/"><span class="mono">Windows</span><b>Mintaria 萌音</b><small>本地实时 AI 变声</small><span class="arrow" aria-hidden="true">↗</span></a></li>
+            <li><a href="https://mintaria.mintryu.com/android/"><span class="mono">Android</span><b>Mintaria Mobile</b><small>手机录音变声</small><span class="arrow" aria-hidden="true">↗</span></a></li>
+            <li><a href="https://melorb.mintryu.com/"><span class="mono">In dev</span><b>Melorb 弥洛</b><small>直播混音声卡机架</small><span class="arrow" aria-hidden="true">↗</span></a></li>
+          </ul>
+          <p class="group-label mono">工具与实验</p>
+          <ul class="class-list" id="more-work">
+            <li><a href="https://live.mintryu.com/"><span class="mono">Live AI</span><b>Mint 同传</b><small>课堂现场同传：韩语实时译成普通话</small><span class="arrow" aria-hidden="true">↗</span></a></li>
+            <li><a href="https://ai.mintryu.com/"><span class="mono">Web</span><b>AI 订阅向导</b><small>用卡片分支理清 ChatGPT / Claude / Gemini 订阅</small><span class="arrow" aria-hidden="true">↗</span></a></li>
+            <li><a href="/works/hansa/"><span class="mono">Android</span><b>HANSA 韩学事</b><small>高丽大学留学生的公告、课表、作业与 A 饭手账</small><span class="arrow" aria-hidden="true">↗</span></a></li>
+            <li><a href="/works/mint-final-channel/"><span class="mono">VST3</span><b>Final Channel</b><small>从一键处理到完整混音控制的通道条插件</small><span class="arrow" aria-hidden="true">↗</span></a></li>
+            <li><a href="https://mignet.mintryu.com/"><span class="mono">Desktop</span><b>mignet</b><small>能在 Word 里盖章的桌面印章</small><span class="arrow" aria-hidden="true">↗</span></a></li>
+          </ul>
         </div>
       </section>
+      </div>
 
+      <div class="pane">
       <section class="block" id="writing" aria-labelledby="writing-title">
         <div>
           <h2 class="block-label mono" id="writing-title">Writing<span>文章</span></h2>
@@ -640,7 +816,9 @@
           <a class="all mono" id="blog-all" href="/blog">All writing <span aria-hidden="true">↗</span></a>
         </div>
       </section>
+      </div>
 
+      <div class="pane">
       <section class="block" id="class" aria-labelledby="class-title">
         <h2 class="block-label mono" id="class-title">Class<span>课堂材料</span></h2>
         <div>
@@ -697,7 +875,25 @@
           <a class="all mono" href="/presentations/">All presentations <span aria-hidden="true">↗</span></a>
         </div>
       </section>
+      </div>
 
+      <div class="pane">
+      <section class="block" id="about" aria-labelledby="about-title">
+        <h2 class="block-label mono" id="about-title">About<span>关于我</span></h2>
+        <div class="about">
+          <p class="lede">我是 Mint。写代码，做声音，记录一点光。</p>
+          <p>大部分时间在做和声音有关的软件：从 C++ 的实时音频内核，到普通人打开就能用的界面。也会为身边的小麻烦写工具，比如给高丽大学留学生做的 HANSA，和能在 Word 里真的“盖一下章”的 mignet。</p>
+          <p>我在意的不是功能有多少，而是用起来有没有那一下“诶，好玩”。所以一直想<em>把好用的小工具，做得更像小玩具</em>。</p>
+          <dl class="facts">
+            <div><dt class="mono">Stack</dt><dd>C++20 · JUCE · CUDA · WebRTC · Astro</dd></div>
+            <div><dt class="mono">Into</dt><dd>音乐 · 摄影 · 韩国生活</dd></div>
+            <div><dt class="mono">Now</dt><dd>Mintaria 7.1.2 刚发布；Melorb 官网已上线，软件还在开发</dd></div>
+          </dl>
+        </div>
+      </section>
+      </div>
+
+      <div class="pane">
       <section class="block" id="contact" aria-labelledby="contact-title">
         <h2 class="block-label mono" id="contact-title">Contact<span>想说点什么？</span></h2>
         <ul class="contact">
@@ -731,7 +927,17 @@
         <p><span>© 2026 Mint Ryu</span><span>Rev 2026.10</span><span>Viewport <output id="viewport">—</output></span></p>
         <a href="#top">Back to top ↑</a>
       </footer>
+      </div>
     </div>
+  </section>
+
+  <button class="preview-scrim" type="button" aria-label="收起预览"></button>
+  <section class="preview" id="preview" role="dialog" aria-modal="true" aria-labelledby="preview-title">
+    <div class="preview-grab" aria-hidden="true"><i></i></div>
+    <p class="kicker mono"></p>
+    <h3 id="preview-title"></h3>
+    <p class="preview-body"></p>
+    <a class="preview-cta"><span></span><span aria-hidden="true">↗</span></a>
   </section>
 
   <script>
@@ -743,46 +949,448 @@
       const grab = drawer.querySelector('.grab');
       const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
       const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
-      const scrollBehavior = () => (reduceMotion.matches ? 'auto' : 'smooth');
+      const phone = matchMedia('(max-width: 960px)');
+      const views = drawer.querySelector('.drawer-body');
+      const panes = [...views.querySelectorAll('.pane')];
+      const tabs = [...drawer.querySelectorAll('.tabs a')];
+      const moreLink = document.querySelector('.more');
+      const morePanel = document.getElementById('more-panel');
+      const preview = document.getElementById('preview');
+      const previewScrim = document.querySelector('.preview-scrim');
+      const safeProbe = document.querySelector('.safe-probe');
+      const feed = document.createElement('div');
 
-      // Stage height drives the sticky offset and whether snapping is safe.
-      const measure = () => {
-        const height = stage.offsetHeight;
-        root.style.setProperty('--stage-h', `${height}px`);
-        root.classList.toggle('fits', height <= innerHeight + 1);
+      // The drawer stops at three heights. --y is how far it sits below full height;
+      // --p is 0 while it only peeks and 1 once it covers the screen.
+      let points = { peek: 0, half: 0, full: 0 };
+      let detent = 'peek';
+      let y = 0;
+      let tab = 1;
+      let tabTarget = null;
+      let snapTimer;
+      let moreOpen = false;
+      let previewOpen = false;
+      let previewOrigin = null;
+
+      const setY = (value) => {
+        y = Math.min(points.peek, Math.max(0, value));
+        root.style.setProperty('--y', `${y}px`);
+        root.style.setProperty('--p', (1 - y / Math.max(1, points.peek)).toFixed(3));
       };
-      new ResizeObserver(measure).observe(stage);
+      const markTabs = () => {
+        tabs.forEach((link, index) => {
+          const active = detent !== 'peek' && index === tab;
+          link.classList.toggle('is-active', active);
+          if (active) link.setAttribute('aria-current', 'true');
+          else link.removeAttribute('aria-current');
+        });
+      };
+      const settle = (name, animate = true) => {
+        detent = name;
+        root.dataset.d = name;
+        clearTimeout(snapTimer);
+        root.classList.remove('dragging');
+        root.classList.toggle('snap', animate && !reduceMotion.matches);
+        if (animate) snapTimer = setTimeout(() => root.classList.remove('snap'), 520);
+        setY(points[name]);
+        const open = name !== 'peek';
+        drawer.toggleAttribute('data-open', open);
+        grab.setAttribute('aria-expanded', String(open));
+        grab.querySelector('.sr').textContent = open ? '收起抽屉' : '展开抽屉';
+        stage.inert = open;
+        views.inert = !open;
+        markTabs();
+      };
+      const measure = () => {
+        const height = drawer.offsetHeight;
+        points = { peek: height - head.offsetHeight - safeProbe.offsetHeight, half: Math.round(height * .46), full: 0 };
+        setY(points[detent]);
+        views.scrollLeft = tab * views.clientWidth;
+      };
+      // A flick only has to travel part of the way: the direction of travel biases the choice.
+      const nearest = (direction) => {
+        const aim = y + direction * points.peek * .16;
+        return Object.keys(points).reduce((best, name) => (Math.abs(points[name] - aim) < Math.abs(points[best] - aim) ? name : best), 'peek');
+      };
 
-      // --p: 0 while the drawer only peeks, 1 once it covers the screen.
-      let open = false;
-      let queued = false;
-      const progress = () => {
-        queued = false;
-        const peek = head.offsetHeight;
-        const range = Math.max(1, innerHeight - peek);
-        const p = Math.min(1, Math.max(0, (innerHeight - peek - drawer.getBoundingClientRect().top) / range));
-        root.style.setProperty('--p', p.toFixed(3));
-        if (p > 0.6 !== open) {
-          open = !open;
-          drawer.toggleAttribute('data-open', open);
-          grab.setAttribute('aria-expanded', String(open));
-          grab.querySelector('.sr').textContent = open ? '收起抽屉' : '展开抽屉';
+      // Each view has its own URL, and Back closes the top layer instead of leaving the page.
+      const urlFor = (hash = '') => `${location.pathname}${location.search}${hash}`;
+      const tabHash = (index) => `#${panes[index].querySelector('.block').id}`;
+      const paneOf = (id) => (id ? panes.findIndex((pane) => pane.querySelector(`#${CSS.escape(id)}`)) : -1);
+      const showTab = (index, animate) => {
+        tab = index;
+        tabTarget = animate && !reduceMotion.matches ? index : null;
+        views.scrollTo({ left: index * views.clientWidth, behavior: tabTarget === null ? 'auto' : 'smooth' });
+        root.style.setProperty('--tab', index);
+        markTabs();
+      };
+      const openAt = (index) => {
+        const wasClosed = detent === 'peek';
+        showTab(index, !wasClosed);
+        if (wasClosed) {
+          history.pushState({ drawer: true }, '', urlFor(tabHash(index)));
+          settle('half');
+        } else {
+          history.replaceState(history.state, '', urlFor(tabHash(index)));
         }
       };
-      const queue = () => {
-        if (queued) return;
-        queued = true;
-        requestAnimationFrame(progress);
+      const closeDrawer = () => {
+        settle('peek');
+        if (history.state?.drawer) history.back();
+        else history.replaceState(null, '', urlFor());
       };
-      addEventListener('scroll', queue, { passive: true });
-      addEventListener('resize', () => { measure(); queue(); });
-      measure();
-      progress();
+      const settleGesture = (name) => {
+        if (name === detent) return settle(name);
+        if (name === 'peek') return closeDrawer();
+        if (detent === 'peek') history.pushState({ drawer: true }, '', urlFor(tabHash(tab)));
+        settle(name);
+      };
 
-      grab.addEventListener('click', () => {
-        if (open) scrollTo({ top: 0, behavior: scrollBehavior() });
-        else drawer.scrollIntoView({ block: 'start', behavior: scrollBehavior() });
+      views.addEventListener('scroll', () => {
+        const position = views.scrollLeft / Math.max(1, views.clientWidth);
+        root.style.setProperty('--tab', position.toFixed(3));
+        const index = Math.round(position);
+        if (tabTarget !== null) {
+          if (index === tabTarget && Math.abs(position - index) < .01) tabTarget = null;
+          return;
+        }
+        if (index === tab) return;
+        tab = index;
+        markTabs();
+        if (detent !== 'peek') history.replaceState(history.state, '', urlFor(tabHash(index)));
+      }, { passive: true });
+
+      // Dragging: the head always, the content too until the drawer is fully open.
+      let drag = null;
+      let dragged = false;
+      drawer.addEventListener('pointerdown', (event) => {
+        dragged = false;
+        if (event.button || previewOpen) return;
+        const onHead = event.target.closest('.drawer-head');
+        if (!onHead && !(event.target.closest('.pane') && detent !== 'full')) return;
+        drag = { id: event.pointerId, x0: event.clientX, y0: event.clientY, from: y, last: event.clientY, direction: 0, onHead, on: false };
       });
+      drawer.addEventListener('dragstart', (event) => event.preventDefault());
+      addEventListener('pointermove', (event) => {
+        if (!drag || event.pointerId !== drag.id) return;
+        const dy = event.clientY - drag.y0;
+        if (!drag.on) {
+          if (Math.abs(dy) < 6 && Math.abs(event.clientX - drag.x0) < 6) return;
+          if (!drag.onHead && Math.abs(event.clientX - drag.x0) > Math.abs(dy)) { drag = null; return; }
+          if (Math.abs(dy) < 6) return;
+          drag.on = true;
+          dragged = true;
+          root.classList.add('dragging');
+          root.classList.remove('snap');
+          try { drawer.setPointerCapture(drag.id); } catch {}
+        }
+        drag.direction = event.clientY < drag.last ? -1 : 1;
+        drag.last = event.clientY;
+        setY(drag.from + dy);
+      }, { passive: true });
+      const endDrag = (event) => {
+        if (!drag || event.pointerId !== drag.id) return;
+        const { on, direction } = drag;
+        drag = null;
+        if (on) settleGesture(nearest(direction));
+        setTimeout(() => { dragged = false; });
+      };
+      addEventListener('pointerup', endDrag);
+      addEventListener('pointercancel', endDrag);
+      // The click that ends a drag must not also follow a link or press a tab.
+      drawer.addEventListener('click', (event) => {
+        if (!dragged) return;
+        event.preventDefault();
+        event.stopPropagation();
+        dragged = false;
+      }, true);
+
+      // Touch hand-offs the browser would otherwise keep for itself: pulling a fully open list down
+      // from its top, and pushing past the end of the stage to lift the drawer.
+      const stageAtEnd = () => stage.scrollHeight - stage.scrollTop - stage.clientHeight < 2;
+      let pull = null;
+      views.addEventListener('touchstart', (event) => {
+        const pane = event.target.closest('.pane');
+        pull = detent === 'full' && pane && pane.scrollTop <= 0 ? { x0: event.touches[0].clientX, y0: event.touches[0].clientY, from: y, on: false } : null;
+      }, { passive: true });
+      views.addEventListener('touchmove', (event) => {
+        if (!pull) return;
+        const dy = event.touches[0].clientY - pull.y0;
+        if (!pull.on) {
+          if (dy <= 6 || Math.abs(event.touches[0].clientX - pull.x0) > dy) { if (dy < 0 || Math.abs(event.touches[0].clientX - pull.x0) > 6) pull = null; return; }
+          pull.on = true;
+          root.classList.remove('snap');
+        }
+        if (event.cancelable) event.preventDefault();
+        setY(pull.from + dy);
+      }, { passive: false });
+      views.addEventListener('touchend', () => {
+        if (pull?.on) settleGesture(nearest(1));
+        pull = null;
+      });
+      let lift = null;
+      stage.addEventListener('touchstart', (event) => {
+        lift = detent === 'peek' && stageAtEnd() ? { y0: event.touches[0].clientY, from: y, on: false } : null;
+      }, { passive: true });
+      stage.addEventListener('touchmove', (event) => {
+        if (!lift) return;
+        const dy = event.touches[0].clientY - lift.y0;
+        if (!lift.on) {
+          if (dy > 0) { lift = null; return; }
+          if (dy > -6) return;
+          lift.on = true;
+          root.classList.remove('snap');
+        }
+        if (event.cancelable) event.preventDefault();
+        setY(lift.from + dy);
+      }, { passive: false });
+      stage.addEventListener('touchend', () => {
+        if (lift?.on) settleGesture(nearest(-1));
+        lift = null;
+      });
+
+      // Wheel and trackpad move the drawer 1:1, then it settles once the scrolling stops.
+      let wheelTimer;
+      addEventListener('wheel', (event) => {
+        if (previewOpen || event.ctrlKey || Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+        if (event.target.closest?.('.more-panel')) return;
+        const pane = event.target.closest?.('.pane');
+        if (pane && y <= 0 && !(event.deltaY < 0 && pane.scrollTop <= 0)) return;
+        if (!event.target.closest?.('.drawer') && y >= points.peek && (event.deltaY < 0 || !stageAtEnd())) return;
+        root.classList.remove('snap');
+        setY(y - event.deltaY);
+        const direction = event.deltaY > 0 ? -1 : 1;
+        clearTimeout(wheelTimer);
+        wheelTimer = setTimeout(() => settleGesture(nearest(direction)), 130);
+      }, { passive: true });
+
+      // More work: a side drawer on wide screens, a shelf in place on phones.
+      morePanel.querySelector('.class-list').innerHTML = document.getElementById('more-work').innerHTML;
+      morePanel.inert = true;
+      const setMore = (open) => {
+        moreOpen = open;
+        morePanel.classList.toggle('is-open', open);
+        morePanel.inert = !open;
+        moreLink.setAttribute('aria-expanded', String(open));
+      };
+      const placeForViewport = () => {
+        setMore(false);
+        if (phone.matches) {
+          moreLink.after(morePanel);
+          document.querySelector('.roles').after(feed);
+        } else {
+          document.body.append(morePanel);
+          stage.after(feed);
+        }
+      };
+      phone.addEventListener('change', placeForViewport);
+
+      // Second layer: a list row rises as a preview; its ↗ still goes straight to the page.
+      const setPreview = (open) => {
+        previewOpen = open;
+        preview.classList.toggle('is-open', open);
+        previewScrim.classList.toggle('is-open', open);
+        drawer.classList.toggle('is-back', open);
+        preview.inert = !open;
+        drawer.inert = open;
+        stage.inert = open || detent !== 'peek';
+        morePanel.inert = open || !moreOpen;
+      };
+      const openPreview = (link) => {
+        const title = link.querySelector('b, strong').textContent;
+        preview.querySelector('.kicker').textContent = link.querySelector('.mono').textContent;
+        preview.querySelector('h3').textContent = title;
+        preview.querySelector('.preview-body').textContent = link.dataset.excerpt || link.querySelector('small')?.textContent || '';
+        const cta = preview.querySelector('.preview-cta');
+        cta.href = link.href;
+        cta.firstElementChild.textContent = link.closest('#writing') ? '阅读全文' : link.closest('#class') ? '打开材料' : `打开 ${title}`;
+        previewOrigin = link;
+        setPreview(true);
+        history.pushState({ ...history.state, preview: true }, '', location.href);
+        cta.focus({ preventScroll: true });
+      };
+      const hidePreview = () => {
+        if (!previewOpen) return;
+        setPreview(false);
+        previewOrigin?.focus({ preventScroll: true });
+      };
+      const closePreview = () => {
+        hidePreview();
+        if (history.state?.preview) history.back();
+      };
+      preview.inert = true;
+      let previewDrag = null;
+      const previewGrab = preview.querySelector('.preview-grab');
+      previewGrab.addEventListener('pointerdown', (event) => {
+        previewDrag = { y0: event.clientY };
+        previewGrab.setPointerCapture(event.pointerId);
+        preview.classList.add('is-dragging');
+      });
+      previewGrab.addEventListener('pointermove', (event) => {
+        if (previewDrag) preview.style.setProperty('--sy', `${Math.max(0, event.clientY - previewDrag.y0)}px`);
+      });
+      const endPreviewDrag = (event) => {
+        if (!previewDrag) return;
+        const distance = event.clientY - previewDrag.y0;
+        previewDrag = null;
+        preview.classList.remove('is-dragging');
+        preview.style.removeProperty('--sy');
+        if (distance > 90) closePreview();
+      };
+      previewGrab.addEventListener('pointerup', endPreviewDrag);
+      previewGrab.addEventListener('pointercancel', endPreviewDrag);
+
+      // Switching the post language swaps the list in place; a failed fetch falls back to the full page.
+      const switchLanguage = async (link) => {
+        const target = new URL(link.href);
+        try {
+          const response = await fetch(`${target.pathname}${target.search}`, { headers: { accept: 'text/html' } });
+          if (!response.ok) throw new Error();
+          const page = new DOMParser().parseFromString(await response.text(), 'text/html');
+          document.getElementById('latest-posts').innerHTML = page.getElementById('latest-posts').innerHTML;
+          document.getElementById('blog-all').href = page.getElementById('blog-all').getAttribute('href');
+          document.querySelectorAll('.langs a').forEach((option) => {
+            const active = option === link;
+            option.classList.toggle('is-active', active);
+            if (active) option.setAttribute('aria-current', 'page');
+            else option.removeAttribute('aria-current');
+          });
+          history.replaceState(history.state, '', `${target.pathname}${target.search}${tabHash(tab)}`);
+          buildFeed();
+        } catch {
+          location.href = link.href;
+        }
+      };
+
+      // Posts and class material drift by, read from the lists already on the page.
+      const shortDate = (text) => {
+        const match = text.match(/(\d{4})\.(\d{2})(?:\.(\d{2}))?\s*$/);
+        return !match ? '' : match[3] ? `${match[2]}.${match[3]}` : `${Number(match[2])}月`;
+      };
+      const buildFeed = () => {
+        const posts = [...document.querySelectorAll('#latest-posts a')].slice(0, 3).map((link) => ({
+          href: link.href, tag: `文章 · ${shortDate(link.querySelector('time').textContent)}`, title: link.querySelector('h3, strong').textContent
+        }));
+        const material = [...document.querySelectorAll('#class .class-list a')].slice(0, 2).map((link) => ({
+          href: link.href, tag: `材料 · ${shortDate(link.querySelector('.mono').textContent)}`, title: link.querySelector('b').textContent
+        }));
+        const items = [posts[0], posts[1], material[0], posts[2], material[1]];
+        feed.hidden = items.some((item) => !item);
+        if (feed.hidden) return;
+        const track = document.createElement('div');
+        track.className = 'feed-track';
+        [...items, ...items].forEach((item, index) => {
+          const link = document.createElement('a');
+          link.href = item.href;
+          const tag = document.createElement('b');
+          tag.textContent = item.tag;
+          link.append(tag, item.title);
+          // The second run only exists to make the loop seamless.
+          if (index >= items.length) { link.tabIndex = -1; link.setAttribute('aria-hidden', 'true'); }
+          track.append(link);
+        });
+        feed.replaceChildren(track);
+      };
+      feed.className = 'feed';
+      feed.setAttribute('aria-label', '最近更新');
+
+      // Mint: tap the face to make her blink; on wide screens the art leans away from the pointer.
+      const scene = document.querySelector('.scene');
+      const closedEyes = scene.querySelector('.closed');
+      let winkTimer;
+      const overFace = (event) => {
+        if (detent !== 'peek' || moreOpen || event.target.closest?.('a, button, .drawer, .feed, .more-panel, .preview')) return false;
+        const rect = closedEyes.getBoundingClientRect();
+        return Math.hypot(event.clientX - (rect.left + rect.width / 2), event.clientY - (rect.top + rect.height / 2)) < rect.width * .55;
+      };
+      stage.addEventListener('scroll', () => root.style.setProperty('--st', stage.scrollTop), { passive: true });
+      if (finePointer.matches) {
+        const rig = scene.querySelector('.rig');
+        addEventListener('pointermove', (event) => {
+          rig.style.setProperty('--px', `${(event.clientX / innerWidth - .5) * -10}px`);
+          rig.style.setProperty('--py', `${(event.clientY / innerHeight - .5) * -6}px`);
+          root.classList.toggle('over-face', overFace(event));
+        }, { passive: true });
+      }
+
+      // One listener for every click the layers care about.
+      const nowLine = document.getElementById('now');
+      document.addEventListener('click', (event) => {
+        const plain = !(event.defaultPrevented || event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey);
+        const link = event.target.closest('a[href]');
+        if (overFace(event)) {
+          scene.classList.add('is-winking');
+          clearTimeout(winkTimer);
+          winkTimer = setTimeout(() => scene.classList.remove('is-winking'), 380);
+        }
+        if (nowLine.classList.contains('is-open') && !event.target.closest('.now')) nowLine.classList.remove('is-open');
+        if (moreOpen && !phone.matches && !event.target.closest('.more-panel, .more, .preview, .preview-scrim')) setMore(false);
+        if (event.target.closest('.scrim')) return closeDrawer();
+        if (event.target.closest('.preview-scrim')) return closePreview();
+        if (event.target.closest('[data-close-more]')) return setMore(false);
+        if (event.target.closest('.grab')) return settleGesture(detent === 'peek' ? 'half' : detent === 'half' ? 'full' : 'peek');
+        if (!link || !plain) return;
+        if (link === moreLink) {
+          event.preventDefault();
+          return setMore(!moreOpen);
+        }
+        if (link.closest('.now-link') && !finePointer.matches && !nowLine.classList.contains('is-open')) {
+          event.preventDefault();
+          return nowLine.classList.add('is-open');
+        }
+        if (link.closest('.langs')) {
+          event.preventDefault();
+          return switchLanguage(link);
+        }
+        if (link.closest('.class-list, .posts') && !event.target.closest('.arrow')) {
+          event.preventDefault();
+          return openPreview(link);
+        }
+        const hash = link.getAttribute('href');
+        if (!hash.startsWith('#')) return;
+        if (hash === '#top') {
+          event.preventDefault();
+          if (detent !== 'peek') closeDrawer();
+          return stage.scrollTo({ top: 0 });
+        }
+        const index = paneOf(hash.slice(1));
+        if (index < 0) return;
+        event.preventDefault();
+        setMore(false);
+        if (link.closest('.tabs') && detent !== 'peek' && index === tab) return closeDrawer();
+        openAt(index);
+        // Keyboard users land on the view they asked for.
+        if (event.detail === 0) {
+          const title = panes[index].querySelector(`${hash} h2`);
+          title.tabIndex = -1;
+          title.focus({ preventScroll: true });
+        }
+      });
+      addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape') return;
+        if (previewOpen) closePreview();
+        else if (moreOpen) setMore(false);
+        else if (detent !== 'peek') closeDrawer();
+      });
+      addEventListener('popstate', () => {
+        if (!history.state?.preview) hidePreview();
+        const index = paneOf(location.hash.slice(1));
+        if (index >= 0) {
+          if (index !== tab) showTab(index, detent !== 'peek');
+          if (detent === 'peek') settle('half');
+        } else if (detent !== 'peek') {
+          settle('peek');
+        }
+      });
+      addEventListener('resize', measure);
+      new ResizeObserver(measure).observe(drawer);
+
+      buildFeed();
+      placeForViewport();
+      measure();
+      const initial = paneOf(location.hash.slice(1));
+      showTab(initial >= 0 ? initial : tab, false);
+      settle(initial >= 0 ? 'full' : 'peek', false);
 
       // Grid spotlight + app card glow follow the pointer.
       const glow = document.querySelector('.grid--glow');
@@ -825,16 +1433,6 @@
       const showViewport = () => { viewport.textContent = `${innerWidth}×${innerHeight}`; };
       showViewport();
       addEventListener('resize', showViewport);
-
-      // Drawer tabs follow the section in view.
-      const tabs = [...document.querySelectorAll('.tabs a')];
-      const spy = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          tabs.forEach((tab) => tab.classList.toggle('is-active', tab.hash === `#${entry.target.id}`));
-        });
-      }, { rootMargin: '-35% 0px -60% 0px' });
-      document.querySelectorAll('.block[id]').forEach((section) => spy.observe(section));
     })();
 
     // Colorful meteors flare up over the stage, shed twinkling glitter and light the grid as they cross it.
@@ -1112,7 +1710,7 @@
 
       // Click empty sky and a meteor streaks right through the pointer.
       addEventListener('click', (event) => {
-        if (event.target.closest('a, button, input, label, summary, .drawer')) return;
+        if (event.target.closest('a, button, input, label, summary, .drawer, .feed, .more-panel, .preview') || root.classList.contains('over-face')) return;
         const back = 140;
         launch(event.clientX - Math.cos(HEADING) * back, event.clientY - Math.sin(HEADING) * back, { heading: HEADING, boost: 1.15 });
       });

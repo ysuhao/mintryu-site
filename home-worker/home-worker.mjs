@@ -119,7 +119,7 @@ export function renderPostCards(posts, language) {
   const featured = `<a class="featured" href="${top.href}"><span class="kicker mono">Latest ✦ 最新</span><h3 lang="${top.lang}">${top.title}</h3>${latest.excerpt ? `<p lang="${top.lang}">${escape(latest.excerpt)}</p>` : ""}${top.time}</a>`;
   const rows = rest.slice(0, 4).map((post) => {
     const row = parts(post);
-    return `<li><a href="${row.href}">${row.time}<strong lang="${row.lang}">${row.title}</strong><span class="arrow" aria-hidden="true">↗</span></a></li>`;
+    return `<li><a href="${row.href}"${post.excerpt ? ` data-excerpt="${escape(post.excerpt)}"` : ""}>${row.time}<strong lang="${row.lang}">${row.title}</strong><span class="arrow" aria-hidden="true">↗</span></a></li>`;
   }).join("");
   return rows ? `${featured}<ol class="posts">${rows}</ol>` : featured;
 }
